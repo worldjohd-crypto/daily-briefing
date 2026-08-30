@@ -3,57 +3,180 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>오늘의 브리핑 - 2026년 08월 31일 (Mon)</title>
+<title>오늘의 브리핑 - 2026년 8월 31일 월요일</title>
 <style>
   :root { color-scheme: light; }
-  body { margin:0; background:#f4f5f7; color:#1f2328; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Malgun Gothic",sans-serif; }
-  .wrap { max-width:860px; margin:0 auto; padding:24px 16px 64px; }
-  header { text-align:center; margin-bottom:24px; }
-  header h1 { font-size:1.6rem; margin:0 0 4px; }
-  header .date { color:#57606a; font-size:0.95rem; }
-  section { background:#fff; border:1px solid #e4e7eb; border-radius:12px; padding:18px 20px; margin-bottom:16px; }
-  section h2 { margin:0 0 12px; font-size:1.1rem; display:flex; align-items:center; gap:6px; }
-  table.fortune-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
-  table.fortune-table th, table.fortune-table td { padding:6px 4px; border-bottom:1px solid #eee; text-align:left; }
-  ul { margin:4px 0 12px; padding-left:18px; }
-  li { margin-bottom:4px; font-size:0.92rem; }
-  a { color:#1a73e8; text-decoration:none; }
-  a:hover { text-decoration:underline; }
-  .stat { display:inline-flex; flex-direction:column; background:#f7f8fa; border-radius:8px; padding:10px 14px; margin:0 8px 8px 0; min-width:120px; }
-  .stat .label { font-size:0.78rem; color:#57606a; }
-  .stat .value { font-size:1.05rem; font-weight:600; }
-  .empty { color:#8a8f98; font-size:0.9rem; }
-  footer { text-align:center; color:#8a8f98; font-size:0.8rem; margin-top:24px; }
+  body { margin:0; background:#f4f5f7; color:#1a1a1a; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Malgun Gothic",sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; padding:20px 16px 64px; }
+  header { text-align:center; margin-bottom:20px; }
+  header h1 { font-size:1.4rem; margin:0 0 4px; }
+  header .updated { color:#666; font-size:0.85rem; }
+  .card { background:#fff; border:1px solid #e2e2e2; border-radius:10px; padding:14px 16px; margin-bottom:14px; }
+  .card-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .card-head h2 { margin:0; font-size:1.05rem; }
+  .copy-btn { background:#4a6cf7; color:#fff; border:none; border-radius:6px; padding:6px 14px; font-size:0.85rem; cursor:pointer; }
+  .copy-btn:active { background:#3a5ce0; }
+  .textbox { white-space:pre-wrap; word-break:break-word; max-height:180px; overflow-y:auto; border:1px solid #e2e2e2; border-radius:6px; padding:10px 12px; font-size:0.88rem; line-height:1.5; background:#fafafa; }
+  footer { text-align:center; color:#8a8f98; font-size:0.8rem; margin-top:20px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
-    <h1>📋 오늘의 브리핑</h1>
-    <div class="date">2026년 08월 31일 (Mon)</div>
+    <h1>📅 2026년 8월 31일 월요일</h1>
+    <div class="updated">🕐 마지막 업데이트: 08월 31일 01:16</div>
   </header>
+  
+  <section class="card">
+    <div class="card-head">
+      <h2>🐭 오늘의 운세</h2>
+      <button class="copy-btn" onclick="copySection('fortune')">복사</button>
+    </div>
+    <div class="textbox" id="fortune">오늘의 운세, 8월 31일
 
-  <section>
-    <h2>🐭 오늘의 운세</h2>
-    <table class='fortune-table'><thead><tr><th>띠</th><th>금전</th><th>애정</th><th>건강</th><th>한줄</th></tr></thead><tbody><tr><td>쥐띠</td><td>💰★★☆☆☆</td><td>❤️★★★★★</td><td>💪★★☆☆☆</td><td>작은 성취가 큰 자신감으로 이어집니다.</td></tr><tr><td>소띠</td><td>💰★★★★☆</td><td>❤️★★★★☆</td><td>💪★☆☆☆☆</td><td>새로운 시도를 하기에 나쁘지 않은 날입니다.</td></tr><tr><td>호랑이띠</td><td>💰★☆☆☆☆</td><td>❤️★★★☆☆</td><td>💪★★★☆☆</td><td>무리한 지출은 피하는 것이 좋습니다.</td></tr><tr><td>토끼띠</td><td>💰★★★★☆</td><td>❤️★★★★★</td><td>💪★★★☆☆</td><td>주변 사람과의 대화에서 힌트를 얻을 수 있어요.</td></tr><tr><td>용띠</td><td>💰★★★☆☆</td><td>❤️★★★★☆</td><td>💪★★★★★</td><td>생각지 못한 곳에서 좋은 소식이 들려옵니다.</td></tr><tr><td>뱀띠</td><td>💰★★☆☆☆</td><td>❤️★★★★★</td><td>💪★☆☆☆☆</td><td>무리한 지출은 피하는 것이 좋습니다.</td></tr><tr><td>말띠</td><td>💰★☆☆☆☆</td><td>❤️★★★★★</td><td>💪★★☆☆☆</td><td>컨디션 관리에 신경 쓰면 좋은 하루가 됩니다.</td></tr><tr><td>양띠</td><td>💰★☆☆☆☆</td><td>❤️★★★★☆</td><td>💪★★★★☆</td><td>평소보다 신중한 판단이 필요한 하루입니다.</td></tr><tr><td>원숭이띠</td><td>💰★★★☆☆</td><td>❤️★★★★★</td><td>💪★★★★☆</td><td>컨디션 관리에 신경 쓰면 좋은 하루가 됩니다.</td></tr><tr><td>닭띠</td><td>💰★★★★☆</td><td>❤️★★☆☆☆</td><td>💪★★★★★</td><td>감정적인 결정보다는 차분한 판단이 필요합니다.</td></tr><tr><td>개띠</td><td>💰★★★★☆</td><td>❤️★★★☆☆</td><td>💪★★★☆☆</td><td>무리한 지출은 피하는 것이 좋습니다.</td></tr><tr><td>돼지띠</td><td>💰★★★★★</td><td>❤️★★★★☆</td><td>💪★★★★★</td><td>작은 성취가 큰 자신감으로 이어집니다.</td></tr></tbody></table>
+&lt;쥐띠&gt;
+20년생 무리한 지출은 피하는 것이 좋다. 08년생 무리한 지출은 피하는 것이 좋다. 96년생 가족과의 시간에서 안정을 찾을 수 있다. 84년생 행운을 가져다주는 사람이 가까이에 있다.
+
+&lt;소띠&gt;
+21년생 작은 성취가 큰 자신감으로 이어진다. 09년생 감정적인 결정보다는 차분한 판단이 필요하다. 97년생 쓸 만큼의 금전 유통은 가능하다. 85년생 평소보다 신중한 판단이 필요한 하루다.
+
+&lt;호랑이띠&gt;
+22년생 감정적인 결정보다는 차분한 판단이 필요하다. 10년생 행운을 가져다주는 사람이 가까이에 있다. 98년생 귀인의 도움으로 막힌 일이 풀린다. 86년생 귀인의 도움으로 막힌 일이 풀린다.
+
+&lt;토끼띠&gt;
+23년생 건강 관리에 소홀하지 않도록 주의가 필요하다. 11년생 쓸 만큼의 금전 유통은 가능하다. 99년생 가족과의 시간에서 안정을 찾을 수 있다. 87년생 작은 것에도 감사하는 마음을 가지면 좋다.
+
+&lt;용띠&gt;
+24년생 고생 끝에 낙이 온다. 힘들었던 문제도 해결될 것이다. 12년생 새로운 시도를 하기에 나쁘지 않은 날이다. 00년생 건강 관리에 소홀하지 않도록 주의가 필요하다. 88년생 귀인의 도움으로 막힌 일이 풀린다.
+
+&lt;뱀띠&gt;
+25년생 쓸 만큼의 금전 유통은 가능하다. 13년생 평소보다 신중한 판단이 필요한 하루다. 01년생 가족과의 시간에서 안정을 찾을 수 있다. 89년생 귀인의 도움으로 막힌 일이 풀린다.
+
+&lt;말띠&gt;
+14년생 컨디션 관리에 신경 쓰면 좋은 하루가 된다. 02년생 건강 관리에 소홀하지 않도록 주의가 필요하다. 90년생 귀인의 도움으로 막힌 일이 풀린다. 78년생 고생 끝에 낙이 온다. 힘들었던 문제도 해결될 것이다.
+
+&lt;양띠&gt;
+15년생 쓸 만큼의 금전 유통은 가능하다. 03년생 귀인의 도움으로 막힌 일이 풀린다. 91년생 컨디션 관리에 신경 쓰면 좋은 하루가 된다. 79년생 행운을 가져다주는 사람이 가까이에 있다.
+
+&lt;원숭이띠&gt;
+16년생 무리한 지출은 피하는 것이 좋다. 04년생 귀인의 도움으로 막힌 일이 풀린다. 92년생 새로운 시도를 하기에 나쁘지 않은 날이다. 80년생 작은 성취가 큰 자신감으로 이어진다.
+
+&lt;닭띠&gt;
+17년생 쓸 만큼의 금전 유통은 가능하다. 05년생 행운을 가져다주는 사람이 가까이에 있다. 93년생 주변 사람과의 대화에서 힌트를 얻을 수 있다. 81년생 작은 성취가 큰 자신감으로 이어진다.
+
+&lt;개띠&gt;
+18년생 고생 끝에 낙이 온다. 힘들었던 문제도 해결될 것이다. 06년생 작은 것에도 감사하는 마음을 가지면 좋다. 94년생 새로운 시도를 하기에 나쁘지 않은 날이다. 82년생 생각지 못한 곳에서 좋은 소식이 들려온다.
+
+&lt;돼지띠&gt;
+19년생 주변 사람과의 대화에서 힌트를 얻을 수 있다. 07년생 평소보다 신중한 판단이 필요한 하루다. 95년생 건강 관리에 소홀하지 않도록 주의가 필요하다. 83년생 작은 것에도 감사하는 마음을 가지면 좋다.</div>
   </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>🌤 날씨</h2>
+      <button class="copy-btn" onclick="copySection('weather')">복사</button>
+    </div>
+    <div class="textbox" id="weather">2026년 8월 31일 월요일
 
-  <section>
-    <h2>📰 뉴스</h2>
-    <h3>정치</h3><ul><li><a href='https://www.yna.co.kr/view/AKR20260830030752504' target='_blank' rel='noopener'>[네팔 대홍수] 韓헬기 오늘 운항 못해…당국 불허(종합2보)</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830069400001' target='_blank' rel='noopener'>김민석, &#x27;전대 여론조사 조작 의혹&#x27; 유튜버 긴급 감찰 지시</a></li><li><a href='https://www.yna.co.kr/view/AKR20260829044551001' target='_blank' rel='noopener'>이준석 사퇴에 갈 길 잃은 개혁신당…재건 일정 불투명(종합)</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830061900001' target='_blank' rel='noopener'>韓총리, 호우 대비 긴급지시…&quot;위험지역 사전 점검해 철저 관리&quot;</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830056800003' target='_blank' rel='noopener'>&#x27;현장형 관료&#x27; 홍지선 국토장관 후보자…주택공급 속도내나</a></li></ul><h3>경제</h3><ul><li><a href='https://www.yna.co.kr/view/AKR20260830062900030' target='_blank' rel='noopener'>신영수 CJ대한통운 대표 &quot;글로벌에서 퀀텀점프 해법 찾아야&quot;</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830060100002' target='_blank' rel='noopener'>[게시판] 교보생명, 지속가능경영보고서 발간…소비자 보호·포용성 개선</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830058900002' target='_blank' rel='noopener'>새 경제사령탑 이형일의 과제…잠재성장률·민생·부동산</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830059800030' target='_blank' rel='noopener'>[부고] 박화진(전 청송건설 대표)씨 별세</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830056800003' target='_blank' rel='noopener'>&#x27;현장형 관료&#x27; 홍지선 국토장관 후보자…주택공급 속도내나</a></li></ul><h3>사회</h3><ul><li><a href='https://www.yna.co.kr/view/AKR20260831000800004' target='_blank' rel='noopener'>[네팔 대홍수] 신속대응팀 &quot;헬기 이륙허가 변수에 육로 수색 시도&quot;</a></li><li><a href='https://www.yna.co.kr/view/AKR20260831001100527' target='_blank' rel='noopener'>천안 등 충남 10곳 31일 0시 호우주의보</a></li><li><a href='https://www.yna.co.kr/view/AKR20260831000900527' target='_blank' rel='noopener'>대전에 31일 0시 호우주의보</a></li><li><a href='https://www.yna.co.kr/view/AKR20260831001000527' target='_blank' rel='noopener'>세종남부·북부에 31일 0시 호우주의보</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830072400004' target='_blank' rel='noopener'>[네팔 대홍수] 구조된 현장소장 &quot;사방이 물보라…3시간 지나서야 현장 보여&quot;</a></li></ul><h3>국제</h3><ul><li><a href='https://www.yna.co.kr/view/AKR20260831000700071' target='_blank' rel='noopener'>트럼프 &quot;베네수 석유로 전략비축유 채울 것…절차 곧 시작&quot;</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830073200071' target='_blank' rel='noopener'>&#x27;허블 시야각 100배&#x27; 美 최신형 우주망원경 &#x27;로먼&#x27; 발사</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830073000085' target='_blank' rel='noopener'>&quot;이란전쟁 후 G7 차입비용 22조 늘었다…미국이 3분의 2&quot;</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830071800071' target='_blank' rel='noopener'>&quot;트럼프, 김정은 일단 만나고 중간선거 후 2차 회담 가능성&quot;</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830071000071' target='_blank' rel='noopener'>트럼프, NBC 앵커 맹비난…방송규제 당국에 처벌 요구</a></li></ul>
+▷ 지역별 날씨전망 ▷
+
+☆서울(🌧️)  22℃ ~ 23℃
+☆인천(🌧️)  22℃ ~ 23℃
+☆광주(🌧️)  26℃ ~ 31℃
+☆대구(🌧️)  24℃ ~ 32℃
+☆부산(🌧️)  26℃ ~ 31℃
+☆울산(🌧️)  24℃ ~ 32℃
+☆창원(🌧️)  25℃ ~ 31℃
+☆제주(🌤️)  25℃ ~ 31℃</div>
   </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>⚡ 오늘의 퀵뉴스</h2>
+      <button class="copy-btn" onclick="copySection('quicknews')">복사</button>
+    </div>
+    <div class="textbox" id="quicknews">26년 8월 31일 월요일 오늘의 퀵뉴스⚡
 
-  <section>
-    <h2>💹 금융지표</h2>
-    <div class='stat'><span class='label'>USD/KRW</span><span class='value'>1374.55원</span></div><div class='stat'><span class='label'>코스피</span><span class='value'>6,788.88</span></div><div class='stat'><span class='label'>BTC</span><span class='value'>109365000.0원 (+0.57%)</span></div><div class='stat'><span class='label'>ETH</span><span class='value'>3443000.0원 (+0.79%)</span></div>
+🏛 (정치) [네팔 대홍수] 韓헬기 오늘 운항 못해…당국 불허(종합2보) / 김민석, &#x27;전대 여론조사 조작 의혹&#x27; 유튜버 긴급 감찰 지시 / 이준석 사퇴에 갈 길 잃은 개혁신당…재건 일정 불투명(종합)
+💰 (경제) 신영수 CJ대한통운 대표 &quot;글로벌에서 퀀텀점프 해법 찾아야&quot; / [게시판] 교보생명, 지속가능경영보고서 발간…소비자 보호·포용성 개선 / 새 경제사령탑 이형일의 과제…잠재성장률·민생·부동산
+🏙 (사회) [네팔 대홍수] 신속대응팀 &quot;헬기 이륙허가 변수에 육로 수색 시도&quot; / 천안 등 충남 10곳 31일 0시 호우주의보 / 대전에 31일 0시 호우주의보
+🌍 (국제) 안보보다 &#x27;바다&#x27; 택했다…아이슬란드, EU 가입 협상 재개 불발(종합2보) / 트럼프 &quot;베네수 석유로 전략비축유 채울 것…절차 곧 시작&quot; / &#x27;허블 시야각 100배&#x27; 美 최신형 우주망원경 &#x27;로먼&#x27; 발사</div>
   </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>🏗 청약 소식</h2>
+      <button class="copy-btn" onclick="copySection('subscription')">복사</button>
+    </div>
+    <div class="textbox" id="subscription">26년 8월 31일 월요일 청약 소식
 
-  <section>
-    <h2>🏠 부동산 (전국)</h2>
-    <ul><li><a href='https://www.yna.co.kr/view/AKR20260830058900002' target='_blank' rel='noopener'>새 경제사령탑 이형일의 과제…잠재성장률·민생·부동산</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830014200004' target='_blank' rel='noopener'>전세사기 피해 집 누수·보일러도 고쳐준다…최대 500만원 지원</a></li><li><a href='https://www.yna.co.kr/view/AKR20260828151800064' target='_blank' rel='noopener'>&#x27;30년 흉물&#x27; 증평 윤모아파트 내년 &#x27;역사 속으로&#x27;…보상 순조</a></li><li><a href='https://www.yna.co.kr/view/AKR20260830006900003' target='_blank' rel='noopener'>전고점 바라보는 서울 중하위권 아파트 …상승세 지속되나</a></li><li><a href='https://www.yna.co.kr/view/AKR20260829033400003' target='_blank' rel='noopener'>금리 오르고 전세 뛰는데…무주택 서민 버팀목대출 1년새 42%↓</a></li><li><a href='https://www.yna.co.kr/view/AKR20260829040100004' target='_blank' rel='noopener'>장기전세 20년 채운 입주민들 &quot;더 살게 해달라&quot;…서울시 &quot;불가&quot;</a></li><li><a href='https://www.yna.co.kr/view/AKR20260828132100003' target='_blank' rel='noopener'>[부동산캘린더] 내주 인천 시티오씨엘9단지오션파크뷰 등 3천713가구 분양</a></li></ul>
+📝 관련 뉴스
+- [부동산캘린더] 내주 인천 시티오씨엘9단지오션파크뷰 등 3천713가구 분양</div>
   </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>📈 부동산 주간 시세동향</h2>
+      <button class="copy-btn" onclick="copySection('realestate')">복사</button>
+    </div>
+    <div class="textbox" id="realestate">26년 8월 31일 월요일 부동산 주간 시세동향
 
-  <footer>🕐 마지막 업데이트: 08월 31일 00:58</footer>
+📈 관련 뉴스
+- 새 경제사령탑 이형일의 과제…잠재성장률·민생·부동산
+- 전세사기 피해 집 누수·보일러도 고쳐준다…최대 500만원 지원
+- &#x27;30년 흉물&#x27; 증평 윤모아파트 내년 &#x27;역사 속으로&#x27;…보상 순조
+- 전고점 바라보는 서울 중하위권 아파트 …상승세 지속되나
+- 금리 오르고 전세 뛰는데…무주택 서민 버팀목대출 1년새 42%↓
+- 장기전세 20년 채운 입주민들 &quot;더 살게 해달라&quot;…서울시 &quot;불가&quot;</div>
+  </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>⛽ 기름값·환율</h2>
+      <button class="copy-btn" onclick="copySection('gasfx')">복사</button>
+    </div>
+    <div class="textbox" id="gasfx">26년 8월 31일 월요일 기름값·환율
+
+💱 환율
+미국 USD 1374.55원</div>
+  </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>🥇 금·은·코인</h2>
+      <button class="copy-btn" onclick="copySection('metalscoin')">복사</button>
+    </div>
+    <div class="textbox" id="metalscoin">26년 8월 31일 월요일 금·은·코인
+
+🪙 코인 시세
+BTC 109,775,000원 (+0.95%)
+ETH 3,486,000원 (+2.05%)</div>
+  </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>📚 주간 베스트셀러</h2>
+      <button class="copy-btn" onclick="copySection('bestseller')">복사</button>
+    </div>
+    <div class="textbox" id="bestseller">알라딘 API 키(ALADIN_TTB_KEY)가 설정되지 않아 표시할 수 없습니다.
+https://blog.aladin.co.kr/openapi 에서 무료로 발급받아 저장소 Settings &gt; Secrets and variables &gt; Actions 에 등록하면 자동으로 채워집니다.</div>
+  </section>
+  <footer>daily-briefing · 자동 생성</footer>
 </div>
+<script>
+function copySection(id) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(ta);
+}
+</script>
 </body>
 </html>
