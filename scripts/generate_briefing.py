@@ -915,8 +915,11 @@ def build_metalcoin():
     return "\n".join(lines).strip()
 
 
-@safe_none("베스트셀러")
-def fetch_bestsellers():
+ALADIN_TTB_KEY = os.environ.get("ALADIN_TTB_KEY", "")
+
+
+@safe_none("베스트셀러(스크래핑)")
+def _fetch_bestsellers_scrape():
     r = get("https://www.aladin.co.kr/shop/common/wbest.aspx?BestType=Bestseller&BranchType=1&CID=0")
     soup = BeautifulSoup(r.text, "html.parser")
     titles = []
@@ -927,6 +930,30 @@ def fetch_bestsellers():
         if len(titles) >= 10:
             break
     return titles
+
+
+@safe_none("베스트셀러(TTB API)")
+def _fetch_bestsellers_api():
+    if not ALADIN_TTB_KEY:
+        return None
+    r = get(
+        "https://www.aladin.co.kr/ttb/api/ItemList.aspx",
+        params={
+            "ttbkey": ALADIN_TTB_KEY, "QueryType": "Bestseller", "MaxResults": 10,
+            "start": 1, "SearchTarget": "Book", "output": "js", "Version": "20131101",
+        },
+    )
+    items = r.json().get("item", [])
+    return [it["title"] for it in items if it.get("title")]
+
+
+def fetch_bestsellers():
+    # 알라딘 웹페이지 직접 스크래핑을 우선 시도하고 (API 키 불필요),
+    # 봇 차단 등으로 실패하면 TTB API 키(ALADIN_TTB_KEY, 선택)가 있을 때 그것으로 대체한다.
+    titles = _fetch_bestsellers_scrape()
+    if titles:
+        return titles
+    return _fetch_bestsellers_api()
 
 
 @safe("주간 베스트셀러")
