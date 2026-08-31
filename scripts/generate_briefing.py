@@ -552,7 +552,16 @@ def build_shortnews():
 # 실패해도 해당 섹션만 안내 문구로 대체되고 나머지 섹션에는 영향 없다.
 # ---------------------------------------------------------------------------
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
-ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-3-5-haiku-latest")
+ANTHROPIC_MODEL_OVERRIDE = os.environ.get("ANTHROPIC_MODEL", "")
+# 모델 별칭은 시간이 지나면 폐지될 수 있으므로(404 Not Found), 후보를 여러 개
+# 두고 앞에서부터 시도한다. 마지막 후보(claude-sonnet-5)는 이 저장소를 만든
+# 시점에 실제로 서비스 중인 것이 확인된 모델이라 항상 동작해야 한다.
+# ANTHROPIC_MODEL 시크릿/변수를 지정하면 그 값만 사용한다.
+ANTHROPIC_MODEL_CANDIDATES = (
+    [ANTHROPIC_MODEL_OVERRIDE]
+    if ANTHROPIC_MODEL_OVERRIDE
+    else ["claude-haiku-4-5", "claude-sonnet-5"]
+)
 COMMENT_FALLBACK = (
     "ANTHROPIC_API_KEY가 설정되지 않았거나 생성에 실패해 논평을 표시할 수 없습니다."
 )
@@ -562,32 +571,38 @@ def _ask_claude(persona_prompt, material_lines, max_tokens=400):
     if not ANTHROPIC_API_KEY or not material_lines:
         return None
     material = "\n".join(f"- {m}" for m in material_lines[:8])
-    body = {
-        "model": ANTHROPIC_MODEL,
-        "max_tokens": max_tokens,
-        "temperature": 0.7,
-        "system": persona_prompt,
-        "messages": [
-            {
-                "role": "user",
-                "content": (
-                    f"오늘({TODAY_STR}) 수집된 관련 뉴스 헤드라인/요약은 다음과 같습니다:\n\n"
-                    f"{material}\n\n"
-                    "위 내용을 참고해서 페르소나에 맞는 논평을 작성해줘."
-                ),
-            }
-        ],
-    }
-    resp = requests.post(
-        "https://api.anthropic.com/v1/messages",
-        headers={
-            "x-api-key": ANTHROPIC_API_KEY,
-            "anthropic-version": "2023-06-01",
-            "content-type": "application/json",
-        },
-        json=body,
-        timeout=30,
-    )
+    messages = [
+        {
+            "role": "user",
+            "content": (
+                f"오늘({TODAY_STR}) 수집된 관련 뉴스 헤드라인/요약은 다음과 같습니다:\n\n"
+                f"{material}\n\n"
+                "위 내용을 참고해서 페르소나에 맞는 논평을 작성해줘."
+            ),
+        }
+    ]
+    resp = None
+    for i, model in enumerate(ANTHROPIC_MODEL_CANDIDATES):
+        resp = requests.post(
+            "https://api.anthropic.com/v1/messages",
+            headers={
+                "x-api-key": ANTHROPIC_API_KEY,
+                "anthropic-version": "2023-06-01",
+                "content-type": "application/json",
+            },
+            json={
+                "model": model,
+                "max_tokens": max_tokens,
+                "temperature": 0.7,
+                "system": persona_prompt,
+                "messages": messages,
+            },
+            timeout=30,
+        )
+        if resp.status_code == 404 and i < len(ANTHROPIC_MODEL_CANDIDATES) - 1:
+            # 이 모델 별칭을 찾을 수 없음 -> 다음 후보 모델로 재시도
+            continue
+        break
     resp.raise_for_status()
     data = resp.json()
     parts = [b.get("text", "") for b in data.get("content", []) if b.get("type") == "text"]
