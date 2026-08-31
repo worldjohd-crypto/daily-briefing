@@ -4,7 +4,12 @@ on:
   schedule:
     # 매일 06:30 ~ 21:30 KST, 1시간 간격 (총 16회/일) = 매일 00:30~12:30, 21:30~23:30 UTC
     - cron: "30 0-12,21-23 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      refresh_comments:
+        description: "AI 논평 6개 새로 생성 (체크 안 하면 캐시된 이전 논평 재사용, 무료)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -29,6 +34,7 @@ jobs:
           RONE_KEY: ${{ secrets.RONE_KEY }}
           ALADIN_TTB_KEY: ${{ secrets.ALADIN_TTB_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          REFRESH_COMMENTS: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_comments }}
         run: python scripts/generate_briefing.py
 
       - name: Commit and push if changed
@@ -36,7 +42,7 @@ jobs:
           git config user.name "briefing-bot"
           git config user.email "actions@users.noreply.github.com"
           git add briefing.html index.html
-          for f in fx-cache.json rone-cache.json; do
+          for f in fx-cache.json rone-cache.json comment-cache.json; do
             [ -f "$f" ] && git add "$f"
           done
           git diff --quiet --cached || git commit -m "chore: update daily briefing ($(date -u +'%Y-%m-%d %H:%M UTC'))"
