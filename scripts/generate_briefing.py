@@ -566,6 +566,27 @@ COMMENT_FALLBACK = (
     "ANTHROPIC_API_KEY가 설정되지 않았거나 생성에 실패해 논평을 표시할 수 없습니다."
 )
 
+# AI 논평 6개는 비용이 드는 구간이라, 매시간 자동 실행에서는 새로 생성하지
+# 않고 마지막으로 생성해 둔 결과(comment-cache.json)를 그대로 재사용한다.
+# REFRESH_COMMENTS=true 로 실행할 때만(수동 workflow_dispatch에서 체크박스로
+# 지정) 실제로 Claude API를 호출해 새로 생성하고 캐시를 갱신한다.
+COMMENT_CACHE_FILE = "comment-cache.json"
+REFRESH_COMMENTS = os.environ.get("REFRESH_COMMENTS", "false").strip().lower() == "true"
+
+try:
+    with open(COMMENT_CACHE_FILE, "r", encoding="utf-8") as f:
+        _COMMENT_CACHE = json.load(f)
+except Exception:
+    _COMMENT_CACHE = {}
+
+
+def _save_comment_cache():
+    try:
+        with open(COMMENT_CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(_COMMENT_CACHE, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+
 
 def _ask_claude(persona_prompt, material_lines, max_tokens=400):
     if not ANTHROPIC_API_KEY or not material_lines:
@@ -610,18 +631,28 @@ def _ask_claude(persona_prompt, material_lines, max_tokens=400):
     return text or None
 
 
-def _build_commentary(section_label, persona_name, persona_prompt, material_lines):
-    text = _ask_claude(persona_prompt, material_lines)
-    if not text:
+def _build_commentary(cache_key, section_label, persona_name, persona_prompt, material_lines):
+    cached = _COMMENT_CACHE.get(cache_key)
+
+    if REFRESH_COMMENTS or not cached:
+        text = _ask_claude(persona_prompt, material_lines)
+        if text:
+            cached = {"text": text, "updated": UPDATED_STR}
+            _COMMENT_CACHE[cache_key] = cached
+            _save_comment_cache()
+
+    if not cached:
         return None
-    header = f"{DATE_HEAD} {section_label} ({persona_name})"
-    return f"{header}\n\n{text}"
+
+    header = f"{DATE_HEAD} {section_label} ({persona_name}) · {cached['updated']} 생성"
+    return f"{header}\n\n{cached['text']}"
 
 
 @safe("정치 논평", fallback=COMMENT_FALLBACK)
 def build_politics_comment():
     material = [s for e, l, s in _daum_news_cached() if l == "정치"]
     return _build_commentary(
+        "politics",
         "정치 논평",
         "정치 브리핑",
         "너는 냉철하고 균형 잡힌 시각을 가진 한국 정치 평론가야. 특정 정당에 "
@@ -636,6 +667,7 @@ def build_politics_comment():
 def build_economy_comment():
     material = [s for e, l, s in _daum_news_cached() if l == "경제"]
     return _build_commentary(
+        "economy",
         "경제 논평",
         "경제 브리핑",
         "너는 거시경제와 산업 동향에 밝은 경제 전문 애널리스트야. 오늘자 경제 "
@@ -1161,6 +1193,7 @@ def build_realestate_comment():
     )
     material = [a["title"] for a in (articles or [])]
     return _build_commentary(
+        "realestate",
         "부동산 시장 논평",
         "부동산 워치",
         "너는 오랜 경력의 부동산 시장 분석가야. 오늘자 부동산 관련 뉴스 "
@@ -1196,6 +1229,7 @@ def build_world_comment():
     )
     material = [a["title"] for a in (articles or [])]
     return _build_commentary(
+        "world",
         "국제정세 논평",
         "글로벌 브리핑",
         "너는 국제정세를 다루는 외신 데스크 기자야. 오늘자 세계 뉴스 "
@@ -1222,6 +1256,7 @@ def build_finance_comment():
     )
     material = [a["title"] for a in (articles or [])]
     return _build_commentary(
+        "finance",
         "금융시장 논평",
         "마켓 브리핑",
         "너는 국내 금융시장을 다루는 애널리스트야. 오늘자 금융 뉴스 제목들을 "
@@ -1278,6 +1313,7 @@ def build_ai_comment():
     articles = _fetch_ai_articles()
     material = [a["title"] for a in (articles or [])]
     return _build_commentary(
+        "ai",
         "AI·테크 논평",
         "테크 트렌드 워치",
         "너는 AI와 테크 산업을 취재하는 전문 기자야. 오늘자 AI 뉴스 제목들을 "
