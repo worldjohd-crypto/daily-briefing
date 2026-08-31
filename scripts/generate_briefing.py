@@ -8,14 +8,17 @@ generate_briefing.py
 그대로 이식했다. 각 섹션은 서로 독립적으로 try/except 로 감싸, 한 섹션이
 실패해도 나머지 섹션은 정상적으로 만들어지도록 설계했다.
 
-섹션 구성 (원본과 동일한 순서):
-  오늘의 운세 / 날씨 / 오늘의 퀵뉴스 / 청약 소식 / 부동산 주간 시세동향 /
-  기름값·환율 / 금·은·코인 / 주간 베스트셀러 /
-  부동산 뉴스 / 세계 뉴스 / 금융 뉴스 / AI 뉴스
+섹션 구성:
+  오늘의 운세 / 날씨 / 오늘의 퀵뉴스 / [정치 논평] / [경제 논평] /
+  청약 소식 / 부동산 주간 시세동향 / 기름값·환율 / 금·은·코인 /
+  주간 베스트셀러 / 부동산 뉴스 / [부동산 시장 논평] /
+  세계 뉴스 / [국제정세 논평] / 금융 뉴스 / [금융시장 논평] /
+  AI 뉴스 / [AI·테크 논평]
 
-※ 정책분석 6종(월부길/부알남/부부투/비밀노트/여러분의 부동산/대한민국)은
-   원본에서 별도 LLM(Claude) 페르소나 작성 단계가 있어 이번 버전에는
-   포함하지 않았다.
+※ [ ] 표시된 6개 논평 섹션은 원본의 "정책분석" 코너를 그대로 이식한 것이
+   아니라, 그날 수집한 뉴스를 바탕으로 Claude API(Anthropic)가 매번 새로
+   생성하는 짧은 전문가 논평이다. ANTHROPIC_API_KEY 시크릿이 없으면 해당
+   섹션은 안내 문구로 대체되고 나머지 섹션에는 영향이 없다.
 """
 
 import datetime
@@ -497,13 +500,25 @@ def _get_market_indicators():
     return rows
 
 
+_DAUM_NEWS_CACHE = None
+
+
+def _daum_news_cached():
+    """_collect_daum_news() 는 매번 다음 여러 섹션을 스크래핑하므로,
+    퀵뉴스 섹션과 정치/경제 논평 섹션이 같은 결과를 재사용하도록 캐싱한다."""
+    global _DAUM_NEWS_CACHE
+    if _DAUM_NEWS_CACHE is None:
+        try:
+            _DAUM_NEWS_CACHE = _collect_daum_news()
+        except Exception:
+            _DAUM_NEWS_CACHE = []
+    return _DAUM_NEWS_CACHE
+
+
 @safe("퀵뉴스")
 def build_shortnews():
     header = f"{DATE_HEAD} 오늘의 퀵뉴스⚡"
-    try:
-        news_items = _collect_daum_news()
-    except Exception:
-        news_items = []
+    news_items = _daum_news_cached()
 
     lines = [header, ""]
     if news_items:
@@ -529,6 +544,91 @@ def build_shortnews():
     if not news_items and not indicators:
         return None
     return "\n".join(lines).strip()
+
+
+# ---------------------------------------------------------------------------
+# AI 논평 공통 헬퍼 — Claude API(Anthropic)로 그날 수집한 뉴스를 바탕으로
+# 짧은 전문가 페르소나 논평을 생성한다. ANTHROPIC_API_KEY 가 없거나 호출에
+# 실패해도 해당 섹션만 안내 문구로 대체되고 나머지 섹션에는 영향 없다.
+# ---------------------------------------------------------------------------
+ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-3-5-haiku-latest")
+COMMENT_FALLBACK = (
+    "ANTHROPIC_API_KEY가 설정되지 않았거나 생성에 실패해 논평을 표시할 수 없습니다."
+)
+
+
+def _ask_claude(persona_prompt, material_lines, max_tokens=400):
+    if not ANTHROPIC_API_KEY or not material_lines:
+        return None
+    material = "\n".join(f"- {m}" for m in material_lines[:8])
+    body = {
+        "model": ANTHROPIC_MODEL,
+        "max_tokens": max_tokens,
+        "temperature": 0.7,
+        "system": persona_prompt,
+        "messages": [
+            {
+                "role": "user",
+                "content": (
+                    f"오늘({TODAY_STR}) 수집된 관련 뉴스 헤드라인/요약은 다음과 같습니다:\n\n"
+                    f"{material}\n\n"
+                    "위 내용을 참고해서 페르소나에 맞는 논평을 작성해줘."
+                ),
+            }
+        ],
+    }
+    resp = requests.post(
+        "https://api.anthropic.com/v1/messages",
+        headers={
+            "x-api-key": ANTHROPIC_API_KEY,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+        },
+        json=body,
+        timeout=30,
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    parts = [b.get("text", "") for b in data.get("content", []) if b.get("type") == "text"]
+    text = "\n".join(parts).strip()
+    return text or None
+
+
+def _build_commentary(section_label, persona_name, persona_prompt, material_lines):
+    text = _ask_claude(persona_prompt, material_lines)
+    if not text:
+        return None
+    header = f"{DATE_HEAD} {section_label} ({persona_name})"
+    return f"{header}\n\n{text}"
+
+
+@safe("정치 논평", fallback=COMMENT_FALLBACK)
+def build_politics_comment():
+    material = [s for e, l, s in _daum_news_cached() if l == "정치"]
+    return _build_commentary(
+        "정치 논평",
+        "정치 브리핑",
+        "너는 냉철하고 균형 잡힌 시각을 가진 한국 정치 평론가야. 특정 정당에 "
+        "편향되지 않고, 오늘자 정치 뉴스의 핵심 쟁점과 그 파장을 3~4문장, "
+        "300자 내외의 한국어로 간결하게 짚어줘. 자극적인 단정은 피하고 "
+        "사실관계 중심으로 서술해.",
+        material,
+    )
+
+
+@safe("경제 논평", fallback=COMMENT_FALLBACK)
+def build_economy_comment():
+    material = [s for e, l, s in _daum_news_cached() if l == "경제"]
+    return _build_commentary(
+        "경제 논평",
+        "경제 브리핑",
+        "너는 거시경제와 산업 동향에 밝은 경제 전문 애널리스트야. 오늘자 경제 "
+        "뉴스를 바탕으로 시장에 어떤 의미가 있는지 3~4문장, 300자 내외의 "
+        "한국어로 간결하고 담백하게 설명해줘. 투자 조언이 아니라 상황 해설에 "
+        "집중해.",
+        material,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -1016,42 +1116,119 @@ def _render_news_section(emoji, label, articles):
     return "\n".join(lines).strip()
 
 
+_SECTION_ARTICLES_CACHE = {}
+
+
+def _cached_section_headlines(cache_key, urls, max_articles=10):
+    """뉴스 섹션과 그에 대응하는 논평 섹션이 같은 스크래핑 결과를
+    재사용하도록 캐싱한다 (사이트에 중복 요청을 보내지 않기 위함)."""
+    if cache_key not in _SECTION_ARTICLES_CACHE:
+        _SECTION_ARTICLES_CACHE[cache_key] = _naver_section_headlines(
+            urls, max_articles=max_articles
+        )
+    return _SECTION_ARTICLES_CACHE[cache_key]
+
+
 @safe("부동산 뉴스")
 def build_realestate_news():
-    articles = _naver_section_headlines("https://news.naver.com/breakingnews/section/101/260")
+    articles = _cached_section_headlines(
+        "realestate", "https://news.naver.com/breakingnews/section/101/260"
+    )
     if not articles:
         return None
     return _render_news_section("🏠", "부동산 주요뉴스", articles)
 
 
+@safe("부동산 시장 논평", fallback=COMMENT_FALLBACK)
+def build_realestate_comment():
+    articles = _cached_section_headlines(
+        "realestate", "https://news.naver.com/breakingnews/section/101/260"
+    )
+    material = [a["title"] for a in (articles or [])]
+    return _build_commentary(
+        "부동산 시장 논평",
+        "부동산 워치",
+        "너는 오랜 경력의 부동산 시장 분석가야. 오늘자 부동산 관련 뉴스 "
+        "제목들을 보고 정책, 공급, 가격 동향 중 어떤 흐름이 눈에 띄는지 "
+        "3~4문장, 300자 내외의 한국어로 담백하게 짚어줘. 특정 지역의 매수·"
+        "매도를 직접 권유하지는 마.",
+        material,
+    )
+
+
 @safe("세계 뉴스")
 def build_world_news():
-    articles = _naver_section_headlines([
-        "https://news.naver.com/section/104",
-        "https://news.naver.com/breakingnews/section/104",
-    ])
+    articles = _cached_section_headlines(
+        "world",
+        [
+            "https://news.naver.com/section/104",
+            "https://news.naver.com/breakingnews/section/104",
+        ],
+    )
     if not articles:
         return None
     return _render_news_section("🌏", "세계 뉴스", articles)
 
 
+@safe("국제정세 논평", fallback=COMMENT_FALLBACK)
+def build_world_comment():
+    articles = _cached_section_headlines(
+        "world",
+        [
+            "https://news.naver.com/section/104",
+            "https://news.naver.com/breakingnews/section/104",
+        ],
+    )
+    material = [a["title"] for a in (articles or [])]
+    return _build_commentary(
+        "국제정세 논평",
+        "글로벌 브리핑",
+        "너는 국제정세를 다루는 외신 데스크 기자야. 오늘자 세계 뉴스 "
+        "제목들을 보고 한국에 미칠 수 있는 영향까지 포함해 3~4문장, 300자 "
+        "내외의 한국어로 균형 잡히게 정리해줘.",
+        material,
+    )
+
+
 @safe("금융 뉴스")
 def build_finance_news():
-    articles = _naver_section_headlines("https://news.naver.com/breakingnews/section/101/259")
+    articles = _cached_section_headlines(
+        "finance", "https://news.naver.com/breakingnews/section/101/259"
+    )
     if not articles:
         return None
     return _render_news_section("🏦", "금융 뉴스", articles)
 
 
+@safe("금융시장 논평", fallback=COMMENT_FALLBACK)
+def build_finance_comment():
+    articles = _cached_section_headlines(
+        "finance", "https://news.naver.com/breakingnews/section/101/259"
+    )
+    material = [a["title"] for a in (articles or [])]
+    return _build_commentary(
+        "금융시장 논평",
+        "마켓 브리핑",
+        "너는 국내 금융시장을 다루는 애널리스트야. 오늘자 금융 뉴스 제목들을 "
+        "보고 은행·증시·코인 등 시장 전반의 분위기를 3~4문장, 300자 내외의 "
+        "한국어로 간결하게 정리해줘. 특정 종목 매수·매도 추천은 하지 마.",
+        material,
+    )
+
+
 AI_ARTICLE_RE = re.compile(r"/news/articleView\.html\?idxno=\d+")
+_AI_ARTICLES_CACHE = None
 
 
-@safe("AI 뉴스")
-def build_ai_news():
+def _fetch_ai_articles():
+    global _AI_ARTICLES_CACHE
+    if _AI_ARTICLES_CACHE is not None:
+        return _AI_ARTICLES_CACHE
     try:
         resp = get("https://www.aitimes.com/news/articleList.html?box_idxno=10&view_type=sm")
     except Exception:
-        return None
+        _AI_ARTICLES_CACHE = []
+        return _AI_ARTICLES_CACHE
     resp.encoding = "utf-8"
     soup = BeautifulSoup(resp.text, "html.parser")
     articles = []
@@ -1069,9 +1246,30 @@ def build_ai_news():
         seen_links.add(href)
         if len(articles) >= 10:
             break
+    _AI_ARTICLES_CACHE = articles
+    return articles
+
+
+@safe("AI 뉴스")
+def build_ai_news():
+    articles = _fetch_ai_articles()
     if not articles:
         return None
     return _render_news_section("🤖", "AI 뉴스", articles)
+
+
+@safe("AI·테크 논평", fallback=COMMENT_FALLBACK)
+def build_ai_comment():
+    articles = _fetch_ai_articles()
+    material = [a["title"] for a in (articles or [])]
+    return _build_commentary(
+        "AI·테크 논평",
+        "테크 트렌드 워치",
+        "너는 AI와 테크 산업을 취재하는 전문 기자야. 오늘자 AI 뉴스 제목들을 "
+        "보고 어떤 흐름이 중요한지 3~4문장, 300자 내외의 한국어로 담백하게 "
+        "짚어줘.",
+        material,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -1155,15 +1353,21 @@ def build_page():
         ("fortune", "🔮", "오늘의 운세", build_fortune()),
         ("weather", "☀️", "날씨", build_weather()),
         ("shortnews", "⚡", "오늘의 퀵뉴스", build_shortnews()),
+        ("politics_comment", "🏛️", "정치 논평 (AI)", build_politics_comment()),
+        ("economy_comment", "💹", "경제 논평 (AI)", build_economy_comment()),
         ("subs", "🏗️", "청약 소식", build_subs()),
         ("trend", "📈", "부동산 주간 시세동향", build_trend()),
         ("fuelfx", "⛽", "기름값·환율", build_fuelfx()),
         ("metalcoin", "🥇", "금·은·코인", build_metalcoin()),
         ("books", "📚", "주간 베스트셀러", build_books()),
         ("realestate", "🏠", "부동산 뉴스", build_realestate_news()),
+        ("realestate_comment", "🏠", "부동산 시장 논평 (AI)", build_realestate_comment()),
         ("world", "🌏", "세계 뉴스", build_world_news()),
+        ("world_comment", "🌐", "국제정세 논평 (AI)", build_world_comment()),
         ("finance", "🏦", "금융 뉴스", build_finance_news()),
+        ("finance_comment", "🏦", "금융시장 논평 (AI)", build_finance_comment()),
         ("ai", "🤖", "AI 뉴스", build_ai_news()),
+        ("ai_comment", "🤖", "AI·테크 논평 (AI)", build_ai_comment()),
     ]
     sections_html = "".join(
         render_section(sid, emoji, title, body) for sid, emoji, title, body in sections_data
