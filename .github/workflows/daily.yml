@@ -27,6 +27,8 @@ jobs:
       - name: Generate briefing
         env:
           RONE_KEY: ${{ secrets.RONE_KEY }}
+          ALADIN_TTB_KEY: ${{ secrets.ALADIN_TTB_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scripts/generate_briefing.py
 
       - name: Commit and push if changed
