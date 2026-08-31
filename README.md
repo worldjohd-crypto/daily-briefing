@@ -5,7 +5,7 @@
 ## 구조
 
 - `scripts/generate_briefing.py` — 데이터 수집 + HTML 생성 (아래 18개 섹션)
-- `.github/workflows/daily.yml` — 매일 23:50(KST) 자동 실행, 결과를 커밋
+- `.github/workflows/daily.yml` — 매일 06:30~21:30(KST) 사이 1시간 간격(하루 16회) 자동 실행, 결과를 커밋
 - `briefing.html`, `index.html` — 생성된 결과 (GitHub Pages로 서빙)
 - `fx-cache.json`, `rone-cache.json` — 외부 API 실패 시 이전 값을 재사용하기 위한 캐시 (자동 생성/커밋)
 
