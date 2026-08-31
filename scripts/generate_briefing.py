@@ -44,6 +44,11 @@ UPDATED_STR = NOW.strftime("%m월 %d일 %H:%M")
 YY2 = NOW.year % 100
 DATE_HEAD = f"{YY2}년 {NOW.month}월 {NOW.day}일 {WEEKDAY_KO[NOW.weekday()]}"
 
+# 사이트 안의 "AI 논평 새로 받기" 버튼이 가리키는 곳. GitHub Pages는 정적
+# 페이지라 브라우저에서 바로 워크플로우를 실행시킬 수 없으므로(토큰 노출
+# 문제), GitHub Actions의 수동 실행 화면으로 안내한다.
+GITHUB_ACTIONS_URL = "https://github.com/worldjohd-crypto/daily-briefing/actions/workflows/daily.yml"
+
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
@@ -1359,6 +1364,9 @@ PAGE_TEMPLATE = """<!doctype html>
   .card-head h2 {{ margin:0; font-size:1.05rem; }}
   .copy-btn {{ background:#4a6cf7; color:#fff; border:none; border-radius:6px; padding:6px 14px; font-size:0.85rem; cursor:pointer; }}
   .copy-btn:active {{ background:#3a5ce0; }}
+  .refresh-box {{ margin-top:12px; padding:10px 14px; background:#fff7e6; border:1px solid #f0d999; border-radius:8px; font-size:0.82rem; color:#5c4a12; line-height:1.5; }}
+  .refresh-box a {{ display:inline-block; margin-top:6px; background:#f7a44a; color:#fff; text-decoration:none; border-radius:6px; padding:6px 14px; font-size:0.85rem; font-weight:600; }}
+  .refresh-box a:active {{ background:#e08e33; }}
   .textbox {{ white-space:pre-wrap; word-break:break-word; max-height:180px; overflow-y:auto; border:1px solid #e2e2e2; border-radius:6px; padding:10px 12px; font-size:0.88rem; line-height:1.5; background:#fafafa; }}
   footer {{ text-align:center; color:#8a8f98; font-size:0.8rem; margin-top:20px; }}
 </style>
@@ -1368,6 +1376,11 @@ PAGE_TEMPLATE = """<!doctype html>
   <header>
     <h1>📅 {today}</h1>
     <div class="updated">🕐 마지막 업데이트: {updated}</div>
+    <div class="refresh-box">
+      💡 6개 AI 논평(🏛️💹🏠🌐🏦🤖)은 비용 절감을 위해 평소엔 캐시된 내용을 보여줍니다.<br>
+      지금 바로 새로 생성하려면 아래 버튼으로 이동해 <b>Run workflow → "AI 논평 6개 새로 생성" 체크 → Run workflow</b> 순서로 실행하세요. (GitHub 로그인 필요)<br>
+      <a href="{actions_url}" target="_blank" rel="noopener">▶ AI 논평 새로 받기</a>
+    </div>
   </header>
   {sections}
   <footer>daily-briefing · 자동 생성</footer>
@@ -1426,6 +1439,7 @@ def build_page():
     return PAGE_TEMPLATE.format(
         today=esc(TODAY_STR),
         updated=esc(UPDATED_STR),
+        actions_url=esc(GITHUB_ACTIONS_URL),
         sections=sections_html,
     )
 
