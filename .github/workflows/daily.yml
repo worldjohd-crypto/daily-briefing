@@ -25,6 +25,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Generate briefing
+        env:
+          RONE_KEY: ${{ secrets.RONE_KEY }}
         run: python scripts/generate_briefing.py
 
       - name: Commit and push if changed
@@ -32,5 +34,8 @@ jobs:
           git config user.name "briefing-bot"
           git config user.email "actions@users.noreply.github.com"
           git add briefing.html index.html
+          for f in fx-cache.json rone-cache.json; do
+            [ -f "$f" ] && git add "$f"
+          done
           git diff --quiet --cached || git commit -m "chore: update daily briefing ($(date -u +'%Y-%m-%d %H:%M UTC'))"
           git push
