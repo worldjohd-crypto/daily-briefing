@@ -2,8 +2,8 @@ name: Daily Briefing
 
 on:
   schedule:
-    # 매일 23:50 KST = 14:50 UTC
-    - cron: "50 14 * * *"
+    # 매일 06:30 ~ 21:30 KST, 1시간 간격 (총 16회/일) = 매일 00:30~12:30, 21:30~23:30 UTC
+    - cron: "30 0-12,21-23 * * *"
   workflow_dispatch: {}
 
 permissions:
