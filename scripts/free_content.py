@@ -3,6 +3,7 @@ import datetime
 import json
 import html
 import hashlib
+from bs4 import BeautifulSoup
 import requests
 import re
 import xml.etree.ElementTree as ET
@@ -25,7 +26,7 @@ EXTRA = [
 ]
 NEWS = [
     ('entertainment', '🌟', '연예 뉴스', '연예 배우 가수'),
-    ('romance', '💕', '열애·결혼 소식', '연예인 열애 결혼 결별'),
+    ('romance', '💕', '열애·결혼 소식', '(열애 OR 결혼 OR 결별) (연예 OR 배우 OR 가수)'),
     ('broadcast', '📺', '방송 화제', '드라마 예능 방송 화제'),
 ]
 
@@ -33,6 +34,8 @@ ARTICLE_LINKS_FILE = Path(__file__).resolve().parent.parent / 'article-links.jso
 SHORT_LINK_BASE = 'https://worldjohd-crypto.github.io/daily-briefing/go.html#'
 EXTERNAL_LINKS_FILE = Path(__file__).resolve().parent.parent / 'external-shortlinks.json'
 _SHORTENER_UNAVAILABLE = False
+PORTAL_NEWS_HOSTS = {'v.daum.net'}
+NEWS_SOURCE_AUDIT_FILE = Path(__file__).resolve().parent.parent / 'news-source-audit.json'
 
 
 def external_article_link(url):
@@ -40,7 +43,7 @@ def external_article_link(url):
     global _SHORTENER_UNAVAILABLE
     if re.fullmatch(r'https://da\.gd/[A-Za-z0-9_-]+', url):
         return url
-    if urlparse(url).scheme != 'https' or urlparse(url).hostname != 'news.google.com':
+    if urlparse(url).scheme != 'https' or urlparse(url).hostname not in ('news.google.com', 'v.daum.net'):
         return url
     try:
         links = json.loads(EXTERNAL_LINKS_FILE.read_text(encoding='utf-8'))
@@ -115,7 +118,7 @@ def local_article_link(url):
 
 def prepare_news_text(body, section_id):
     original_links = {}
-    if section_id in ('entertainment', 'romance'):
+    if section_id in ('entertainment', 'romance', 'broadcast'):
         try:
             original_links = {v: k for k, v in json.loads((Path(__file__).resolve().parent.parent / 'news-shortlinks.json').read_text(encoding='utf-8')).items()}
         except (OSError, ValueError):
@@ -130,10 +133,10 @@ def prepare_news_text(body, section_id):
         lines = block.splitlines()
         if len(lines) in (2, 3) and urlparse(lines[-1]).scheme == 'https':
             url = original_links.get(lines[-1], lines[-1])
-            if section_id in ('entertainment', 'romance'):
+            if section_id in ('entertainment', 'romance', 'broadcast'):
                 url = external_article_link(url)
             parsed = urlparse(url)
-            if parsed.scheme != 'https' or parsed.hostname not in ('news.google.com', 'm.site.naver.com', 'da.gd'):
+            if parsed.scheme != 'https' or parsed.hostname not in ('news.google.com', 'v.daum.net', 'm.site.naver.com', 'da.gd'):
                 url = lines[-1]
             blocks.append(lines[0] + '\n' + url)
         else:
@@ -149,7 +152,7 @@ def render_news_links(body):
         if len(lines) in (2, 3):
             title, url = lines[0], lines[-1]
             parsed = urlparse(url)
-            if parsed.scheme == 'https' and parsed.hostname in ('news.google.com', 'm.site.naver.com', 'da.gd'):
+            if parsed.scheme == 'https' and parsed.hostname in ('news.google.com', 'v.daum.net', 'm.site.naver.com', 'da.gd'):
                 blocks.append('<a href="' + html.escape(url, quote=True)
                               + '" target="_blank" rel="noopener noreferrer">'
                               + html.escape(title) + '</a>')
@@ -175,30 +178,94 @@ def source_sections(get, now):
     return result
 
 
-def news_text(get, now, label, query, used):
-    url = 'https://news.google.com/rss/search?q=' + quote(query + ' when:2d') + '&hl=ko&gl=KR&ceid=KR:ko'
-    root = ET.fromstring(get(url, timeout=20).content)
-    lines = [f'{now:%Y-%m-%d %H:%M} 수집 · {label}', '기사 제목·출처·원문 링크 (AI 생성 없음)', '']
-    count = 0
-    for item in root.findall('./channel/item'):
-        title = item.findtext('title', '').strip()
-        link = item.findtext('link', '').strip()
+_PORTAL_CANDIDATES = None
+_VERIFIED_PORTAL_ARTICLES = {}
+ROMANCE_NEWS_RE = re.compile(r'열애|결혼|결별|♥|부부|연인|이혼|재혼|신혼|연애|상견례')
+BROADCAST_NEWS_RE = re.compile(r'예능|드라마|시청률|방송|OTT|넷플릭스|놀면|놀뭐|나 혼자|런닝맨|미우새|돌싱포맨|쇼미|환승연애|나는 솔로|살림남|미스터트롯|불후|금타는|닥터|비서진|출연|나혼산')
+AD_WALL_RE = re.compile(r'goog-continue-reading-btn|계속하려면\s*광고|광고를\s*시청.{0,20}계속', re.I)
+
+
+def _portal_candidates(get):
+    global _PORTAL_CANDIDATES
+    if _PORTAL_CANDIDATES is None:
+        response = get('https://entertain.daum.net/news', timeout=20)
+        response.encoding = 'utf-8'
+        soup = BeautifulSoup(response.text, 'html.parser')
+        items, seen = [], set()
+        for anchor in soup.find_all('a', href=True):
+            url = anchor['href']
+            match = re.fullmatch(r'https://v\.daum\.net/v/(\d{14})\d*', url)
+            title = anchor.select_one('.tit_txt')
+            if not match or not title or url in seen:
+                continue
+            seen.add(url)
+            items.append((title.get_text(' ', strip=True), url, match.group(1)))
+        # The portal also supplies more stories as quoted hydration data.
+        # Parse string literals only; never execute embedded JavaScript.
+        pattern = r'\{id:"hamny-\d+",type:"TEXT",title:("(?:[^"\\]|\\.)*")[\s\S]*?pcUrl:("(?:[^"\\]|\\.)*")'
+        for match in re.finditer(pattern, response.text):
+            try:
+                title, url = (json.loads(value) for value in match.groups())
+            except ValueError:
+                continue
+            stamp = re.fullmatch(r'https://v\.daum\.net/v/(\d{14})\d*', url)
+            if stamp and url not in seen:
+                seen.add(url)
+                items.append((title, url, stamp.group(1)))
+        _PORTAL_CANDIDATES = sorted(items, key=lambda x: x[2], reverse=True)
+    return _PORTAL_CANDIDATES
+
+
+def _verify_portal_article(get, url):
+    if url not in _VERIFIED_PORTAL_ARTICLES:
         try:
-            published = parsedate_to_datetime(item.findtext('pubDate', '')).astimezone(now.tzinfo)
-        except (ValueError, TypeError, OverflowError):
+            response = get(url, timeout=15)
+            response.encoding = 'utf-8'
+            if urlparse(response.url).hostname != 'v.daum.net' or AD_WALL_RE.search(response.text):
+                _VERIFIED_PORTAL_ARTICLES[url] = None
+            else:
+                soup = BeautifulSoup(response.text, 'html.parser')
+                body = soup.select_one('.article_view, #harmonyContainer, article')
+                title = soup.select_one('meta[property="og:title"]')
+                if not body or len(body.get_text(' ', strip=True)) < 80:
+                    _VERIFIED_PORTAL_ARTICLES[url] = None
+                else:
+                    _VERIFIED_PORTAL_ARTICLES[url] = {'finalUrl': response.url, 'title': title.get('content', '') if title else '', 'adWallDetected': False}
+        except Exception:
+            _VERIFIED_PORTAL_ARTICLES[url] = None
+    return _VERIFIED_PORTAL_ARTICLES[url]
+
+
+def news_text(get, now, label, query, used):
+    lines = [f'{now:%Y-%m-%d %H:%M} 수집 · {label}', '']
+    count = 0
+    try:
+        source_audit = json.loads(NEWS_SOURCE_AUDIT_FILE.read_text(encoding='utf-8'))
+    except FileNotFoundError:
+        source_audit = {}
+    for title, link, stamp in _portal_candidates(get):
+        published = datetime.datetime.strptime(stamp, '%Y%m%d%H%M%S').replace(tzinfo=now.tzinfo)
+        if not 0 <= (now - published).total_seconds() <= 172800 or title in used:
             continue
-        if not title or title in used or not 0 <= (now - published).total_seconds() <= 172800:
+        if '열애' in label and not ROMANCE_NEWS_RE.search(title):
             continue
-        if urlparse(link).scheme != 'https' or urlparse(link).hostname != 'news.google.com':
+        if '방송' in label and not BROADCAST_NEWS_RE.search(title):
+            continue
+        checked = _verify_portal_article(get, link)
+        if not checked:
+            continue
+        title = checked['title'] or title
+        if title in used:
             continue
         used.add(title)
-        source = item.findtext('source', '언론사 미표시')
-        lines.extend([title, f'{source} · {published:%m/%d %H:%M}', link, ''])
+        source_audit[link] = {'title': title, 'sourceUrl': 'https://v.daum.net', 'collectedAt': now.isoformat(), 'policy': 'direct_portal_no_detected_ad_wall', **checked}
+        lines.extend([title, link, ''])
         count += 1
         if count == 8:
             break
     if not count:
-        lines.append('최근 48시간 내 수집된 기사가 없습니다.')
+        lines.append('최근 48시간 내 열람 조건에 맞는 포털 기사가 없습니다. 광고 시청 유도 기사나 일반 언론사 사이트로 대체하지 않습니다.')
+    NEWS_SOURCE_AUDIT_FILE.write_text(json.dumps(source_audit, ensure_ascii=False, indent=2), encoding='utf-8')
     return '\n'.join(lines).strip()
 
 
@@ -213,11 +280,14 @@ def extend_sections(sections, get, now):
                 for sid, emoji, title, body in sections]
     for sid, emoji, label in EXTRA:
         sections.append((sid, emoji, label, upstream.get(sid, '오늘 자료를 확인하지 못했습니다. 이전 날짜 자료를 오늘 정보로 표시하지 않습니다.\n자료: ' + SOURCE)))
-    used = set()
-    for sid, emoji, label, query in NEWS:
+    used, news_bodies = set(), {}
+    # Reserve topic-specific stories before choosing general entertainment news.
+    for sid, emoji, label, query in (NEWS[1], NEWS[2], NEWS[0]):
         try:
             body = news_text(get, now, label, query, used)
         except Exception:
             body = '뉴스 수집에 실패했습니다. 다음 무료 자동 갱신에서 다시 확인합니다.'
-        sections.append((sid, emoji, label, body))
+        news_bodies[sid] = body
+    for sid, emoji, label, query in NEWS:
+        sections.append((sid, emoji, label, news_bodies[sid]))
     return sections

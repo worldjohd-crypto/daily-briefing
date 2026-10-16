@@ -49,6 +49,7 @@ jobs:
           git add briefing.html index.html
           [ ! -f article-links.json ] || git add article-links.json
           [ ! -f external-shortlinks.json ] || git add external-shortlinks.json
+          [ ! -f news-source-audit.json ] || git add news-source-audit.json
           for f in fx-cache.json rone-cache.json comment-cache.json; do
             [ -f "$f" ] && git add "$f"
           done

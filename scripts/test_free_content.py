@@ -14,17 +14,28 @@ class FreeContentTests(unittest.TestCase):
         self.assertIn('오늘 OX', f.source_sections(get, NOW)['daily19'])
         self.assertEqual(f.source_sections(get, NOW + datetime.timedelta(days=1)), {})
 
-    def test_news_dates_duplicates_and_urls(self):
-        def item(title, link, date):
-            return f'<item><title>{title}</title><link>{link}</link><pubDate>{date}</pubDate><source>방송사</source></item>'
-        xml = '<rss><channel>' + item('새 기사', 'https://news.google.com/rss/articles/a', 'Fri, 16 Oct 2026 10:00:00 GMT') + item('옛 기사', 'https://news.google.com/rss/articles/b', 'Fri, 09 Oct 2026 10:00:00 GMT') + item('위험 링크', 'javascript:alert(1)', 'Fri, 16 Oct 2026 10:00:00 GMT') + '</channel></rss>'
-        get = lambda *a, **k: SimpleNamespace(content=xml.encode())
-        used = set()
-        text = f.news_text(get, NOW, '연예', '연예', used)
-        self.assertIn('새 기사', text)
-        self.assertNotIn('옛 기사', text)
-        self.assertNotIn('javascript:', text)
-        self.assertIn('기사가 없습니다', f.news_text(get, NOW, '연예', '연예', used))
+    def test_portal_dates_duplicates_adwall_and_redirects(self):
+        valid = 'https://v.daum.net/v/20261016100000000'
+        old = 'https://v.daum.net/v/20261009100000000'
+        gated = 'https://v.daum.net/v/20261016110000000'
+        redirected = 'https://v.daum.net/v/20261016120000000'
+        listing = ''.join(f'<a href="{url}"><strong class="tit_txt">{title}</strong></a>' for title, url in [('정상 기사', valid), ('오래된 기사', old), ('광고 유도', gated), ('언론사 재연결', redirected), ('지원하지 않는 주소', 'https://ads.example/a')])
+        article = '<meta property="og:title" content="정상 기사"><article>' + '본문 내용입니다. ' * 30 + '</article>'
+        def get(url, **kwargs):
+            if url == 'https://entertain.daum.net/news':
+                return SimpleNamespace(text=listing)
+            if url == gated:
+                return SimpleNamespace(text=article + '계속하려면 광고를 시청하세요', url=url)
+            return SimpleNamespace(text=article, url='https://publisher.example/article' if url == redirected else url)
+        with patch.object(f, '_PORTAL_CANDIDATES', None), patch.object(f, '_VERIFIED_PORTAL_ARTICLES', {}), patch.object(f, 'NEWS_SOURCE_AUDIT_FILE') as audit:
+            audit.read_text.return_value = '{}'
+            used = set()
+            text = f.news_text(get, NOW, '연예', 'query', used)
+            self.assertIn('정상 기사', text)
+            self.assertNotIn(old, text)
+            self.assertNotIn(gated, text)
+            self.assertNotIn(redirected, text)
+            self.assertIn('기사가 없습니다', f.news_text(get, NOW, '연예', 'query', used))
 
     def test_failures_preserve_ai(self):
         sections = [('ai_comment', '🤖', 'AI', 'cached commentary')]
