@@ -6,6 +6,7 @@ import re
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
 from urllib.parse import quote, urlparse
+from pathlib import Path
 
 SOURCE = 'https://busanfransisco-source.github.io/naver-realestate-bot/briefing.html'
 EXTRA = [
@@ -27,18 +28,39 @@ NEWS = [
 ]
 
 
+def prepare_news_text(body, section_id):
+    links = {}
+    if section_id in ('entertainment', 'romance'):
+        try:
+            links = json.loads((Path(__file__).resolve().parent.parent / 'news-shortlinks.json').read_text(encoding='utf-8'))
+        except (OSError, ValueError):
+            pass
+    blocks = []
+    for block in body.split('\n\n'):
+        lines = block.splitlines()
+        if len(lines) in (2, 3) and urlparse(lines[-1]).scheme == 'https':
+            url = links.get(lines[-1], lines[-1])
+            parsed = urlparse(url)
+            if parsed.scheme != 'https' or parsed.hostname not in ('news.google.com', 'm.site.naver.com'):
+                url = lines[-1]
+            blocks.append(lines[0] + '\n' + url)
+        else:
+            blocks.append(block)
+    return '\n\n'.join(blocks)
+
+
 def render_news_links(body):
     """Keep original copy text separate; render only validated headline links."""
     blocks = []
     for block in body.split('\n\n'):
         lines = block.splitlines()
-        if len(lines) == 3:
-            title, source, url = lines
+        if len(lines) in (2, 3):
+            title, url = lines[0], lines[-1]
             parsed = urlparse(url)
-            if parsed.scheme == 'https' and parsed.hostname == 'news.google.com':
+            if parsed.scheme == 'https' and parsed.hostname in ('news.google.com', 'm.site.naver.com'):
                 blocks.append('<a href="' + html.escape(url, quote=True)
                               + '" target="_blank" rel="noopener noreferrer">'
-                              + html.escape(title) + '</a>\n' + html.escape(source))
+                              + html.escape(title) + '</a>')
                 continue
         blocks.append(html.escape(block))
     return '\n\n'.join(blocks)

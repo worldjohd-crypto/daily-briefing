@@ -29,7 +29,7 @@ import re
 import sys
 import time
 import traceback
-from free_content import extend_sections, render_news_links
+from free_content import extend_sections, render_news_links, prepare_news_text
 from collections import Counter
 from urllib.parse import quote
 
@@ -1338,6 +1338,8 @@ def esc(s):
 
 def render_section(section_id, emoji, title, body_text):
     linked_news = section_id in ('entertainment', 'romance', 'broadcast')
+    if linked_news:
+        body_text = prepare_news_text(body_text, section_id)
     body_html = render_news_links(body_text) if linked_news else esc(body_text)
     copy_attribute = f' data-copy-text="{esc(body_text)}"' if linked_news else ''
     return f"""
