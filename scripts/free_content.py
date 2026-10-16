@@ -1,6 +1,7 @@
 """Public-source additions. No AI clients, credentials or paid APIs."""
 import datetime
 import json
+import html
 import re
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
@@ -24,6 +25,23 @@ NEWS = [
     ('romance', '💕', '열애·결혼 소식', '연예인 열애 결혼 결별'),
     ('broadcast', '📺', '방송 화제', '드라마 예능 방송 화제'),
 ]
+
+
+def render_news_links(body):
+    """Keep original copy text separate; render only validated headline links."""
+    blocks = []
+    for block in body.split('\n\n'):
+        lines = block.splitlines()
+        if len(lines) == 3:
+            title, source, url = lines
+            parsed = urlparse(url)
+            if parsed.scheme == 'https' and parsed.hostname == 'news.google.com':
+                blocks.append('<a href="' + html.escape(url, quote=True)
+                              + '" target="_blank" rel="noopener noreferrer">'
+                              + html.escape(title) + '</a>\n' + html.escape(source))
+                continue
+        blocks.append(html.escape(block))
+    return '\n\n'.join(blocks)
 
 
 def source_sections(get, now):

@@ -29,7 +29,7 @@ import re
 import sys
 import time
 import traceback
-from free_content import extend_sections
+from free_content import extend_sections, render_news_links
 from collections import Counter
 from urllib.parse import quote
 
@@ -1337,13 +1337,16 @@ def esc(s):
 
 
 def render_section(section_id, emoji, title, body_text):
+    linked_news = section_id in ('entertainment', 'romance', 'broadcast')
+    body_html = render_news_links(body_text) if linked_news else esc(body_text)
+    copy_attribute = f' data-copy-text="{esc(body_text)}"' if linked_news else ''
     return f"""
   <section class="card">
     <div class="card-head">
       <h2>{emoji} {esc(title)}</h2>
       <button class="copy-btn" onclick="copySection('{section_id}')">복사</button>
     </div>
-    <div class="textbox" id="{section_id}">{esc(body_text)}</div>
+    <div class="textbox" id="{section_id}"{copy_attribute}>{body_html}</div>
   </section>"""
 
 
@@ -1369,6 +1372,7 @@ PAGE_TEMPLATE = """<!doctype html>
   .refresh-box a {{ display:inline-block; margin-top:6px; background:#f7a44a; color:#fff; text-decoration:none; border-radius:6px; padding:6px 14px; font-size:0.85rem; font-weight:600; }}
   .refresh-box a:active {{ background:#e08e33; }}
   .textbox {{ white-space:pre-wrap; word-break:break-word; max-height:180px; overflow-y:auto; border:1px solid #e2e2e2; border-radius:6px; padding:10px 12px; font-size:0.88rem; line-height:1.5; background:#fafafa; }}
+  .textbox a {{ color:#2453c4; text-decoration:underline; text-underline-offset:3px; }}
   footer {{ text-align:center; color:#8a8f98; font-size:0.8rem; margin-top:20px; }}
 </style>
 </head>
@@ -1389,7 +1393,7 @@ PAGE_TEMPLATE = """<!doctype html>
 <script>
 function copySection(id) {{
   const el = document.getElementById(id);
-  const text = el.innerText;
+  const text = el.dataset.copyText || el.innerText;
   if (navigator.clipboard && navigator.clipboard.writeText) {{
     navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
   }} else {{
