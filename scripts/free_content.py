@@ -2,6 +2,7 @@
 import datetime
 import json
 import html
+import hashlib
 import re
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
@@ -27,21 +28,47 @@ NEWS = [
     ('broadcast', '📺', '방송 화제', '드라마 예능 방송 화제'),
 ]
 
+ARTICLE_LINKS_FILE = Path(__file__).resolve().parent.parent / 'article-links.json'
+SHORT_LINK_BASE = 'https://worldjohd-crypto.github.io/daily-briefing/go.html#'
+
+
+def local_article_link(url):
+    # Keep old destinations forever; daily refreshes only add new entries.
+    if url.startswith(SHORT_LINK_BASE):
+        return url
+    if urlparse(url).scheme != 'https' or urlparse(url).hostname != 'news.google.com':
+        return url
+    try:
+        registry = json.loads(ARTICLE_LINKS_FILE.read_text(encoding='utf-8'))
+    except FileNotFoundError:
+        registry = {}
+    digest = hashlib.sha256(url.encode()).hexdigest()
+    size = 10
+    while digest[:size] in registry and registry[digest[:size]] != url:
+        size += 2
+    key = digest[:size]
+    if key not in registry:
+        registry[key] = url
+        ARTICLE_LINKS_FILE.write_text(json.dumps(registry, ensure_ascii=False, indent=2), encoding='utf-8')
+    return SHORT_LINK_BASE + key
+
 
 def prepare_news_text(body, section_id):
-    links = {}
+    original_links = {}
     if section_id in ('entertainment', 'romance'):
         try:
-            links = json.loads((Path(__file__).resolve().parent.parent / 'news-shortlinks.json').read_text(encoding='utf-8'))
+            original_links = {v: k for k, v in json.loads((Path(__file__).resolve().parent.parent / 'news-shortlinks.json').read_text(encoding='utf-8')).items()}
         except (OSError, ValueError):
             pass
     blocks = []
     for block in body.split('\n\n'):
         lines = block.splitlines()
         if len(lines) in (2, 3) and urlparse(lines[-1]).scheme == 'https':
-            url = links.get(lines[-1], lines[-1])
+            url = original_links.get(lines[-1], lines[-1])
+            if section_id in ('entertainment', 'romance'):
+                url = local_article_link(url)
             parsed = urlparse(url)
-            if parsed.scheme != 'https' or parsed.hostname not in ('news.google.com', 'm.site.naver.com'):
+            if parsed.scheme != 'https' or (parsed.hostname not in ('news.google.com', 'm.site.naver.com') and not url.startswith(SHORT_LINK_BASE)):
                 url = lines[-1]
             blocks.append(lines[0] + '\n' + url)
         else:
@@ -57,7 +84,7 @@ def render_news_links(body):
         if len(lines) in (2, 3):
             title, url = lines[0], lines[-1]
             parsed = urlparse(url)
-            if parsed.scheme == 'https' and parsed.hostname in ('news.google.com', 'm.site.naver.com'):
+            if parsed.scheme == 'https' and (parsed.hostname in ('news.google.com', 'm.site.naver.com') or url.startswith(SHORT_LINK_BASE)):
                 blocks.append('<a href="' + html.escape(url, quote=True)
                               + '" target="_blank" rel="noopener noreferrer">'
                               + html.escape(title) + '</a>')

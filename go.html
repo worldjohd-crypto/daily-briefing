@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>기사 원문으로 이동</title>
+<style>body{font-family:system-ui,sans-serif;max-width:36rem;margin:15vh auto;padding:24px;line-height:1.7}a{color:#2453c4}</style>
+<h1>기사 원문으로 이동</h1>
+<p id="status" role="status">기사 주소를 확인하고 있습니다.</p>
+<a id="article" hidden rel="noopener noreferrer">기사 원문 열기</a>
+<p><a href="./briefing.html">브리핑으로 돌아가기</a></p>
+<noscript>자동 이동을 사용하려면 자바스크립트를 켜 주세요.</noscript>
+<script>
+(async () => {
+  const status = document.getElementById('status');
+  try {
+    const key = location.hash.slice(1);
+    if (!/^[a-f0-9]{10,64}$/.test(key)) throw new Error('invalid');
+    const response = await fetch('./article-links.json', {cache:'no-cache'});
+    if (!response.ok) throw new Error('unavailable');
+    const registry = await response.json();
+    if (!Object.hasOwn(registry, key)) throw new Error('unknown');
+    const target = new URL(registry[key]);
+    if (target.protocol !== 'https:' || target.hostname !== 'news.google.com' || target.username || target.password) throw new Error('invalid');
+    const link = document.getElementById('article');
+    link.href = target.href;
+    link.hidden = false;
+    status.textContent = '기사 원문으로 이동합니다. 자동으로 열리지 않으면 아래 링크를 눌러 주세요.';
+    location.replace(target.href);
+  } catch {
+    status.textContent = '기사 주소를 확인하지 못했습니다. 잠시 후 다시 열거나 브리핑에서 기사를 선택해 주세요.';
+  }
+})();
+</script>
+</html>
