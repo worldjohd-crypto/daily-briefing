@@ -14,6 +14,11 @@ on:
 permissions:
   contents: write
 
+# Scheduled and manual refreshes must not push generated files simultaneously.
+concurrency:
+  group: daily-briefing-main
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
