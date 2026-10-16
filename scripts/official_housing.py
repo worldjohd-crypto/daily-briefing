@@ -35,21 +35,10 @@ SOURCES = {
     },
 }
 
-EXCLUSIONS = {
-    'transactions': {
-        'reason': ('국토교통부 무료 실거래가 API 인증키가 설정되지 않아 제외. '
-                   '공개 자료는 계약일 기준이며 전국 당일 신규 등록 거래의 '
-                   '완전한 집계를 제공한다고 볼 수 없어 해당 제목으로 대체하지 않음.'),
-        'source': SOURCES['transactions']['url'],
-        'status': 'omitted_missing_free_api_key_and_unverified_registration_scope',
-        'paid': False,
-    },
-}
-
-
-def build_transactions(get, now):
-    """Omit unsupported nationwide newly registered transactions, without I/O."""
-    return None
+# National sale cases use the official public CSV interface, with no API key.
+from official_transactions import build_transactions, SOURCES as TRANSACTION_SOURCES
+SOURCES['transactions'] = TRANSACTION_SOURCES['transactions']
+EXCLUSIONS = {}
 
 
 def _local_time(now):

@@ -129,7 +129,9 @@ def build_wikiinterest(get, now):
     recent_start = end - dt.timedelta(days=6)
     previous_end = recent_start - dt.timedelta(days=1)
     start = end - dt.timedelta(days=13)
-    lines = ['영어 위키백과 고정 8개 경제 문서의 읽기 관심도',
+    lines = ['경제 주제, 이번 주에 얼마나 읽었을까?',
+             '이 지표는 영어 위키백과의 경제 관련 문서 8개를 최근 일주일 동안 사용자가 열어 본 횟수입니다. 이전 일주일과 비교해 어떤 주제에 관심이 늘거나 줄었는지 살펴봅니다.',
+             '읽는 법: 어떤 문서가 1,000회로 표시되면 그 일주일에 1,000번 열렸다는 뜻입니다. 같은 사람이 여러 번 읽은 것도 포함되므로 사람 수와는 다릅니다. +20%는 이전 7일보다 조회수가 20% 늘었다는 뜻입니다.',
              f'최근 7일: {recent_start:%Y-%m-%d} ~ {end:%Y-%m-%d} (UTC)\n'
              f'직전 7일: {start:%Y-%m-%d} ~ {previous_end:%Y-%m-%d} (UTC)',
              '사용자 조회수 합계입니다. 전체 인기 주제 순위나 투자심리 지수가 아닙니다.']

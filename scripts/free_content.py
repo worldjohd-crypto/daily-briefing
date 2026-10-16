@@ -12,7 +12,7 @@ EXTRA = [
     ('daily22', '🧠', '돈에 관한 착각'),
     ('daily23', '🛠️', '오늘의 집 관리'),
     ('daily24', '📦', '이사 준비 한 가지'),
-    ('transactions', '🏢', '전국 신규 등록 실거래가'),
+    ('transactions', '🏢', '전국 아파트 실거래가'),
     ('seoulcommerce', '📍', '서울 주요 상권'),
     ('cryptofear', '📊', '비트코인 공포·탐욕 지수'),
     ('wikiinterest', '📖', '경제 주제 읽기 관심도'),
@@ -134,6 +134,7 @@ def news_text(get, now, label, query, used):
 
 def extend_sections(sections, get, now):
     from official_guides import build_guides
+    from property_resources import build_property_resources
     from official_metrics import build_cryptofear, build_wikiinterest
     from official_housing import build_transactions, build_seoulcommerce
 
@@ -154,6 +155,10 @@ def extend_sections(sections, get, now):
     for sid, emoji, label in EXTRA:
         if bodies.get(sid):
             sections.append((sid, emoji, label, bodies[sid]))
+    try:
+        sections.extend(build_property_resources(get, now))
+    except Exception:
+        pass
     used, news_bodies = set(), {}
     for sid, emoji, label, query in (NEWS[1], NEWS[2], NEWS[0]):
         try:

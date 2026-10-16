@@ -35,11 +35,15 @@
   },
   "housing": {
     "transactions": {
-      "provider": "국토교통부",
-      "url": "https://www.data.go.kr/data/15126469/openapi.do",
-      "officialPage": "https://rt.molit.go.kr/pt/xls/xls.do",
+      "provider": "국토교통부 실거래가 공개시스템",
+      "url": "https://rt.molit.go.kr/pt/xls/xls.do",
+      "endpoint": "https://rt.molit.go.kr/pt/xls/ptXlsCSVDown.do",
+      "documentation": "https://www.data.go.kr/data/3050988/fileData.do",
       "cost": "free",
-      "authentication": "public_data_service_key_required"
+      "authentication": "anonymous_public_website_session_in_memory_only",
+      "scope": "전국 아파트 매매, 최근 7일 계약, 해제 신고 제외, 최대 12개 사례",
+      "dateBasis": "contract_date_not_registration_date",
+      "downloadsPerBuild": 1
     },
     "seoulcommerce": {
       "provider": "서울특별시 서울 실시간 도시데이터",
@@ -90,13 +94,42 @@
       "status": "no numbers until key is connected"
     }
   },
-  "exclusions": {
-    "transactions": {
-      "reason": "국토교통부 무료 실거래가 API 인증키가 설정되지 않아 제외. 공개 자료는 계약일 기준이며 전국 당일 신규 등록 거래의 완전한 집계를 제공한다고 볼 수 없어 해당 제목으로 대체하지 않음.",
-      "source": "https://www.data.go.kr/data/15126469/openapi.do",
-      "status": "omitted_missing_free_api_key_and_unverified_registration_scope",
-      "paid": false
+  "exclusions": {},
+  "paid": "No paid endpoint is added or executed. Existing AI commentary settings and cached text are preserved.",
+  "propertyResources": {
+    "publicrental": {
+      "provider": "국토교통부·LH 마이홈포털",
+      "source": "https://www.myhome.go.kr/hws/portal/sch/selectRsdtRcritNtcView.do",
+      "endpoint": "https://www.myhome.go.kr/hws/portal/sch/selectRsdtRcritNtcList.do",
+      "cost": "free",
+      "keyRequired": false,
+      "collection": "public_website_search_json",
+      "scope": "current and previous calendar month, nationwide, active status, first page up to five notices"
+    },
+    "rentalguarantee": {
+      "provider": "HUG 주택도시보증공사",
+      "source": "https://www.khug.or.kr/hug/web/ig/dr/igdr000001.jsp?tabId=1",
+      "cost": "free_public_information",
+      "collection": "evergreen_guide",
+      "reviewed": "2026-10-17"
+    },
+    "housingfinance": {
+      "provider": "한국주택금융공사",
+      "sources": [
+        "https://www.hf.go.kr/ko/sub01/sub01_01_01.do",
+        "https://www.hf.go.kr/ko/sub01/sub01_02_01.do"
+      ],
+      "cost": "free_public_information",
+      "collection": "evergreen_guide",
+      "reviewed": "2026-10-17"
+    },
+    "landcheck": {
+      "provider": "국토교통부 토지이음",
+      "source": "https://www.eum.go.kr/web/am/visit.jsp",
+      "cost": "free_public_information",
+      "collection": "evergreen_guide",
+      "reviewed": "2026-10-17"
     }
   },
-  "paid": "No paid endpoint is added or executed. Existing AI commentary settings and cached text are preserved."
+  "copyPolicy": "Source attribution and URLs remain visible below each card but are excluded from the copy button; article/notice detail links stay in the copied body."
 }

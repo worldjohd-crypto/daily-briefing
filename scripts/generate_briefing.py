@@ -30,6 +30,7 @@ import sys
 import time
 import traceback
 from free_content import extend_sections, render_news_links, prepare_news_text, format_news_heading, NEWS_HEADINGS, is_naver_article, AD_WALL_RE
+from content_rendering import split_content_sources, render_sources, render_notice_links
 from collections import Counter
 from urllib.parse import quote
 
@@ -1308,8 +1309,10 @@ def render_section(section_id, emoji, title, body_text):
     linked_news = section_id in NEWS_HEADINGS
     if linked_news:
         body_text = prepare_news_text(body_text, section_id)
-    body_html = render_news_links(body_text) if linked_news else esc(body_text)
-    copy_attribute = f' data-copy-text="{esc(body_text)}"' if linked_news else ''
+    body_text, source_text = split_content_sources(body_text) if not section_id.endswith('_comment') else (body_text, '')
+    body_html = render_news_links(body_text) if linked_news else render_notice_links(body_text) if section_id == 'publicrental' else esc(body_text)
+    copy_attribute = f' data-copy-text="{esc(body_text)}"'
+    source_html = f'<div class="source-note" aria-label="자료 출처">{render_sources(source_text)}</div>' if source_text else ''
     return f"""
   <section class="card">
     <div class="card-head">
@@ -1317,6 +1320,7 @@ def render_section(section_id, emoji, title, body_text):
       <button class="copy-btn" onclick="copySection('{section_id}')">복사</button>
     </div>
     <div class="textbox" id="{section_id}"{copy_attribute}>{body_html}</div>
+    {source_html}
   </section>"""
 
 
@@ -1343,6 +1347,8 @@ PAGE_TEMPLATE = """<!doctype html>
   .refresh-box a:active {{ background:#e08e33; }}
   .textbox {{ white-space:pre-wrap; word-break:break-word; max-height:180px; overflow-y:auto; border:1px solid #e2e2e2; border-radius:6px; padding:10px 12px; font-size:0.88rem; line-height:1.5; background:#fafafa; }}
   .textbox a {{ color:#2453c4; text-decoration:underline; text-underline-offset:3px; }}
+  .source-note {{ margin-top:9px; color:#667085; font-size:0.76rem; line-height:1.5; white-space:pre-line; overflow-wrap:anywhere; }}
+  .source-note a {{ color:#536780; }}
   footer {{ text-align:center; color:#8a8f98; font-size:0.8rem; margin-top:20px; }}
 </style>
 </head>
