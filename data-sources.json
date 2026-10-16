@@ -104,7 +104,15 @@
       "cost": "free",
       "keyRequired": false,
       "collection": "public_website_search_json",
-      "scope": "current and previous calendar month, nationwide, active status, first page up to five notices"
+      "scope": "current and previous calendar month, nationwide, active status, first page up to five notices",
+      "fallback": {
+        "provider": "LH 청약플러스",
+        "source": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancList.do?mi=1026",
+        "collection": "public_server_rendered_html",
+        "cost": "free",
+        "keyRequired": false,
+        "scope": "LH rental supply only; current and previous month; active status and nonexpired closing date"
+      }
     },
     "rentalguarantee": {
       "provider": "HUG 주택도시보증공사",

@@ -11,6 +11,7 @@ class ContentRenderingTests(unittest.TestCase):
         self.assertIn('공고일 2026-10-17', rendered)
         self.assertIn('pblancId=123', body)
         self.assertNotIn('<a', render_notice_links('bad\njavascript:alert(1)'))
+        self.assertIn('>LH 공고</a>', render_notice_links('LH 공고\n게시일 2026-10-17\nhttps://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=123'))
 
     def test_middle_and_trailing_sources_removed_but_reading_dates_and_news_links_stay(self):
         text = ('기준일: 2026-10-17\n\n63/100\n\n자료 : Alternative.me\n'

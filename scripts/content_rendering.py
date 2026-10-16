@@ -41,8 +41,11 @@ def render_notice_links(text):
         lines = block.splitlines()
         url = lines[-1] if len(lines) >= 2 else ''
         parsed = urlparse(url)
-        if (parsed.scheme == 'https' and parsed.hostname == 'www.myhome.go.kr'
-                and parsed.path.endswith('/selectRsdtRcritNtcDetailView.do')):
+        allowed = ((parsed.hostname == 'www.myhome.go.kr'
+                    and parsed.path.endswith('/selectRsdtRcritNtcDetailView.do'))
+                   or (parsed.hostname == 'apply.lh.or.kr'
+                       and parsed.path.endswith('/selectWrtancInfo.do')))
+        if parsed.scheme == 'https' and allowed:
             blocks.append('<a href="' + html.escape(url, quote=True)
                           + '" target="_blank" rel="noopener noreferrer">'
                           + html.escape(lines[0]) + '</a>'
