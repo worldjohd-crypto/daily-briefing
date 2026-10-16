@@ -3,6 +3,7 @@ import datetime
 import json
 import html
 import hashlib
+import requests
 import re
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
@@ -30,6 +31,41 @@ NEWS = [
 
 ARTICLE_LINKS_FILE = Path(__file__).resolve().parent.parent / 'article-links.json'
 SHORT_LINK_BASE = 'https://worldjohd-crypto.github.io/daily-briefing/go.html#'
+EXTERNAL_LINKS_FILE = Path(__file__).resolve().parent.parent / 'external-shortlinks.json'
+_SHORTENER_UNAVAILABLE = False
+
+
+def external_article_link(url):
+    """Cache verified external redirects. On failure use the article, never this site."""
+    global _SHORTENER_UNAVAILABLE
+    if re.fullmatch(r'https://da\.gd/[A-Za-z0-9_-]+', url):
+        return url
+    if urlparse(url).scheme != 'https' or urlparse(url).hostname != 'news.google.com':
+        return url
+    try:
+        links = json.loads(EXTERNAL_LINKS_FILE.read_text(encoding='utf-8'))
+    except FileNotFoundError:
+        links = {}
+    cached = links.get(url, '')
+    if re.fullmatch(r'https://da\.gd/[A-Za-z0-9_-]+', cached):
+        return cached
+    if _SHORTENER_UNAVAILABLE:
+        return url
+    try:
+        response = requests.get('https://da.gd/s', params={'url': url}, timeout=20)
+        response.raise_for_status()
+        short = response.text.strip()
+        if not re.fullmatch(r'https://da\.gd/[A-Za-z0-9_-]+', short):
+            raise ValueError('Invalid shortener response')
+        target = requests.get(short, allow_redirects=False, timeout=20)
+        if target.status_code not in (301, 302, 303, 307, 308) or target.headers.get('Location') != url:
+            raise ValueError('Unexpected redirect destination')
+        links[url] = short
+        EXTERNAL_LINKS_FILE.write_text(json.dumps(links, ensure_ascii=False, indent=2), encoding='utf-8')
+        return short
+    except (requests.RequestException, ValueError):
+        _SHORTENER_UNAVAILABLE = True
+        return url
 
 NEWS_HEADINGS = {
     'shortnews': ('⚡', '오늘의 퀵뉴스'),
@@ -84,15 +120,20 @@ def prepare_news_text(body, section_id):
             original_links = {v: k for k, v in json.loads((Path(__file__).resolve().parent.parent / 'news-shortlinks.json').read_text(encoding='utf-8')).items()}
         except (OSError, ValueError):
             pass
+        # Recover original destinations from already-published local short links.
+        try:
+            original_links.update({SHORT_LINK_BASE + k: v for k, v in json.loads(ARTICLE_LINKS_FILE.read_text(encoding='utf-8')).items()})
+        except (OSError, ValueError):
+            pass
     blocks = []
     for block in body.split('\n\n'):
         lines = block.splitlines()
         if len(lines) in (2, 3) and urlparse(lines[-1]).scheme == 'https':
             url = original_links.get(lines[-1], lines[-1])
             if section_id in ('entertainment', 'romance'):
-                url = local_article_link(url)
+                url = external_article_link(url)
             parsed = urlparse(url)
-            if parsed.scheme != 'https' or (parsed.hostname not in ('news.google.com', 'm.site.naver.com') and not url.startswith(SHORT_LINK_BASE)):
+            if parsed.scheme != 'https' or parsed.hostname not in ('news.google.com', 'm.site.naver.com', 'da.gd'):
                 url = lines[-1]
             blocks.append(lines[0] + '\n' + url)
         else:
@@ -108,7 +149,7 @@ def render_news_links(body):
         if len(lines) in (2, 3):
             title, url = lines[0], lines[-1]
             parsed = urlparse(url)
-            if parsed.scheme == 'https' and (parsed.hostname in ('news.google.com', 'm.site.naver.com') or url.startswith(SHORT_LINK_BASE)):
+            if parsed.scheme == 'https' and parsed.hostname in ('news.google.com', 'm.site.naver.com', 'da.gd'):
                 blocks.append('<a href="' + html.escape(url, quote=True)
                               + '" target="_blank" rel="noopener noreferrer">'
                               + html.escape(title) + '</a>')
