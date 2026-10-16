@@ -93,3 +93,5 @@ python scripts/generate_briefing.py
 ```bash
 RONE_KEY=xxx ALADIN_TTB_KEY=xxx ANTHROPIC_API_KEY=xxx python scripts/generate_briefing.py
 ```
+
+전체 뉴스(퀵뉴스·부동산·세계·금융·AI·연예·열애·방송)는 기사 본문 열람 및 광고 시청 요구 여부를 검사한 뒤 da.gd 외부 단축 주소를 사용합니다. 검사 실패 기사는 제외합니다. 단축 서비스 장애 시 검증된 원문 주소를 사용하며 자체 정보사이트를 경유하지 않습니다. 복사에는 제목과 링크를 함께 제공합니다. 동적으로 나중에 삽입되는 광고나 일반 배너의 부재까지 보장하지는 않습니다. AI 논평 생성 설정은 변경하지 않습니다.

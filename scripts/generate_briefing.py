@@ -29,7 +29,7 @@ import re
 import sys
 import time
 import traceback
-from free_content import extend_sections, render_news_links, prepare_news_text, format_news_heading
+from free_content import extend_sections, render_news_links, prepare_news_text, format_news_heading, NEWS_HEADINGS
 from collections import Counter
 from urllib.parse import quote
 
@@ -418,6 +418,7 @@ def _collect_daum_news():
         try:
             summary = _daum_article_summary(href) or title
             items.append(("🔥", "톱뉴스", summary))
+            _QUICKNEWS_LINKS[summary] = href
             used.add(href)
         except Exception:
             pass
@@ -433,6 +434,7 @@ def _collect_daum_news():
                 try:
                     summary = _daum_article_summary(href) or title
                     weather_item = ("☀️", "날씨", summary)
+                    _QUICKNEWS_LINKS[summary] = href
                     used.add(href)
                     continue
                 except Exception:
@@ -446,6 +448,7 @@ def _collect_daum_news():
             if not summary:
                 continue
             items.append((emoji, label, summary))
+            _QUICKNEWS_LINKS[summary] = href
             used.add(href)
             count += 1
             time.sleep(0.2)
@@ -453,6 +456,9 @@ def _collect_daum_news():
     if weather_item:
         items.append(weather_item)
     return items
+
+
+_QUICKNEWS_LINKS = {}
 
 
 def _todays_quote():
@@ -529,7 +535,7 @@ def build_shortnews():
     lines = [header, ""]
     if news_items:
         for emoji, label, summary in news_items:
-            lines.append(f"{emoji} ({label}) {summary}")
+            lines.extend([f"{emoji} ({label}) {summary}", _QUICKNEWS_LINKS.get(summary, ""), ""])
         lines.append("")
     else:
         lines.append("(오늘 뉴스 수집에 실패했습니다)")
@@ -1338,7 +1344,7 @@ def esc(s):
 
 def render_section(section_id, emoji, title, body_text):
     body_text = format_news_heading(section_id, body_text, NOW)
-    linked_news = section_id in ('entertainment', 'romance', 'broadcast')
+    linked_news = section_id in NEWS_HEADINGS
     if linked_news:
         body_text = prepare_news_text(body_text, section_id)
     body_html = render_news_links(body_text) if linked_news else esc(body_text)

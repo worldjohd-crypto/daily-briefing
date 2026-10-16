@@ -37,6 +37,20 @@ class FreeContentTests(unittest.TestCase):
             self.assertNotIn(redirected, text)
             self.assertIn('기사가 없습니다', f.news_text(get, NOW, '연예', 'query', used))
 
+    def test_all_news_reject_gate_and_keep_external_copy_links(self):
+        url = 'https://n.news.naver.com/mnews/article/001/123'
+        def response(text):
+            return SimpleNamespace(text=text, url=url, raise_for_status=lambda: None)
+        good = '<article>' + 'readable news body ' * 20 + '</article>'
+        for sid in f.NEWS_HEADINGS:
+            with patch.object(f, '_VERIFIED_PORTAL_ARTICLES', {}), patch.object(f.requests, 'get', return_value=response(good)), patch.object(f, 'external_article_link', return_value='https://da.gd/test'), patch.object(f, 'NEWS_SOURCE_AUDIT_FILE') as audit:
+                audit.read_text.return_value = '{}'
+                result = f.prepare_news_text('heading\n\nTitle\n' + url, sid)
+                self.assertIn('Title\nhttps://da.gd/test', result)
+                self.assertIn('href="https://da.gd/test"', f.render_news_links(result))
+            with patch.object(f, '_VERIFIED_PORTAL_ARTICLES', {}), patch.object(f.requests, 'get', return_value=response(good + '계속하려면 광고를 시청하세요')):
+                self.assertNotIn(url, f.prepare_news_text('heading\n\nTitle\n' + url, sid))
+
     def test_failures_preserve_ai(self):
         sections = [('ai_comment', '🤖', 'AI', 'cached commentary')]
         def fail(*a, **k):

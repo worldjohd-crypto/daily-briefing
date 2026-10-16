@@ -35,6 +35,7 @@ SHORT_LINK_BASE = 'https://worldjohd-crypto.github.io/daily-briefing/go.html#'
 EXTERNAL_LINKS_FILE = Path(__file__).resolve().parent.parent / 'external-shortlinks.json'
 _SHORTENER_UNAVAILABLE = False
 PORTAL_NEWS_HOSTS = {'v.daum.net'}
+ARTICLE_HOSTS = {'v.daum.net', 'news.naver.com', 'n.news.naver.com', 'www.aitimes.com'}
 NEWS_SOURCE_AUDIT_FILE = Path(__file__).resolve().parent.parent / 'news-source-audit.json'
 
 
@@ -43,7 +44,7 @@ def external_article_link(url):
     global _SHORTENER_UNAVAILABLE
     if re.fullmatch(r'https://da\.gd/[A-Za-z0-9_-]+', url):
         return url
-    if urlparse(url).scheme != 'https' or urlparse(url).hostname not in ('news.google.com', 'v.daum.net'):
+    if urlparse(url).scheme != 'https' or urlparse(url).hostname not in ARTICLE_HOSTS | {'news.google.com'}:
         return url
     try:
         links = json.loads(EXTERNAL_LINKS_FILE.read_text(encoding='utf-8'))
@@ -118,7 +119,7 @@ def local_article_link(url):
 
 def prepare_news_text(body, section_id):
     original_links = {}
-    if section_id in ('entertainment', 'romance', 'broadcast'):
+    if section_id in NEWS_HEADINGS:
         try:
             original_links = {v: k for k, v in json.loads((Path(__file__).resolve().parent.parent / 'news-shortlinks.json').read_text(encoding='utf-8')).items()}
         except (OSError, ValueError):
@@ -133,10 +134,12 @@ def prepare_news_text(body, section_id):
         lines = block.splitlines()
         if len(lines) in (2, 3) and urlparse(lines[-1]).scheme == 'https':
             url = original_links.get(lines[-1], lines[-1])
-            if section_id in ('entertainment', 'romance', 'broadcast'):
+            if section_id in NEWS_HEADINGS:
+                if not verify_news_article(requests.get, url):
+                    continue
                 url = external_article_link(url)
             parsed = urlparse(url)
-            if parsed.scheme != 'https' or parsed.hostname not in ('news.google.com', 'v.daum.net', 'm.site.naver.com', 'da.gd'):
+            if parsed.scheme != 'https' or parsed.hostname not in ARTICLE_HOSTS | {'news.google.com', 'm.site.naver.com', 'da.gd'}:
                 url = lines[-1]
             blocks.append(lines[0] + '\n' + url)
         else:
@@ -152,7 +155,7 @@ def render_news_links(body):
         if len(lines) in (2, 3):
             title, url = lines[0], lines[-1]
             parsed = urlparse(url)
-            if parsed.scheme == 'https' and parsed.hostname in ('news.google.com', 'v.daum.net', 'm.site.naver.com', 'da.gd'):
+            if parsed.scheme == 'https' and parsed.hostname in ARTICLE_HOSTS | {'news.google.com', 'm.site.naver.com', 'da.gd'}:
                 blocks.append('<a href="' + html.escape(url, quote=True)
                               + '" target="_blank" rel="noopener noreferrer">'
                               + html.escape(title) + '</a>')
@@ -183,6 +186,35 @@ _VERIFIED_PORTAL_ARTICLES = {}
 ROMANCE_NEWS_RE = re.compile(r'열애|결혼|결별|♥|부부|연인|이혼|재혼|신혼|연애|상견례')
 BROADCAST_NEWS_RE = re.compile(r'예능|드라마|시청률|방송|OTT|넷플릭스|놀면|놀뭐|나 혼자|런닝맨|미우새|돌싱포맨|쇼미|환승연애|나는 솔로|살림남|미스터트롯|불후|금타는|닥터|비서진|출연|나혼산')
 AD_WALL_RE = re.compile(r'goog-continue-reading-btn|계속하려면\s*광고|광고를\s*시청.{0,20}계속', re.I)
+
+
+def verify_news_article(get, url):
+    """Fail closed on unreadable articles, external redirects or ad-watch gates."""
+    if urlparse(url).hostname not in ARTICLE_HOSTS:
+        return False
+    if url in _VERIFIED_PORTAL_ARTICLES:
+        return bool(_VERIFIED_PORTAL_ARTICLES[url])
+    try:
+        response = get(url, timeout=20)
+        response.raise_for_status()
+        response.encoding = 'utf-8'
+        soup = BeautifulSoup(response.text, 'html.parser')
+        body = soup.select_one('.article_view, #harmonyContainer, #dic_area, #newsct_article, #articeBody, #article-view-content-div, article')
+        valid = (urlparse(response.url).hostname in ARTICLE_HOSTS
+                 and not AD_WALL_RE.search(response.text)
+                 and body is not None and len(body.get_text(' ', strip=True)) >= 80)
+        checked = {'finalUrl': response.url, 'adWallDetected': False} if valid else None
+    except Exception:
+        checked = None
+    _VERIFIED_PORTAL_ARTICLES[url] = checked
+    if checked:
+        try:
+            audit = json.loads(NEWS_SOURCE_AUDIT_FILE.read_text(encoding='utf-8'))
+        except FileNotFoundError:
+            audit = {}
+        audit[url] = {**checked, 'collectedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'policy': 'readable_article_no_detected_ad_wall'}
+        NEWS_SOURCE_AUDIT_FILE.write_text(json.dumps(audit, ensure_ascii=False, indent=2), encoding='utf-8')
+    return bool(checked)
 
 
 def _portal_candidates(get):
