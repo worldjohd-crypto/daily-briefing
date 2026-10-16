@@ -2,16 +2,9 @@
 import datetime
 import json
 import html
-import hashlib
-from bs4 import BeautifulSoup
-import requests
 import re
-import xml.etree.ElementTree as ET
-from email.utils import parsedate_to_datetime
-from urllib.parse import quote, urlparse
-from pathlib import Path
+from urllib.parse import urlparse
 
-SOURCE = 'https://busanfransisco-source.github.io/naver-realestate-bot/briefing.html'
 EXTRA = [
     ('daily19', '⭕', '오늘의 부동산 OX'),
     ('daily20', '🏠', '집 보러 갈 때 한 가지'),
@@ -29,47 +22,6 @@ NEWS = [
     ('romance', '💕', '열애·결혼 소식', '(열애 OR 결혼 OR 결별) (연예 OR 배우 OR 가수)'),
     ('broadcast', '📺', '방송 화제', '드라마 예능 방송 화제'),
 ]
-
-ARTICLE_LINKS_FILE = Path(__file__).resolve().parent.parent / 'article-links.json'
-SHORT_LINK_BASE = 'https://worldjohd-crypto.github.io/daily-briefing/go.html#'
-EXTERNAL_LINKS_FILE = Path(__file__).resolve().parent.parent / 'external-shortlinks.json'
-_SHORTENER_UNAVAILABLE = False
-PORTAL_NEWS_HOSTS = {'v.daum.net'}
-ARTICLE_HOSTS = {'v.daum.net', 'news.naver.com', 'n.news.naver.com', 'www.aitimes.com'}
-NEWS_SOURCE_AUDIT_FILE = Path(__file__).resolve().parent.parent / 'news-source-audit.json'
-
-
-def external_article_link(url):
-    """Cache verified external redirects. On failure use the article, never this site."""
-    global _SHORTENER_UNAVAILABLE
-    if re.fullmatch(r'https://da\.gd/[A-Za-z0-9_-]+', url):
-        return url
-    if urlparse(url).scheme != 'https' or urlparse(url).hostname not in ARTICLE_HOSTS | {'news.google.com'}:
-        return url
-    try:
-        links = json.loads(EXTERNAL_LINKS_FILE.read_text(encoding='utf-8'))
-    except FileNotFoundError:
-        links = {}
-    cached = links.get(url, '')
-    if re.fullmatch(r'https://da\.gd/[A-Za-z0-9_-]+', cached):
-        return cached
-    if _SHORTENER_UNAVAILABLE:
-        return url
-    try:
-        response = requests.get('https://da.gd/s', params={'url': url}, timeout=20)
-        response.raise_for_status()
-        short = response.text.strip()
-        if not re.fullmatch(r'https://da\.gd/[A-Za-z0-9_-]+', short):
-            raise ValueError('Invalid shortener response')
-        target = requests.get(short, allow_redirects=False, timeout=20)
-        if target.status_code not in (301, 302, 303, 307, 308) or target.headers.get('Location') != url:
-            raise ValueError('Unexpected redirect destination')
-        links[url] = short
-        EXTERNAL_LINKS_FILE.write_text(json.dumps(links, ensure_ascii=False, indent=2), encoding='utf-8')
-        return short
-    except (requests.RequestException, ValueError):
-        _SHORTENER_UNAVAILABLE = True
-        return url
 
 NEWS_HEADINGS = {
     'shortnews': ('⚡', '오늘의 퀵뉴스'),
@@ -94,27 +46,6 @@ def format_news_heading(section_id, body, now):
     if re.search(r'\d{2,4}(?:년|-)\s*\d{1,2}(?:월|-)', parts[0]):
         body = parts[1] if len(parts) > 1 else ''
     return heading + '\n\n' + body
-
-
-def local_article_link(url):
-    # Keep old destinations forever; daily refreshes only add new entries.
-    if url.startswith(SHORT_LINK_BASE):
-        return url
-    if urlparse(url).scheme != 'https' or urlparse(url).hostname != 'news.google.com':
-        return url
-    try:
-        registry = json.loads(ARTICLE_LINKS_FILE.read_text(encoding='utf-8'))
-    except FileNotFoundError:
-        registry = {}
-    digest = hashlib.sha256(url.encode()).hexdigest()
-    size = 10
-    while digest[:size] in registry and registry[digest[:size]] != url:
-        size += 2
-    key = digest[:size]
-    if key not in registry:
-        registry[key] = url
-        ARTICLE_LINKS_FILE.write_text(json.dumps(registry, ensure_ascii=False, indent=2), encoding='utf-8')
-    return SHORT_LINK_BASE + key
 
 
 def is_naver_article(url):
@@ -154,108 +85,9 @@ def render_news_links(body):
     return '\n\n'.join(blocks)
 
 
-def source_sections(get, now):
-    """Parse JSON literals only. Preserve original dates; reject old editions."""
-    response = get(SOURCE, timeout=25)
-    response.encoding = 'utf-8'
-    page = response.text
-    if not re.search(r'<h1[^>]*>[^<]*' + re.escape(f'{now.year}년 {now.month}월 {now.day}일'), page):
-        return {}
-    result = {}
-    for sid in [x[0] for x in EXTRA] + ['fuelfx', 'metalcoin', 'trend']:
-        match = re.search(r'window\.__content_' + sid + r'\s*=\s*("(?:[^"\\]|\\.)*")\s*;', page)
-        if match:
-            value = json.loads(match.group(1)).strip()
-            if value and not re.search('수집 중|수집중|업데이트 예정|데이터를 가져오지 못', value):
-                result[sid] = value + '\n\n자료: ' + SOURCE
-    return result
-
-
-_PORTAL_CANDIDATES = None
-_VERIFIED_PORTAL_ARTICLES = {}
 ROMANCE_NEWS_RE = re.compile(r'열애|결혼|결별|♥|부부|연인|이혼|재혼|신혼|연애|상견례')
 BROADCAST_NEWS_RE = re.compile(r'예능|드라마|시청률|방송|OTT|넷플릭스|놀면|놀뭐|나 혼자|런닝맨|미우새|돌싱포맨|쇼미|환승연애|나는 솔로|살림남|미스터트롯|불후|금타는|닥터|비서진|출연|나혼산')
 AD_WALL_RE = re.compile(r'goog-continue-reading-btn|계속하려면\s*광고|광고를\s*시청.{0,20}계속', re.I)
-
-
-def verify_news_article(get, url):
-    """Fail closed on unreadable articles, external redirects or ad-watch gates."""
-    if urlparse(url).hostname not in ARTICLE_HOSTS:
-        return False
-    if url in _VERIFIED_PORTAL_ARTICLES:
-        return bool(_VERIFIED_PORTAL_ARTICLES[url])
-    try:
-        response = get(url, timeout=20)
-        response.raise_for_status()
-        response.encoding = 'utf-8'
-        soup = BeautifulSoup(response.text, 'html.parser')
-        body = next((node for selector in ('#article-view-content-div', '#dic_area', '#newsct_article', '#articeBody', '.article_view', '#harmonyContainer', 'article') if (node := soup.select_one(selector)) is not None), None)
-        valid = (urlparse(response.url).hostname in ARTICLE_HOSTS
-                 and not AD_WALL_RE.search(response.text)
-                 and body is not None and len(body.get_text(' ', strip=True)) >= 80)
-        checked = {'finalUrl': response.url, 'adWallDetected': False} if valid else None
-    except Exception:
-        checked = None
-    _VERIFIED_PORTAL_ARTICLES[url] = checked
-    if checked:
-        try:
-            audit = json.loads(NEWS_SOURCE_AUDIT_FILE.read_text(encoding='utf-8'))
-        except FileNotFoundError:
-            audit = {}
-        audit[url] = {**checked, 'collectedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'policy': 'readable_article_no_detected_ad_wall'}
-        NEWS_SOURCE_AUDIT_FILE.write_text(json.dumps(audit, ensure_ascii=False, indent=2), encoding='utf-8')
-    return bool(checked)
-
-
-def _portal_candidates(get):
-    global _PORTAL_CANDIDATES
-    if _PORTAL_CANDIDATES is None:
-        response = get('https://entertain.daum.net/news', timeout=20)
-        response.encoding = 'utf-8'
-        soup = BeautifulSoup(response.text, 'html.parser')
-        items, seen = [], set()
-        for anchor in soup.find_all('a', href=True):
-            url = anchor['href']
-            match = re.fullmatch(r'https://v\.daum\.net/v/(\d{14})\d*', url)
-            title = anchor.select_one('.tit_txt')
-            if not match or not title or url in seen:
-                continue
-            seen.add(url)
-            items.append((title.get_text(' ', strip=True), url, match.group(1)))
-        # The portal also supplies more stories as quoted hydration data.
-        # Parse string literals only; never execute embedded JavaScript.
-        pattern = r'\{id:"hamny-\d+",type:"TEXT",title:("(?:[^"\\]|\\.)*")[\s\S]*?pcUrl:("(?:[^"\\]|\\.)*")'
-        for match in re.finditer(pattern, response.text):
-            try:
-                title, url = (json.loads(value) for value in match.groups())
-            except ValueError:
-                continue
-            stamp = re.fullmatch(r'https://v\.daum\.net/v/(\d{14})\d*', url)
-            if stamp and url not in seen:
-                seen.add(url)
-                items.append((title, url, stamp.group(1)))
-        _PORTAL_CANDIDATES = sorted(items, key=lambda x: x[2], reverse=True)
-    return _PORTAL_CANDIDATES
-
-
-def _verify_portal_article(get, url):
-    if url not in _VERIFIED_PORTAL_ARTICLES:
-        try:
-            response = get(url, timeout=15)
-            response.encoding = 'utf-8'
-            if urlparse(response.url).hostname != 'v.daum.net' or AD_WALL_RE.search(response.text):
-                _VERIFIED_PORTAL_ARTICLES[url] = None
-            else:
-                soup = BeautifulSoup(response.text, 'html.parser')
-                body = soup.select_one('.article_view, #harmonyContainer, article')
-                title = soup.select_one('meta[property="og:title"]')
-                if not body or len(body.get_text(' ', strip=True)) < 80:
-                    _VERIFIED_PORTAL_ARTICLES[url] = None
-                else:
-                    _VERIFIED_PORTAL_ARTICLES[url] = {'finalUrl': response.url, 'title': title.get('content', '') if title else '', 'adWallDetected': False}
-        except Exception:
-            _VERIFIED_PORTAL_ARTICLES[url] = None
-    return _VERIFIED_PORTAL_ARTICLES[url]
 
 
 _NAVER_ENTERTAINMENT = None
@@ -301,18 +133,28 @@ def news_text(get, now, label, query, used):
 
 
 def extend_sections(sections, get, now):
+    from official_guides import build_guides
+    from official_metrics import build_cryptofear, build_wikiinterest
+    from official_housing import build_transactions, build_seoulcommerce
+
+    # Every extra reads its provider directly; unavailable sources never use a mirror.
     try:
-        upstream = source_sections(get, now)
+        bodies = build_guides(get, now)
     except Exception:
-        upstream = {}
-    # Only replace failed free market data, never a commentary section.
-    sections = [(sid, emoji, title, upstream.get(sid, body)
-                 if sid in ('fuelfx', 'metalcoin', 'trend') and (body == '데이터를 가져오지 못했습니다.' or '설정되지 않아' in body) else body)
-                for sid, emoji, title, body in sections]
+        bodies = {}
+    for sid, builder in (('transactions', build_transactions),
+                         ('seoulcommerce', build_seoulcommerce),
+                         ('cryptofear', build_cryptofear), ('wikiinterest', build_wikiinterest)):
+        try:
+            body = builder(get, now)
+        except Exception:
+            body = None
+        if body:
+            bodies[sid] = body
     for sid, emoji, label in EXTRA:
-        sections.append((sid, emoji, label, upstream.get(sid, '오늘 자료를 확인하지 못했습니다. 이전 날짜 자료를 오늘 정보로 표시하지 않습니다.\n자료: ' + SOURCE)))
+        if bodies.get(sid):
+            sections.append((sid, emoji, label, bodies[sid]))
     used, news_bodies = set(), {}
-    # Reserve topic-specific stories before choosing general entertainment news.
     for sid, emoji, label, query in (NEWS[1], NEWS[2], NEWS[0]):
         try:
             body = news_text(get, now, label, query, used)

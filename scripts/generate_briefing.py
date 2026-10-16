@@ -57,7 +57,8 @@ HEADERS = {
 
 
 def get(url, **kw):
-    r = requests.get(url, headers=HEADERS, timeout=kw.pop("timeout", 15), **kw)
+    headers = {**HEADERS, **kw.pop("headers", {})}
+    r = requests.get(url, headers=headers, timeout=kw.pop("timeout", 15), **kw)
     r.raise_for_status()
     return r
 
@@ -832,11 +833,11 @@ def build_trend():
     def get_with_cache(statbl, key):
         try:
             d, ch = _rone_weekly_changes(statbl)
-            cache[key] = {"date": d, "changes": ch}
+            cache[key] = {"date": d, "changes": ch, "source": RONE_URL}
             return d, ch
         except Exception:
             c = cache.get(key)
-            if c and c.get("changes"):
+            if c and c.get("changes") and c.get("source") == RONE_URL:
                 return c["date"], c["changes"]
             return None
 
@@ -867,6 +868,7 @@ def build_trend():
         lines.extend(_format_region_changes(ch))
         lines.append("")
     lines.append("* 한국부동산원 주간 아파트가격 동향 (전주 대비)")
+    lines.extend(["자료: 한국부동산원 R-ONE 무료 공식 API", "https://www.reb.or.kr/r-one/portal/openapi/openApiDevPage.do"])
     return "\n".join(lines).strip()
 
 
@@ -948,49 +950,8 @@ def fetch_fx_rates():
 
 @safe("기름값·환율")
 def build_fuelfx():
-    items = fetch_naver_market_items() or {}
-    lines = [f"{DATE_HEAD} 기름값·환율", "", "⛽ 전국 평균 기름값 (오피넷 기준, 전일 대비)", ""]
-    fuel_rows = []
-    if "휘발유" in items:
-        v, c = items["휘발유"]
-        fuel_rows.append(f"휘발유 {v:,.2f}원/L ({sign_fmt(c)})")
-    diesel = fetch_oil_detail("OIL_LO")
-    if diesel:
-        v, c = diesel
-        chg_s = f" ({sign_fmt(c)})" if c is not None else ""
-        fuel_rows.append(f"경유 {v:,.2f}원/L{chg_s}")
-    lines.extend(fuel_rows or ["(기름값을 가져오지 못했습니다)"])
-    lines.append("")
-    lines.append("💱 주요국 환율 (매매기준율, 전일 대비)")
-    lines.append("")
-
-    rates = fetch_fx_rates() or {}
-    try:
-        with open(FX_CACHE_FILE, "r", encoding="utf-8") as f:
-            prev = json.load(f)
-    except Exception:
-        prev = {}
-    if rates:
-        for code, label in FX_LIST:
-            if code not in rates:
-                continue
-            cur = rates[code]
-            pct = ""
-            if prev.get(code):
-                p = (cur / prev[code] - 1) * 100
-                pct = f" ({p:+.2f}%)"
-            lines.append(f"{label} : {cur:,.2f}원{pct}")
-        try:
-            with open(FX_CACHE_FILE, "w", encoding="utf-8") as f:
-                json.dump(rates, f)
-        except Exception:
-            pass
-    else:
-        lines.append("(환율을 가져오지 못했습니다)")
-
-    if not fuel_rows and not rates:
-        return None
-    return "\n".join(lines).strip()
+    from official_market import build_fuelfx as build_direct
+    return build_direct(get, NOW)
 
 
 @safe_none("국제은시세")
@@ -1334,6 +1295,15 @@ def esc(s):
 
 
 def render_section(section_id, emoji, title, body_text):
+    sources = {
+        'fortune': '자료: 지윤철학원 공식 공개 게시판\nhttps://askjiyun.com/?mid=today',
+        'weather': '자료: Open-Meteo 공식 무료 예보 API\nhttps://open-meteo.com/en/docs',
+        'subs': '자료: 한국부동산원 청약홈 공식 청약공고\n' + APPLYHOME_URL,
+        'metalcoin': '자료: 네이버 금융 시장지표·Yahoo Finance 은 선물·CoinGecko 공개 API 직접 수집\nhttps://finance.naver.com/marketindex/\nhttps://finance.yahoo.com/quote/SI=F/\nhttps://www.coingecko.com/',
+        'books': '자료: 알라딘 공식 베스트셀러 목록·무료 TTB API\nhttps://www.aladin.co.kr/shop/common/wbest.aspx',
+    }
+    if section_id in sources:
+        body_text += '\n\n' + sources[section_id]
     body_text = format_news_heading(section_id, body_text, NOW)
     linked_news = section_id in NEWS_HEADINGS
     if linked_news:

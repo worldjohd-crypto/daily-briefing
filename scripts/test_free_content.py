@@ -8,12 +8,6 @@ import free_content as f
 NOW = datetime.datetime(2026, 10, 16, 23, tzinfo=datetime.timezone(datetime.timedelta(hours=9)))
 
 class FreeContentTests(unittest.TestCase):
-    def test_upstream_freshness_and_json_only(self):
-        page = '<h1>📅 2026년 10월 16일 금요일</h1><script>window.__content_daily19 = ' + json.dumps('오늘 OX') + ';</script>'
-        get = lambda *a, **k: SimpleNamespace(text=page)
-        self.assertIn('오늘 OX', f.source_sections(get, NOW)['daily19'])
-        self.assertEqual(f.source_sections(get, NOW + datetime.timedelta(days=1)), {})
-
     def test_naver_entertainment_and_topic_selection(self):
         items = [{'title': title, 'url': 'https://m.entertain.naver.com/now/article/001/' + str(1000+i), 'subContent': ''} for i, title in enumerate(['배우 결혼 발표', '예능 방송 출연', '가수 신곡 발표'])]
         items.append({'title':'외부 기사', 'url':'https://da.gd/test'})
@@ -31,19 +25,24 @@ class FreeContentTests(unittest.TestCase):
     def test_all_news_original_naver_urls_no_shortener(self):
         url = 'https://n.news.naver.com/mnews/article/001/123'
         for sid in f.NEWS_HEADINGS:
-            with patch.object(f.requests, 'get', side_effect=AssertionError('no shortener calls')):
+            with patch('requests.get', side_effect=AssertionError('no shortener calls')):
                 result = f.prepare_news_text('heading\n\nTitle\n' + url, sid)
                 self.assertIn('Title\n' + url, result)
                 self.assertIn('href="' + url + '"', f.render_news_links(result))
                 self.assertNotIn('da.gd', f.prepare_news_text('heading\n\nTitle\nhttps://da.gd/test', sid))
 
-    def test_failures_preserve_ai(self):
-        sections = [('ai_comment', '🤖', 'AI', 'cached commentary')]
+    def test_direct_extras_do_not_replace_base_content_or_use_mirror(self):
+        sections = [('ai_comment', '🤖', 'AI', 'cached commentary'), ('fuelfx', '⛽', 'FX', 'direct rates')]
         def fail(*a, **k):
             raise RuntimeError('offline')
-        result = f.extend_sections(sections, fail, NOW)
-        self.assertEqual(result[0], sections[0])
-        self.assertEqual(len(result), 14)
+        with patch('official_guides.build_guides', return_value={'daily19': 'official guide'}), patch('official_metrics.build_cryptofear', return_value='official index'), patch('official_metrics.build_wikiinterest', return_value='official views'), patch('official_housing.build_transactions', return_value=None), patch('official_housing.build_seoulcommerce', return_value=None):
+            result = f.extend_sections(sections.copy(), fail, NOW)
+        self.assertEqual(result[:2], sections)
+        ids = [x[0] for x in result]
+        self.assertNotIn('transactions', ids)
+        self.assertNotIn('seoulcommerce', ids)
+        self.assertIn('cryptofear', ids)
+        self.assertNotIn('busanfransisco-source', str(result))
 
     def test_default_page_never_calls_paid_api(self):
         import generate_briefing as g

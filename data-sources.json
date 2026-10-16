@@ -1,0 +1,102 @@
+{
+  "policy": "Direct free official provider sources; no other briefing feed or paid fallback",
+  "updated": "2026-10-17",
+  "guides": {
+    "contract": {
+      "title": "국토교통부·한국부동산원 부동산거래 전자계약시스템 FAQ",
+      "url": "https://irts.molit.go.kr/usr/brd/bscbrd/faq/RtecsFaqList.do",
+      "published": "상시 FAQ · 게시일 미표시"
+    },
+    "neighborhood": {
+      "title": "법제처 찾기쉬운 생활법령정보 · 이사할 곳 주변 조사하기",
+      "url": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=666&ccfNo=1&cciNo=1&cnpClsNo=3",
+      "published": "상시 안내 · 게시일 미표시"
+    },
+    "advertising": {
+      "title": "국가법령정보센터 · 공인중개사법 시행령 제17조의2",
+      "url": "https://www.law.go.kr/LSW/lsLinkCommonInfo.do?chrClsCd=010202&lspttninfSeq=106742",
+      "published": "시행 2026-08-28 · 원문에서 현행 여부 확인"
+    },
+    "saving": {
+      "title": "금융위원회 · 특판 예·적금 가입할 때 우대금리 조건 꼼꼼히 확인하세요!",
+      "url": "https://www.fsc.go.kr/no040101/?cnId=1646&curPage=248&pastPage=248&srchKey=&srchText=",
+      "published": "2023-04-05"
+    },
+    "maintenance": {
+      "title": "국토교통부·한국부동산원 공동주택관리정보시스템 K-apt",
+      "url": "https://www.k-apt.go.kr/web/main/index.do",
+      "published": "상시 서비스 안내 · 게시일 미표시"
+    },
+    "moving": {
+      "title": "법제처 찾기쉬운 생활법령정보 · 이사업체 정하기",
+      "url": "https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&csmSeq=666&ccfNo=3&cciNo=2&cnpClsNo=1",
+      "published": "상시 안내 · 게시일 미표시"
+    }
+  },
+  "housing": {
+    "transactions": {
+      "provider": "국토교통부",
+      "url": "https://www.data.go.kr/data/15126469/openapi.do",
+      "officialPage": "https://rt.molit.go.kr/pt/xls/xls.do",
+      "cost": "free",
+      "authentication": "public_data_service_key_required"
+    },
+    "seoulcommerce": {
+      "provider": "서울특별시 서울 실시간 도시데이터",
+      "url": "https://data.seoul.go.kr/SeoulRtd/map",
+      "endpoint": "https://data.seoul.go.kr/SeoulRtd/api/consumption/hotspot-summary",
+      "documentation": "https://data.seoul.go.kr/dataVisual/seoul/guide.do",
+      "cost": "free",
+      "authentication": "anonymous_public_website_session_in_memory_only",
+      "scope": [
+        "강남역",
+        "건대입구역",
+        "가로수길",
+        "명동 관광특구"
+      ],
+      "metric": "신한카드 내국인 실시간 소비 기반 상권 현황",
+      "sourceUpdateIntervalMinutes": 10
+    }
+  },
+  "metrics": {
+    "cryptofear": {
+      "api": "https://api.alternative.me/fng/",
+      "source": "https://alternative.me/crypto/fear-and-greed-index/",
+      "cost": "free",
+      "keyRequired": false
+    },
+    "wikiinterest": {
+      "api": "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article",
+      "source": "https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/reference/page-views.html",
+      "cost": "free",
+      "keyRequired": false,
+      "scope": "eight fixed English Wikipedia economic pages, two complete seven-day windows"
+    }
+  },
+  "market": {
+    "fx": {
+      "api": "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml",
+      "source": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+      "cost": "free",
+      "keyRequired": false,
+      "metric": "ECB reference rate converted through EUR to KRW"
+    },
+    "fuel": {
+      "api": "https://www.opinet.co.kr/api/avgAllPrice.do",
+      "source": "https://www.opinet.co.kr/user/custapi/openApiInfoDtl.do?apiId=4",
+      "cost": "free",
+      "keyRequired": true,
+      "secretName": "OPINET_KEY",
+      "status": "no numbers until key is connected"
+    }
+  },
+  "exclusions": {
+    "transactions": {
+      "reason": "국토교통부 무료 실거래가 API 인증키가 설정되지 않아 제외. 공개 자료는 계약일 기준이며 전국 당일 신규 등록 거래의 완전한 집계를 제공한다고 볼 수 없어 해당 제목으로 대체하지 않음.",
+      "source": "https://www.data.go.kr/data/15126469/openapi.do",
+      "status": "omitted_missing_free_api_key_and_unverified_registration_scope",
+      "paid": false
+    }
+  },
+  "paid": "No paid endpoint is added or executed. Existing AI commentary settings and cached text are preserved."
+}

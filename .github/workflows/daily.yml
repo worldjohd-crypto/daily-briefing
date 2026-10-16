@@ -36,6 +36,7 @@ jobs:
 
       - name: Generate briefing
         env:
+          OPINET_KEY: ${{ secrets.OPINET_KEY }}
           RONE_KEY: ${{ secrets.RONE_KEY }}
           ALADIN_TTB_KEY: ${{ secrets.ALADIN_TTB_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
