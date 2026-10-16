@@ -88,10 +88,10 @@ def format_news_heading(section_id, body, now):
         return body
     emoji, label = NEWS_HEADINGS[section_id]
     weekday = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'][now.weekday()]
-    heading = f'{emoji} {now.year % 100}년 {now.month}월 {now.day}일 {weekday} [{label}]'
+    heading = f'{emoji} [{label}]\n{now.year % 100}년 {now.month}월 {now.day}일 {weekday}'
     parts = body.split('\n\n', 1)
     # Replace only the generated header, preserving article text and failures.
-    if re.search(r'\d{2,4}(?:년|-)\s*\d{1,2}(?:월|-)', parts[0].splitlines()[0]):
+    if re.search(r'\d{2,4}(?:년|-)\s*\d{1,2}(?:월|-)', parts[0]):
         body = parts[1] if len(parts) > 1 else ''
     return heading + '\n\n' + body
 
