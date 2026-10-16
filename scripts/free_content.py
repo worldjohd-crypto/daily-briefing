@@ -144,7 +144,10 @@ def prepare_news_text(body, section_id):
             blocks.append(lines[0] + '\n' + url)
         else:
             blocks.append(block)
-    return '\n\n'.join(blocks)
+    result = '\n\n'.join(blocks)
+    if re.search(r'^https://', body, re.M) and not re.search(r'^https://', result, re.M):
+        result += '\n\n열람 조건에 맞는 기사를 확인하지 못했습니다. 다음 자동 업데이트에서 다시 확인합니다.'
+    return result
 
 
 def render_news_links(body):
@@ -199,7 +202,7 @@ def verify_news_article(get, url):
         response.raise_for_status()
         response.encoding = 'utf-8'
         soup = BeautifulSoup(response.text, 'html.parser')
-        body = soup.select_one('.article_view, #harmonyContainer, #dic_area, #newsct_article, #articeBody, #article-view-content-div, article')
+        body = next((node for selector in ('#article-view-content-div', '#dic_area', '#newsct_article', '#articeBody', '.article_view', '#harmonyContainer', 'article') if (node := soup.select_one(selector)) is not None), None)
         valid = (urlparse(response.url).hostname in ARTICLE_HOSTS
                  and not AD_WALL_RE.search(response.text)
                  and body is not None and len(body.get_text(' ', strip=True)) >= 80)
