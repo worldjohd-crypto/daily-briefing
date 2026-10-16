@@ -21,6 +21,8 @@
   .refresh-box a:active { background:#e08e33; }
   .textbox { white-space:pre-wrap; word-break:break-word; max-height:180px; overflow-y:auto; border:1px solid #e2e2e2; border-radius:6px; padding:10px 12px; font-size:0.88rem; line-height:1.5; background:#fafafa; }
   .textbox a { color:#2453c4; text-decoration:underline; text-underline-offset:3px; }
+  .source-note { margin-top:9px; color:#667085; font-size:0.76rem; line-height:1.5; white-space:pre-line; overflow-wrap:anywhere; }
+  .source-note a { color:#536780; }
   footer { text-align:center; color:#8a8f98; font-size:0.8rem; margin-top:20px; }
 </style>
 </head>
@@ -28,7 +30,7 @@
 <div class="wrap">
   <header>
     <h1>📅 2026년 10월 17일 토요일</h1>
-    <div class="updated">🕐 마지막 업데이트: 10월 17일 02:15</div>
+    <div class="updated">🕐 마지막 업데이트: 10월 17일 02:46</div>
     <div class="refresh-box">
       💡 6개 AI 논평(🏛️💹🏠🌐🏦🤖)은 비용 절감을 위해 평소엔 캐시된 내용을 보여줍니다.<br>
       지금 바로 새로 생성하려면 아래 버튼으로 이동해 <b>Run workflow → "AI 논평 6개 새로 생성" 체크 → Run workflow</b> 순서로 실행하세요. (GitHub 로그인 필요)<br>
@@ -41,90 +43,138 @@
       <h2>🔮 오늘의 운세</h2>
       <button class="copy-btn" onclick="copySection('fortune')">복사</button>
     </div>
-    <div class="textbox" id="fortune">오늘의 운세, 10월 17일
+    <div class="textbox" id="fortune" data-copy-text="오늘의 운세, 10월 17일
 [음력 9월 7일] 일진: 갑자(甲子)
 
 〈쥐띠〉
 96, 84년생 오늘의 좋은 일이 내일의 활력이 되고 밑거름이 되어줄 것이다. 72년생 노력한 보람으로 차츰 활기를 얻게 된다. 의욕도 생긴다. 60년생 주위 사람들에게 넉넉한 아량을 베풀고 포용력을 보여주어라. 48, 36년생 좋은 경험을 한 것에 만족하고 위안을 삼아야 하겠다.
-
 
 운세지수 61%. 금전 55 건강 65 애정 60
 
 〈소띠〉
 97, 85년생 새로운 변화나 계획을 추진하면 내일이 밝다. 73년생 참신한 정보를 구해서 적극적으로 활용하면 좋은 기회가 온다. 61년생 신중에 신중을 거듭해서 생각하라. 들어오는 것이 많으나 나가는 것은 적을 것이다. 49, 37년생 가정 내 분위기가 화목해지니 즐거움도 함께한다.
 
-
 운세지수 92%. 금전 95 건강 90 애정 95
 
 〈범띠〉
 98, 86년생 주위의 변화를 잘 체크하라. 유용한 정보를 얻게 된다. 74년생 마음의 여유를 가져보라. 생각이 정리되면서 답이 환하게 보일 것이다. 62년생 지금은 말해줄 때까지 모른 척하고 기다려주어야 한다. 50, 38년생 희망의 싹이 움튼다. 웃는 얼굴이 복을 가져다줄 것이다.
-
 
 운세지수 68%. 금전 65 건강 60 애정 70
 
 〈토끼띠〉
 99, 87년생 특별한 생각 없이 사는 것은 아닌지 잘 살고 있는 것인지 스스로에게 물어보아라. 75년생 새로운 바람이 일어난다. 라이프스타일에 큰 변화가 필요하다. 63년생 쉽게 고쳐지지 않는 성격 때문에 서로 힘들어진다. 51, 39년생 음식섭취에 주의하고 화를 내지 말아야 한다.
 
-
 운세지수 43%. 금전 40 건강 45 애정 40
 
 〈용띠〉
 00, 88년생 진심으로 대하라. 자신의 속마음이 상대에게 알려진다. 76년생 오늘의 성공 포인트는 대범한 마음가짐과 여유 있는 자세를 취하는 것이다. 64, 52년생 살면서 매 순간 깨닫게 되는 것이 있겠지만 느끼는 것이 많은 날이다. 40년생 오랜만에 지인과 진한 정을 나눈다.
-
 
 운세지수 96%. 금전 95 건강 95 애정 95
 
 〈뱀띠〉
 01, 89년생 서로에 대한 배려가 필요한 날이다. 대화를 많이 나누는 것이 좋겠다. 77년생 기존의 방법으로는 통하지 않으니 새로운 방법을 찾아야 한다. 65, 53년생 남의 의견에 귀 기울이면 좋은 기회를 얻을 수 있을 것이다. 41년생 이해와 관용으로 덮어주면 문제없이 지나간다.
 
-
 운세지수 43%. 금전 45 건강 40 애정 50
 
 〈말띠〉
 02, 90년생 진실로 대하면 통하게 된다. 솔직하게 말하는 것도 도움이 된다. 78년생 차분하게 진행해야 한다. 무슨 일이든 단기간에 끝장을 보기는 어려울 것이다. 66, 54년생 편법을 쓰지 말고 정면으로 승부해야 한다. 42년생 자신이 뿌린 씨앗을 직접 거둬들여야 하는 날이다.
-
 
 운세지수 36%. 금전 35 건강 35 애정 40
 
 〈양띠〉
 03, 91년생 막연히 어떻게 잘되겠지 하면서 안일하게 생각할 상황이 아니다. 79, 67년생 목마른 말이 샘물보고 달리는 형상이니 이른 새벽부터 마음만 급하고 어수선하다. 55년생 익숙하지 못한 일보다 현재 하는 일에 집중하라. 43년생 욕심나더라도 참지 않으면 낭패를 당한다.
 
-
 운세지수 39%. 금전 40 건강 40 애정 35
 
 〈원숭이띠〉
 04, 92년생 애정전선에 쌍무지개가 뜬다. 연인도 보고 행복한 시간을 보낸다. 80년생 민감하게 대처해야 한다. 유익한 소식은 서둘러 활용하라. 68, 56년생 능률이 오르니 중요한 일은 오늘 처리하는 것이 효과적이다. 44년생 곁에 있는 인연에 정성을 들여라. 든든한 손길이 힘을 보탠다.
-
 
 운세지수 94%. 금전 95 건강 90 애정 95
 
 〈닭띠〉
 05, 93년생 다시 한 번 점검하고 준비를 철저히 해야 한다. 81, 69년생 잘 익은 벼가 고개를 숙인다는 사실을 마음속에 심어두어야 하는 날이다. 57년생 노력 없는 대가 즉 횡재운이나 도박운은 통하지 않으니 아예 기대하지 마라. 45, 33년생 행불행을 만드는 것은 바로 자신이다.
 
-
 운세지수 38%. 금전 35 건강 35 애정 40
 
 〈개띠〉
 06, 94년생 대인관계를 솔직담백하게 할 때다. 경솔하게 행동하면 친한 사람도 잃는다. 82, 70년생 인격수양을 쌓는 심정으로 평화를 추구하는 시간을 가져보라. 58년생 장기적인 안목을 갖고 금전의 흐름을 살피는 것이 필요하다. 46, 34년생 속아서 사거나 비싸게 살 수 있다.
-
 
 운세지수 44%. 금전 45 건강 45 애정 40
 
 〈돼지띠〉
 95, 83년생 좋은 인상을 주기 위한 이미지 관리가 필요한 날이니 특별히 신경 써야 하겠다. 71년생 자신을 이해해주는 사람을 소중히 하고 감사히 여겨라. 59, 47년생 한 걸음 물러서라. 도리어 일이 순조롭게 풀린다. 35년생 뜻 맞는 사람을 만날 것이니 의논해도 좋겠다.
 
+운세지수 88%. 금전 90 건강 85 애정 90">오늘의 운세, 10월 17일
+[음력 9월 7일] 일진: 갑자(甲子)
 
-운세지수 88%. 금전 90 건강 85 애정 90
+〈쥐띠〉
+96, 84년생 오늘의 좋은 일이 내일의 활력이 되고 밑거름이 되어줄 것이다. 72년생 노력한 보람으로 차츰 활기를 얻게 된다. 의욕도 생긴다. 60년생 주위 사람들에게 넉넉한 아량을 베풀고 포용력을 보여주어라. 48, 36년생 좋은 경험을 한 것에 만족하고 위안을 삼아야 하겠다.
 
-자료: 지윤철학원 공식 공개 게시판
-https://askjiyun.com/?mid=today</div>
+운세지수 61%. 금전 55 건강 65 애정 60
+
+〈소띠〉
+97, 85년생 새로운 변화나 계획을 추진하면 내일이 밝다. 73년생 참신한 정보를 구해서 적극적으로 활용하면 좋은 기회가 온다. 61년생 신중에 신중을 거듭해서 생각하라. 들어오는 것이 많으나 나가는 것은 적을 것이다. 49, 37년생 가정 내 분위기가 화목해지니 즐거움도 함께한다.
+
+운세지수 92%. 금전 95 건강 90 애정 95
+
+〈범띠〉
+98, 86년생 주위의 변화를 잘 체크하라. 유용한 정보를 얻게 된다. 74년생 마음의 여유를 가져보라. 생각이 정리되면서 답이 환하게 보일 것이다. 62년생 지금은 말해줄 때까지 모른 척하고 기다려주어야 한다. 50, 38년생 희망의 싹이 움튼다. 웃는 얼굴이 복을 가져다줄 것이다.
+
+운세지수 68%. 금전 65 건강 60 애정 70
+
+〈토끼띠〉
+99, 87년생 특별한 생각 없이 사는 것은 아닌지 잘 살고 있는 것인지 스스로에게 물어보아라. 75년생 새로운 바람이 일어난다. 라이프스타일에 큰 변화가 필요하다. 63년생 쉽게 고쳐지지 않는 성격 때문에 서로 힘들어진다. 51, 39년생 음식섭취에 주의하고 화를 내지 말아야 한다.
+
+운세지수 43%. 금전 40 건강 45 애정 40
+
+〈용띠〉
+00, 88년생 진심으로 대하라. 자신의 속마음이 상대에게 알려진다. 76년생 오늘의 성공 포인트는 대범한 마음가짐과 여유 있는 자세를 취하는 것이다. 64, 52년생 살면서 매 순간 깨닫게 되는 것이 있겠지만 느끼는 것이 많은 날이다. 40년생 오랜만에 지인과 진한 정을 나눈다.
+
+운세지수 96%. 금전 95 건강 95 애정 95
+
+〈뱀띠〉
+01, 89년생 서로에 대한 배려가 필요한 날이다. 대화를 많이 나누는 것이 좋겠다. 77년생 기존의 방법으로는 통하지 않으니 새로운 방법을 찾아야 한다. 65, 53년생 남의 의견에 귀 기울이면 좋은 기회를 얻을 수 있을 것이다. 41년생 이해와 관용으로 덮어주면 문제없이 지나간다.
+
+운세지수 43%. 금전 45 건강 40 애정 50
+
+〈말띠〉
+02, 90년생 진실로 대하면 통하게 된다. 솔직하게 말하는 것도 도움이 된다. 78년생 차분하게 진행해야 한다. 무슨 일이든 단기간에 끝장을 보기는 어려울 것이다. 66, 54년생 편법을 쓰지 말고 정면으로 승부해야 한다. 42년생 자신이 뿌린 씨앗을 직접 거둬들여야 하는 날이다.
+
+운세지수 36%. 금전 35 건강 35 애정 40
+
+〈양띠〉
+03, 91년생 막연히 어떻게 잘되겠지 하면서 안일하게 생각할 상황이 아니다. 79, 67년생 목마른 말이 샘물보고 달리는 형상이니 이른 새벽부터 마음만 급하고 어수선하다. 55년생 익숙하지 못한 일보다 현재 하는 일에 집중하라. 43년생 욕심나더라도 참지 않으면 낭패를 당한다.
+
+운세지수 39%. 금전 40 건강 40 애정 35
+
+〈원숭이띠〉
+04, 92년생 애정전선에 쌍무지개가 뜬다. 연인도 보고 행복한 시간을 보낸다. 80년생 민감하게 대처해야 한다. 유익한 소식은 서둘러 활용하라. 68, 56년생 능률이 오르니 중요한 일은 오늘 처리하는 것이 효과적이다. 44년생 곁에 있는 인연에 정성을 들여라. 든든한 손길이 힘을 보탠다.
+
+운세지수 94%. 금전 95 건강 90 애정 95
+
+〈닭띠〉
+05, 93년생 다시 한 번 점검하고 준비를 철저히 해야 한다. 81, 69년생 잘 익은 벼가 고개를 숙인다는 사실을 마음속에 심어두어야 하는 날이다. 57년생 노력 없는 대가 즉 횡재운이나 도박운은 통하지 않으니 아예 기대하지 마라. 45, 33년생 행불행을 만드는 것은 바로 자신이다.
+
+운세지수 38%. 금전 35 건강 35 애정 40
+
+〈개띠〉
+06, 94년생 대인관계를 솔직담백하게 할 때다. 경솔하게 행동하면 친한 사람도 잃는다. 82, 70년생 인격수양을 쌓는 심정으로 평화를 추구하는 시간을 가져보라. 58년생 장기적인 안목을 갖고 금전의 흐름을 살피는 것이 필요하다. 46, 34년생 속아서 사거나 비싸게 살 수 있다.
+
+운세지수 44%. 금전 45 건강 45 애정 40
+
+〈돼지띠〉
+95, 83년생 좋은 인상을 주기 위한 이미지 관리가 필요한 날이니 특별히 신경 써야 하겠다. 71년생 자신을 이해해주는 사람을 소중히 하고 감사히 여겨라. 59, 47년생 한 걸음 물러서라. 도리어 일이 순조롭게 풀린다. 35년생 뜻 맞는 사람을 만날 것이니 의논해도 좋겠다.
+
+운세지수 88%. 금전 90 건강 85 애정 90</div>
+    <div class="source-note" aria-label="자료 출처">자료: 지윤철학원 공식 공개 게시판
+<a href="https://askjiyun.com/?mid=today" target="_blank" rel="noopener noreferrer">https://askjiyun.com/?mid=today</a></div>
   </section>
   <section class="card">
     <div class="card-head">
       <h2>☀️ 날씨</h2>
       <button class="copy-btn" onclick="copySection('weather')">복사</button>
     </div>
-    <div class="textbox" id="weather">2026년 10월 17일 토요일
+    <div class="textbox" id="weather" data-copy-text="2026년 10월 17일 토요일
 
 ❒ 지역별 날씨전망 ❒
 
@@ -142,10 +192,27 @@ https://askjiyun.com/?mid=today</div>
 ✫부산(☀️)➠(☀️)  16℃ ~ 24℃
 ✫울산(☀️)➠(☀️)  14℃ ~ 24℃
 ✫창원(☀️)➠(☀️)  13℃ ~ 24℃
-✫제주(🌤️)➠(☀️)  20℃ ~ 25℃
+✫제주(🌤️)➠(☀️)  20℃ ~ 25℃">2026년 10월 17일 토요일
 
-자료: Open-Meteo 공식 무료 예보 API
-https://open-meteo.com/en/docs</div>
+❒ 지역별 날씨전망 ❒
+
+✫서울(☀️)➠(☀️)  13℃ ~ 24℃
+✫인천(☀️)➠(☀️)  12℃ ~ 24℃
+✫수원(☀️)➠(☀️)  10℃ ~ 24℃
+✫춘천(☀️)➠(☀️)  11℃ ~ 24℃
+✫강릉(☀️)➠(☀️)  13℃ ~ 22℃
+✫청주(☀️)➠(☀️)  14℃ ~ 25℃
+✫대전(☀️)➠(☀️)  11℃ ~ 24℃
+✫세종(☀️)➠(☀️)  11℃ ~ 25℃
+✫전주(☀️)➠(☀️)  14℃ ~ 26℃
+✫광주(🌤️)➠(☀️)  16℃ ~ 25℃
+✫대구(☀️)➠(☀️)  15℃ ~ 24℃
+✫부산(☀️)➠(☀️)  16℃ ~ 24℃
+✫울산(☀️)➠(☀️)  14℃ ~ 24℃
+✫창원(☀️)➠(☀️)  13℃ ~ 24℃
+✫제주(🌤️)➠(☀️)  20℃ ~ 25℃</div>
+    <div class="source-note" aria-label="자료 출처">자료: Open-Meteo 공식 무료 예보 API
+<a href="https://open-meteo.com/en/docs" target="_blank" rel="noopener noreferrer">https://open-meteo.com/en/docs</a></div>
   </section>
   <section class="card">
     <div class="card-head">
@@ -155,107 +222,130 @@ https://open-meteo.com/en/docs</div>
     <div class="textbox" id="shortnews" data-copy-text="⚡ [오늘의 퀵뉴스]
 26년 10월 17일 토요일
 
-&quot;그을음 하나 없는데?&quot;…북한, 한국 극초음속 미사일 성공에 의혹 제기
-https://n.news.naver.com/mnews/article/008/0005427098
+&#x27;다시 시월, 꺼지지 않는 불꽃&#x27;…제47주년 부마민주항쟁 기념식
+https://n.news.naver.com/mnews/article/001/0016381642
 
-“국민과 직거래 막을 순 없다”…이 대통령, 국무회의 공개 반대론에 작심 반박
-https://n.news.naver.com/mnews/article/009/0005749439
+김민석 “조희대 탄핵 논의 시작, 사퇴 안하면 안되는 이유 정리중”
+https://n.news.naver.com/mnews/article/023/0004004373
 
-브런슨 &quot;전작권 전환 조건 변화&quot;…軍 &quot;골대 옮기면 영원히 불가능&quot;
-https://n.news.naver.com/mnews/article/009/0005749319
+양향자 “전면재선거” 정희용 “해당행위”… 국힘 지도부 공개충돌
+https://n.news.naver.com/mnews/article/022/0004167045
 
-국민의힘 조강특위, 경기 용인갑 &#x27;재투표&#x27; 않기로 결정
-https://n.news.naver.com/mnews/article/421/0009231698
+“22년 기다렸다”…세운4구역 주민들 매장유산 심의 촉구
+https://n.news.naver.com/mnews/article/018/0006389497
 
-조국 &quot;한동훈 딸은 천재? 초능력자라야 가능…&#x27;천재성&#x27; 특검으로 확인하자&quot;
-https://n.news.naver.com/mnews/article/088/0001034748
+코스피, 8거래일 만에 반등…2%대 상승해 5600선 마감
+https://n.news.naver.com/mnews/article/586/0000140128
 
-&#x27;102일 무단 이탈&#x27; 송민호, 군대 다시 간다…병무청 &quot;재복무 절차 검토&quot;
-https://n.news.naver.com/mnews/article/422/0000916373
+김홍국 “홈플러스 익스프레스 연말 정상화... 생산·물류·유통망 완성”
+https://n.news.naver.com/mnews/article/366/0001198419
 
-흉기난동엔 집중순찰, 가정폭력엔 전자발찌…&quot;단기 예방 효과 있지만 한계&quot;
-https://n.news.naver.com/mnews/article/421/0009232255
+제조업 취업 27개월만에 반등에도…‘청년 한파’ 지속
+https://n.news.naver.com/mnews/article/011/0004672137
 
-서울시 “한강버스 ‘리베이트 의혹’ 경찰 수사 의뢰”
-https://n.news.naver.com/mnews/article/056/0012275293
+李대통령, 산업부 차관에 박동일·금융위 부위원장에 신진창 임명
+https://n.news.naver.com/mnews/article/586/0000140103
 
-&quot;5·18은 폭동&quot; 일베 작성자 항소심 무죄…&quot;비난받아 마땅하지만 의견&quot;
-https://n.news.naver.com/mnews/article/660/0000119297
+개인정보 유출한 건보공단 직원 파면...&quot;피해자 통보 안 돼&quot;
+https://n.news.naver.com/mnews/article/052/0002419809
 
-반려견 안구 적출까지…&#x27;비비탄 난사&#x27; 20대 징역 1년 6개월 구형
-https://n.news.naver.com/mnews/article/079/0004199690
+여야, &#x27;유승민 딸 임용특혜 의혹&#x27; 공방…與 &quot;총장 위증 살펴야&quot; vs 野 &quot;정치경찰 우려&quot;
+https://n.news.naver.com/mnews/article/003/0014259180
 
-美 오리건주 초등학교서 총격…어린이 포함 최소 2명 부상
-https://n.news.naver.com/mnews/article/448/0000645180
+불길 속 소방관 5명 부상…부천 공장 화재로 7명 다쳐
+https://n.news.naver.com/mnews/article/015/0005343277
 
-[영상] 테슬라가 진짜 날았다…머스크, 공중제비 도는 &#x27;비행 자동차&#x27; 공개
-https://n.news.naver.com/mnews/article/119/0003143656
+&#x27;인천 흉기난동범&#x27; 59세 최충락 신상정보 공개…구속영장 발부(종합)
+https://n.news.naver.com/mnews/article/082/0001402824
 
-백악관 새 대변인, 가짜 변호사?…WSJ &quot;변호사시험 불합격 확인&quot;
-https://n.news.naver.com/mnews/article/057/0001973649
+브라질 결선투표 앞두고 보우소나루 오차범위 내 선두
+https://n.news.naver.com/mnews/article/014/0005590132
 
-&quot;英, 스톰 섀도 미사일 우크라 추가공급…버넘, 젤렌스키와 논의&quot;
-https://n.news.naver.com/mnews/article/421/0009231179">⚡ [오늘의 퀵뉴스]
+&quot;자동차야 로켓이야&quot;…테슬라, 하늘 나는 스포츠카 시연(종합)
+https://n.news.naver.com/mnews/article/003/0014258662
+
+트럼프의 우크라 길들이기?… 드론 통신 제한 의혹
+https://n.news.naver.com/mnews/article/009/0005749298
+
+&quot;퇴사하지 마&quot;…평균 연봉 14억에 주식까지 주는 &#x27;이 회사&#x27;
+https://n.news.naver.com/mnews/article/018/0006389060">⚡ [오늘의 퀵뉴스]
 26년 10월 17일 토요일
 
-<a href="https://n.news.naver.com/mnews/article/008/0005427098" target="_blank" rel="noopener noreferrer">&quot;그을음 하나 없는데?&quot;…북한, 한국 극초음속 미사일 성공에 의혹 제기</a>
+<a href="https://n.news.naver.com/mnews/article/001/0016381642" target="_blank" rel="noopener noreferrer">&#x27;다시 시월, 꺼지지 않는 불꽃&#x27;…제47주년 부마민주항쟁 기념식</a>
 
-<a href="https://n.news.naver.com/mnews/article/009/0005749439" target="_blank" rel="noopener noreferrer">“국민과 직거래 막을 순 없다”…이 대통령, 국무회의 공개 반대론에 작심 반박</a>
+<a href="https://n.news.naver.com/mnews/article/023/0004004373" target="_blank" rel="noopener noreferrer">김민석 “조희대 탄핵 논의 시작, 사퇴 안하면 안되는 이유 정리중”</a>
 
-<a href="https://n.news.naver.com/mnews/article/009/0005749319" target="_blank" rel="noopener noreferrer">브런슨 &quot;전작권 전환 조건 변화&quot;…軍 &quot;골대 옮기면 영원히 불가능&quot;</a>
+<a href="https://n.news.naver.com/mnews/article/022/0004167045" target="_blank" rel="noopener noreferrer">양향자 “전면재선거” 정희용 “해당행위”… 국힘 지도부 공개충돌</a>
 
-<a href="https://n.news.naver.com/mnews/article/421/0009231698" target="_blank" rel="noopener noreferrer">국민의힘 조강특위, 경기 용인갑 &#x27;재투표&#x27; 않기로 결정</a>
+<a href="https://n.news.naver.com/mnews/article/018/0006389497" target="_blank" rel="noopener noreferrer">“22년 기다렸다”…세운4구역 주민들 매장유산 심의 촉구</a>
 
-<a href="https://n.news.naver.com/mnews/article/088/0001034748" target="_blank" rel="noopener noreferrer">조국 &quot;한동훈 딸은 천재? 초능력자라야 가능…&#x27;천재성&#x27; 특검으로 확인하자&quot;</a>
+<a href="https://n.news.naver.com/mnews/article/586/0000140128" target="_blank" rel="noopener noreferrer">코스피, 8거래일 만에 반등…2%대 상승해 5600선 마감</a>
 
-<a href="https://n.news.naver.com/mnews/article/422/0000916373" target="_blank" rel="noopener noreferrer">&#x27;102일 무단 이탈&#x27; 송민호, 군대 다시 간다…병무청 &quot;재복무 절차 검토&quot;</a>
+<a href="https://n.news.naver.com/mnews/article/366/0001198419" target="_blank" rel="noopener noreferrer">김홍국 “홈플러스 익스프레스 연말 정상화... 생산·물류·유통망 완성”</a>
 
-<a href="https://n.news.naver.com/mnews/article/421/0009232255" target="_blank" rel="noopener noreferrer">흉기난동엔 집중순찰, 가정폭력엔 전자발찌…&quot;단기 예방 효과 있지만 한계&quot;</a>
+<a href="https://n.news.naver.com/mnews/article/011/0004672137" target="_blank" rel="noopener noreferrer">제조업 취업 27개월만에 반등에도…‘청년 한파’ 지속</a>
 
-<a href="https://n.news.naver.com/mnews/article/056/0012275293" target="_blank" rel="noopener noreferrer">서울시 “한강버스 ‘리베이트 의혹’ 경찰 수사 의뢰”</a>
+<a href="https://n.news.naver.com/mnews/article/586/0000140103" target="_blank" rel="noopener noreferrer">李대통령, 산업부 차관에 박동일·금융위 부위원장에 신진창 임명</a>
 
-<a href="https://n.news.naver.com/mnews/article/660/0000119297" target="_blank" rel="noopener noreferrer">&quot;5·18은 폭동&quot; 일베 작성자 항소심 무죄…&quot;비난받아 마땅하지만 의견&quot;</a>
+<a href="https://n.news.naver.com/mnews/article/052/0002419809" target="_blank" rel="noopener noreferrer">개인정보 유출한 건보공단 직원 파면...&quot;피해자 통보 안 돼&quot;</a>
 
-<a href="https://n.news.naver.com/mnews/article/079/0004199690" target="_blank" rel="noopener noreferrer">반려견 안구 적출까지…&#x27;비비탄 난사&#x27; 20대 징역 1년 6개월 구형</a>
+<a href="https://n.news.naver.com/mnews/article/003/0014259180" target="_blank" rel="noopener noreferrer">여야, &#x27;유승민 딸 임용특혜 의혹&#x27; 공방…與 &quot;총장 위증 살펴야&quot; vs 野 &quot;정치경찰 우려&quot;</a>
 
-<a href="https://n.news.naver.com/mnews/article/448/0000645180" target="_blank" rel="noopener noreferrer">美 오리건주 초등학교서 총격…어린이 포함 최소 2명 부상</a>
+<a href="https://n.news.naver.com/mnews/article/015/0005343277" target="_blank" rel="noopener noreferrer">불길 속 소방관 5명 부상…부천 공장 화재로 7명 다쳐</a>
 
-<a href="https://n.news.naver.com/mnews/article/119/0003143656" target="_blank" rel="noopener noreferrer">[영상] 테슬라가 진짜 날았다…머스크, 공중제비 도는 &#x27;비행 자동차&#x27; 공개</a>
+<a href="https://n.news.naver.com/mnews/article/082/0001402824" target="_blank" rel="noopener noreferrer">&#x27;인천 흉기난동범&#x27; 59세 최충락 신상정보 공개…구속영장 발부(종합)</a>
 
-<a href="https://n.news.naver.com/mnews/article/057/0001973649" target="_blank" rel="noopener noreferrer">백악관 새 대변인, 가짜 변호사?…WSJ &quot;변호사시험 불합격 확인&quot;</a>
+<a href="https://n.news.naver.com/mnews/article/014/0005590132" target="_blank" rel="noopener noreferrer">브라질 결선투표 앞두고 보우소나루 오차범위 내 선두</a>
 
-<a href="https://n.news.naver.com/mnews/article/421/0009231179" target="_blank" rel="noopener noreferrer">&quot;英, 스톰 섀도 미사일 우크라 추가공급…버넘, 젤렌스키와 논의&quot;</a></div>
+<a href="https://n.news.naver.com/mnews/article/003/0014258662" target="_blank" rel="noopener noreferrer">&quot;자동차야 로켓이야&quot;…테슬라, 하늘 나는 스포츠카 시연(종합)</a>
+
+<a href="https://n.news.naver.com/mnews/article/009/0005749298" target="_blank" rel="noopener noreferrer">트럼프의 우크라 길들이기?… 드론 통신 제한 의혹</a>
+
+<a href="https://n.news.naver.com/mnews/article/018/0006389060" target="_blank" rel="noopener noreferrer">&quot;퇴사하지 마&quot;…평균 연봉 14억에 주식까지 주는 &#x27;이 회사&#x27;</a></div>
+    
   </section>
   <section class="card">
     <div class="card-head">
       <h2>🏛️ 정치 논평 (AI)</h2>
       <button class="copy-btn" onclick="copySection('politics_comment')">복사</button>
     </div>
-    <div class="textbox" id="politics_comment">26년 10월 17일 토요일 정치 논평 (정치 브리핑) · 08월 31일 23:13 생성
+    <div class="textbox" id="politics_comment" data-copy-text="26년 10월 17일 토요일 정치 논평 (정치 브리핑) · 08월 31일 23:13 생성
+
+# 오늘의 정치 쟁점 평론
+
+**야권의 용혜인 후보 공세와 의료정책 평가 투명성 문제**
+
+야권이 용혜인 대선 후보에 대해 위성정당을 통한 비례대표 당선, 배우자의 당직 겸임 등을 집중 공략하는 가운데, 여성단체는 보완수사권 폐지 주장과의 모순을 지적하고 있습니다. 동시에 국립의대 지정 평가에서 당락을 가른 1.3점의 점수 산정 근거가 불명확하다는 지적이 나오면서, 정부 정책 결정의 투명성 전반에 대한 신뢰도 문제가 부각되고 있습니다. 정치적 공세와 행정 투명성이라는 별개의 쟁점이 동시에 제기되면서 정부와 야권 간 신뢰 회복의 중요성이 더욱 강조되는 상황입니다.">26년 10월 17일 토요일 정치 논평 (정치 브리핑) · 08월 31일 23:13 생성
 
 # 오늘의 정치 쟁점 평론
 
 **야권의 용혜인 후보 공세와 의료정책 평가 투명성 문제**
 
 야권이 용혜인 대선 후보에 대해 위성정당을 통한 비례대표 당선, 배우자의 당직 겸임 등을 집중 공략하는 가운데, 여성단체는 보완수사권 폐지 주장과의 모순을 지적하고 있습니다. 동시에 국립의대 지정 평가에서 당락을 가른 1.3점의 점수 산정 근거가 불명확하다는 지적이 나오면서, 정부 정책 결정의 투명성 전반에 대한 신뢰도 문제가 부각되고 있습니다. 정치적 공세와 행정 투명성이라는 별개의 쟁점이 동시에 제기되면서 정부와 야권 간 신뢰 회복의 중요성이 더욱 강조되는 상황입니다.</div>
+    
   </section>
   <section class="card">
     <div class="card-head">
       <h2>💹 경제 논평 (AI)</h2>
       <button class="copy-btn" onclick="copySection('economy_comment')">복사</button>
     </div>
-    <div class="textbox" id="economy_comment">26년 10월 17일 토요일 경제 논평 (경제 브리핑) · 08월 31일 23:13 생성
+    <div class="textbox" id="economy_comment" data-copy-text="26년 10월 17일 토요일 경제 논평 (경제 브리핑) · 08월 31일 23:13 생성
+
+# 오늘의 경제 뉴스 해설
+
+본일 수집된 뉴스들은 한국 경제의 구조적 전환과 일상의 미시적 변화를 동시에 보여줍니다. 가장 주목할 점은 부산 기장의 소형모듈원자로(SMR) 건설 추진으로, 향후 3조 원대 경제효과와 함께 에너지·데이터센터 산업의 고도화를 예고합니다. 한편 중국 CXMT의 LPDDR6 D램 대량 생산 진입은 글로벌 반도체 공급망 재편 신호로 해석되며, 한국 메모리 산업의 경쟁 심화를 시사합니다. 소비 측면에서는 고물가 속 식품 낭비 문제 대두와 공항 금융 서비스 입찰 진행 등 일상적 변화들이 포착되고 있습니다.">26년 10월 17일 토요일 경제 논평 (경제 브리핑) · 08월 31일 23:13 생성
 
 # 오늘의 경제 뉴스 해설
 
 본일 수집된 뉴스들은 한국 경제의 구조적 전환과 일상의 미시적 변화를 동시에 보여줍니다. 가장 주목할 점은 부산 기장의 소형모듈원자로(SMR) 건설 추진으로, 향후 3조 원대 경제효과와 함께 에너지·데이터센터 산업의 고도화를 예고합니다. 한편 중국 CXMT의 LPDDR6 D램 대량 생산 진입은 글로벌 반도체 공급망 재편 신호로 해석되며, 한국 메모리 산업의 경쟁 심화를 시사합니다. 소비 측면에서는 고물가 속 식품 낭비 문제 대두와 공항 금융 서비스 입찰 진행 등 일상적 변화들이 포착되고 있습니다.</div>
+    
   </section>
   <section class="card">
     <div class="card-head">
       <h2>🏗️ 청약 소식</h2>
       <button class="copy-btn" onclick="copySection('subs')">복사</button>
     </div>
-    <div class="textbox" id="subs">26년 10월 17일 토요일 청약 소식
+    <div class="textbox" id="subs" data-copy-text="26년 10월 17일 토요일 청약 소식
 
 🏗️ 청약 접수 단지 (전국, 2주 이내)
 
@@ -274,17 +364,35 @@ https://n.news.naver.com/mnews/article/421/0009231179">⚡ [오늘의 퀵뉴스]
 [부산·민간] 트리븐센텀 1단지 | 접수 10/26~10/28 | 발표 11/4
 [부산·민간] 광안센텀 비스타동원(조합원 취소분) | 접수 10/26~10/27 | 발표 11/2
 [부산·민간] 연산 센텀 월드메르디앙 | 접수 10/26~10/28 | 발표 11/4
-[충북·민간] 신분평 에피트 더웨이시티 | 접수 10/27~10/29 | 발표 11/4
+[충북·민간] 신분평 에피트 더웨이시티 | 접수 10/27~10/29 | 발표 11/4">26년 10월 17일 토요일 청약 소식
 
-자료: 한국부동산원 청약홈 공식 청약공고
-https://www.applyhome.co.kr/ai/aia/selectAPTLttotPblancListView.do</div>
+🏗️ 청약 접수 단지 (전국, 2주 이내)
+
+[경남·민간] 힐스테이트 거제시그니처(1회차) | 접수 10/19~10/21 | 발표 10/27
+[광주·민간] 한양립스 에듀포레(조합원 취소분) | 접수 10/19~10/20 | 발표 10/26
+[부산·민간] 연제갤러리자이 | 접수 10/19~10/21 | 발표 10/27
+[인천·민간] 산곡역자이힐스테이트앤하늘채 | 접수 10/19~10/21 | 발표 10/27
+[인천·공공] 인천계양 A17블록 신혼희망타운(공공분양)(본청약) | 접수 10/19~10/27 | 발표 11/5
+[충남·민간] 아산 그랑시티필하우스 | 접수 10/19~10/21 | 발표 10/27
+[충북·민간] 청주 가경 아이파크 8단지 | 접수 10/19~10/21 | 발표 10/27
+[충북·민간] 청주 가경 아이파크 7단지 | 접수 10/19~10/21 | 발표 10/28
+[전북·공공] 익산 부송에코르 10년 공공임대주택 | 접수 10/22~10/26 | 발표 10/30
+[경기·민간] 아크메르 동탄 99 | 접수 10/26~10/28 | 발표 11/4
+[경기·민간] 아크메르 동탄 95 | 접수 10/26~10/28 | 발표 11/3
+[부산·민간] 트리븐센텀 2단지 | 접수 10/26~10/28 | 발표 11/5
+[부산·민간] 트리븐센텀 1단지 | 접수 10/26~10/28 | 발표 11/4
+[부산·민간] 광안센텀 비스타동원(조합원 취소분) | 접수 10/26~10/27 | 발표 11/2
+[부산·민간] 연산 센텀 월드메르디앙 | 접수 10/26~10/28 | 발표 11/4
+[충북·민간] 신분평 에피트 더웨이시티 | 접수 10/27~10/29 | 발표 11/4</div>
+    <div class="source-note" aria-label="자료 출처">자료: 한국부동산원 청약홈 공식 청약공고
+<a href="https://www.applyhome.co.kr/ai/aia/selectAPTLttotPblancListView.do" target="_blank" rel="noopener noreferrer">https://www.applyhome.co.kr/ai/aia/selectAPTLttotPblancListView.do</a></div>
   </section>
   <section class="card">
     <div class="card-head">
       <h2>📈 부동산 주간 시세동향</h2>
       <button class="copy-btn" onclick="copySection('trend')">복사</button>
     </div>
-    <div class="textbox" id="trend">26년 10월 17일 토요일 부동산 주간 시세동향
+    <div class="textbox" id="trend" data-copy-text="26년 10월 17일 토요일 부동산 주간 시세동향
 
 📈 주간 아파트 매매가격 변동률 (10/12 기준)
 
@@ -304,21 +412,39 @@ https://www.applyhome.co.kr/ai/aia/selectAPTLttotPblancListView.do</div>
 충북 +0.06% | 충남 +0.05% | 전북 +0.05%
 경북 -0.01% | 경남 +0.06% | 제주 -0.04%
 
-* 한국부동산원 주간 아파트가격 동향 (전주 대비)
-자료: 한국부동산원 R-ONE 무료 공식 API
-https://www.reb.or.kr/r-one/portal/openapi/openApiDevPage.do</div>
+* 한국부동산원 주간 아파트가격 동향 (전주 대비)">26년 10월 17일 토요일 부동산 주간 시세동향
+
+📈 주간 아파트 매매가격 변동률 (10/12 기준)
+
+전국 +0.10% | 수도권 +0.20% | 지방 +0.01%
+서울 +0.16% | 경기 +0.26% | 인천 +0.03%
+부산 -0.01% | 대구 +0.01% | 대전 +0.02%
+울산 +0.02% | 세종 +0.02% | 강원 -0.01%
+충북 +0.05% | 충남 -0.02% | 전북 +0.06%
+경북 -0.04% | 경남 +0.04% | 제주 -0.05%
+
+🔑 주간 아파트 전세가격 변동률
+
+전국 +0.11% | 수도권 +0.18% | 지방 +0.04%
+서울 +0.18% | 경기 +0.19% | 인천 +0.14%
+부산 +0.07% | 대구 +0.04% | 대전 +0.03%
+울산 +0.07% | 세종 +0.24% | 강원 +0.03%
+충북 +0.06% | 충남 +0.05% | 전북 +0.05%
+경북 -0.01% | 경남 +0.06% | 제주 -0.04%
+
+* 한국부동산원 주간 아파트가격 동향 (전주 대비)</div>
+    <div class="source-note" aria-label="자료 출처">자료: 한국부동산원 R-ONE 무료 공식 API
+<a href="https://www.reb.or.kr/r-one/portal/openapi/openApiDevPage.do" target="_blank" rel="noopener noreferrer">https://www.reb.or.kr/r-one/portal/openapi/openApiDevPage.do</a></div>
   </section>
   <section class="card">
     <div class="card-head">
       <h2>⛽ 기름값·환율</h2>
       <button class="copy-btn" onclick="copySection('fuelfx')">복사</button>
     </div>
-    <div class="textbox" id="fuelfx">⛽ [기름값·환율]
+    <div class="textbox" id="fuelfx" data-copy-text="⛽ [기름값·환율]
 2026년 10월 17일
 
 기름값 수치는 무료 오피넷 인증키 연결 전까지 표시하지 않습니다.
-자료: 한국석유공사 오피넷
-https://www.opinet.co.kr/user/custapi/openApiInfoDtl.do?apiId=4
 
 💱 유럽중앙은행 기준환율 · 2026-10-16 발표
 유로 기준 공식 환율을 원화로 교차 계산한 참고값입니다. 은행 매매기준율이 아닙니다.
@@ -331,46 +457,79 @@ https://www.opinet.co.kr/user/custapi/openApiInfoDtl.do?apiId=4
 호주 달러 1단위 : 926.97원
 캐나다 달러 1단위 : 940.70원
 스위스 프랑 1단위 : 1,616.71원
-홍콩 달러 1단위 : 169.73원
+홍콩 달러 1단위 : 169.73원">⛽ [기름값·환율]
+2026년 10월 17일
 
+기름값 수치는 무료 오피넷 인증키 연결 전까지 표시하지 않습니다.
+
+💱 유럽중앙은행 기준환율 · 2026-10-16 발표
+유로 기준 공식 환율을 원화로 교차 계산한 참고값입니다. 은행 매매기준율이 아닙니다.
+
+미국 달러 1단위 : 1,332.10원
+유로 1단위 : 1,499.01원
+일본 엔 100단위 : 842.99원
+중국 위안 1단위 : 199.23원
+영국 파운드 1단위 : 1,776.39원
+호주 달러 1단위 : 926.97원
+캐나다 달러 1단위 : 940.70원
+스위스 프랑 1단위 : 1,616.71원
+홍콩 달러 1단위 : 169.73원</div>
+    <div class="source-note" aria-label="자료 출처">자료: 한국석유공사 오피넷
+<a href="https://www.opinet.co.kr/user/custapi/openApiInfoDtl.do?apiId=4" target="_blank" rel="noopener noreferrer">https://www.opinet.co.kr/user/custapi/openApiInfoDtl.do?apiId=4</a>
 자료: 유럽중앙은행(ECB)
-https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html</div>
+<a href="https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html" target="_blank" rel="noopener noreferrer">https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html</a></div>
   </section>
   <section class="card">
     <div class="card-head">
       <h2>🥇 금·은·코인</h2>
       <button class="copy-btn" onclick="copySection('metalcoin')">복사</button>
     </div>
-    <div class="textbox" id="metalcoin">26년 10월 17일 토요일 금·은·코인
+    <div class="textbox" id="metalcoin" data-copy-text="26년 10월 17일 토요일 금·은·코인
 
 🥇 금·은 시세 (전일 대비)
 
-국제 은 57.30달러/온스
+국제 은 57.23달러/온스
 
 🪙 코인 시가총액 상위 10 (24시간 등락)
 
-비트코인 107,995,571원 (-2.58%)
-이더리움 3,205,905원 (-2.70%)
-비앤비 960,492원 (-2.60%)
-리플 1,731원 (-4.22%)
-솔라나 137,850원 (-3.43%)
-트론 446원 (+0.24%)
-ZEC 1,519,820원 (-7.42%)
-하이퍼리퀴드 104,865원 (-4.49%)
-도지코인 106원 (-2.39%)
-XMR 729,325원 (-0.57%)
+비트코인 108,619,523원 (-1.80%)
+이더리움 3,231,734원 (-1.63%)
+비앤비 964,943원 (-2.04%)
+리플 1,744원 (-3.23%)
+솔라나 138,957원 (-2.34%)
+트론 446원 (+0.30%)
+ZEC 1,545,295원 (-6.73%)
+하이퍼리퀴드 105,964원 (-3.65%)
+도지코인 107원 (-1.72%)
+XMR 736,438원 (+0.44%)">26년 10월 17일 토요일 금·은·코인
 
-자료: 네이버 금융 시장지표·Yahoo Finance 은 선물·CoinGecko 공개 API 직접 수집
-https://finance.naver.com/marketindex/
-https://finance.yahoo.com/quote/SI=F/
-https://www.coingecko.com/</div>
+🥇 금·은 시세 (전일 대비)
+
+국제 은 57.23달러/온스
+
+🪙 코인 시가총액 상위 10 (24시간 등락)
+
+비트코인 108,619,523원 (-1.80%)
+이더리움 3,231,734원 (-1.63%)
+비앤비 964,943원 (-2.04%)
+리플 1,744원 (-3.23%)
+솔라나 138,957원 (-2.34%)
+트론 446원 (+0.30%)
+ZEC 1,545,295원 (-6.73%)
+하이퍼리퀴드 105,964원 (-3.65%)
+도지코인 107원 (-1.72%)
+XMR 736,438원 (+0.44%)</div>
+    <div class="source-note" aria-label="자료 출처">자료: 네이버 금융 시장지표·Yahoo Finance 은 선물·CoinGecko 공개 API 직접 수집
+<a href="https://finance.naver.com/marketindex/" target="_blank" rel="noopener noreferrer">https://finance.naver.com/marketindex/</a>
+<a href="https://finance.yahoo.com/quote/SI=F/" target="_blank" rel="noopener noreferrer">https://finance.yahoo.com/quote/SI=F/</a>
+<a href="https://www.coingecko.com/" target="_blank" rel="noopener noreferrer">https://www.coingecko.com/</a></div>
   </section>
   <section class="card">
     <div class="card-head">
       <h2>📚 주간 베스트셀러</h2>
       <button class="copy-btn" onclick="copySection('books')">복사</button>
     </div>
-    <div class="textbox" id="books">26년 10월 17일 토요일 주간 베스트셀러
+    <div class="textbox" id="books" data-copy-text="26년 10월 17일 토요일 주간 베스트셀러
 
 📚 알라딘 주간 베스트셀러 TOP 10
 
@@ -383,10 +542,22 @@ https://www.coingecko.com/</div>
 7. 녹스
 8. 박완서의 낱말들
 9. 자연의 것들은 그저 자란다
-10. 가짜 돈 진짜 부
+10. 가짜 돈 진짜 부">26년 10월 17일 토요일 주간 베스트셀러
 
-자료: 알라딘 공식 베스트셀러 목록·무료 TTB API
-https://www.aladin.co.kr/shop/common/wbest.aspx</div>
+📚 알라딘 주간 베스트셀러 TOP 10
+
+1. 빨강의 자서전
+2. 가호
+3. 싯다르타
+4. 트렌드 코리아 2027
+5. 남편의 아름다움
+6. 에로스, 달콤씁쓸한
+7. 녹스
+8. 박완서의 낱말들
+9. 자연의 것들은 그저 자란다
+10. 가짜 돈 진짜 부</div>
+    <div class="source-note" aria-label="자료 출처">자료: 알라딘 공식 베스트셀러 목록·무료 TTB API
+<a href="https://www.aladin.co.kr/shop/common/wbest.aspx" target="_blank" rel="noopener noreferrer">https://www.aladin.co.kr/shop/common/wbest.aspx</a></div>
   </section>
   <section class="card">
     <div class="card-head">
@@ -396,14 +567,8 @@ https://www.aladin.co.kr/shop/common/wbest.aspx</div>
     <div class="textbox" id="realestate" data-copy-text="🏠 [부동산 주요뉴스]
 26년 10월 17일 토요일
 
-“과천 경마장 6년내 이전 어려워” 꼬이는 공급대책
-https://n.news.naver.com/mnews/article/023/0004004377
-
-가격·상품성 잡았다…청주 가경 아이파크 7·8단지 &#x27;눈길&#x27;
-https://n.news.naver.com/mnews/article/629/0000542922
-
-“추가 대출 규제 없다” 못 박은 정부…강남 집값 잡혔다는데, 서울 외곽은?
-https://n.news.naver.com/mnews/article/009/0005749855
+‘닥공’ 한다더니 올 수도권 착공 37% 그쳐… “최대 5만채 미달 전망”
+https://n.news.naver.com/mnews/article/020/0003755613
 
 시작부터 흔들리는 닥공…정부 “수도권 착공 최대 5만가구 부족”
 https://n.news.naver.com/mnews/article/009/0005749853
@@ -417,15 +582,14 @@ https://n.news.naver.com/mnews/article/020/0003755582
 전월세 불안 잡기 총력…내년까지 10만호 입주
 https://n.news.naver.com/mnews/article/422/0000916469
 
+&quot;수도권 9.9만호 착공&quot;…주택공급 상황판 가동
+https://n.news.naver.com/mnews/article/422/0000916468
+
 “연말까지 최대 23.5만호 착공”… 수도권 ‘닥공’ 총력전
 https://n.news.naver.com/mnews/article/005/0001879169">🏠 [부동산 주요뉴스]
 26년 10월 17일 토요일
 
-<a href="https://n.news.naver.com/mnews/article/023/0004004377" target="_blank" rel="noopener noreferrer">“과천 경마장 6년내 이전 어려워” 꼬이는 공급대책</a>
-
-<a href="https://n.news.naver.com/mnews/article/629/0000542922" target="_blank" rel="noopener noreferrer">가격·상품성 잡았다…청주 가경 아이파크 7·8단지 &#x27;눈길&#x27;</a>
-
-<a href="https://n.news.naver.com/mnews/article/009/0005749855" target="_blank" rel="noopener noreferrer">“추가 대출 규제 없다” 못 박은 정부…강남 집값 잡혔다는데, 서울 외곽은?</a>
+<a href="https://n.news.naver.com/mnews/article/020/0003755613" target="_blank" rel="noopener noreferrer">‘닥공’ 한다더니 올 수도권 착공 37% 그쳐… “최대 5만채 미달 전망”</a>
 
 <a href="https://n.news.naver.com/mnews/article/009/0005749853" target="_blank" rel="noopener noreferrer">시작부터 흔들리는 닥공…정부 “수도권 착공 최대 5만가구 부족”</a>
 
@@ -435,18 +599,26 @@ https://n.news.naver.com/mnews/article/005/0001879169">🏠 [부동산 주요뉴
 
 <a href="https://n.news.naver.com/mnews/article/422/0000916469" target="_blank" rel="noopener noreferrer">전월세 불안 잡기 총력…내년까지 10만호 입주</a>
 
+<a href="https://n.news.naver.com/mnews/article/422/0000916468" target="_blank" rel="noopener noreferrer">&quot;수도권 9.9만호 착공&quot;…주택공급 상황판 가동</a>
+
 <a href="https://n.news.naver.com/mnews/article/005/0001879169" target="_blank" rel="noopener noreferrer">“연말까지 최대 23.5만호 착공”… 수도권 ‘닥공’ 총력전</a></div>
+    
   </section>
   <section class="card">
     <div class="card-head">
       <h2>🏠 부동산 시장 논평 (AI)</h2>
       <button class="copy-btn" onclick="copySection('realestate_comment')">복사</button>
     </div>
-    <div class="textbox" id="realestate_comment">26년 10월 17일 토요일 부동산 시장 논평 (부동산 워치) · 08월 31일 23:13 생성
+    <div class="textbox" id="realestate_comment" data-copy-text="26년 10월 17일 토요일 부동산 시장 논평 (부동산 워치) · 08월 31일 23:13 생성
+
+# 부동산 시장 분석
+
+**공급 확대와 가격 상승의 이중주가 진행 중입니다.** 여당의 민간 용적률 상향 검토와 향후 2년간 서울 공동주택 5만 가구 입주 예정은 중기적 공급 증가 신호인 반면, 현실은 서울 외곽까지 국평 20억원을 돌파하는 매매가 확산되고 있습니다. 전세난으로 인한 추격 매수 심화가 단기 가격 상승을 견인하는 상황입니다. 기술 혁신(층간소음 저감)과 경영 인사 변화 등은 건설사 간 경쟁 심화를 시사하며, 장기적으로는 공급 정상화가 가격 안정화의 관건이 될 것으로 보입니다.">26년 10월 17일 토요일 부동산 시장 논평 (부동산 워치) · 08월 31일 23:13 생성
 
 # 부동산 시장 분석
 
 **공급 확대와 가격 상승의 이중주가 진행 중입니다.** 여당의 민간 용적률 상향 검토와 향후 2년간 서울 공동주택 5만 가구 입주 예정은 중기적 공급 증가 신호인 반면, 현실은 서울 외곽까지 국평 20억원을 돌파하는 매매가 확산되고 있습니다. 전세난으로 인한 추격 매수 심화가 단기 가격 상승을 견인하는 상황입니다. 기술 혁신(층간소음 저감)과 경영 인사 변화 등은 건설사 간 경쟁 심화를 시사하며, 장기적으로는 공급 정상화가 가격 안정화의 관건이 될 것으로 보입니다.</div>
+    
   </section>
   <section class="card">
     <div class="card-head">
@@ -456,64 +628,67 @@ https://n.news.naver.com/mnews/article/005/0001879169">🏠 [부동산 주요뉴
     <div class="textbox" id="world" data-copy-text="🌏 [세계 뉴스]
 26년 10월 17일 토요일
 
-백악관 신임 대변인 자카리아, 허위 경력 논란 확산
-https://n.news.naver.com/mnews/article/014/0005590358
-
-‘트럼프와 갈등 폭발’ 젤렌스키, EU 찾아 또 “무기·자금 좀”
-https://n.news.naver.com/mnews/article/056/0012275311
-
-주일 러시아대사, 일본인 기자 구금 관련 日요구 거부
-https://n.news.naver.com/mnews/article/003/0014258565
-
-미국 오리건주 초등학교서 총격 참사…어린이 3명 등 5명 사망
-https://n.news.naver.com/mnews/article/011/0004671940
-
-상장 앞둔 앤트로픽 3분기 흑자...성장세 둔화에 기업가치 기대감 &#x27;뚝&#x27;
-https://n.news.naver.com/mnews/article/052/0002419479
-
-&quot;&#x27;폐암 진단&#x27; 교황 수술 후 회복 순조&quot;…신자들 쾌유 빌어
-https://n.news.naver.com/mnews/article/001/0016380264
+차량 5대 뛰어넘고 공중 회전까지…테슬라, 하늘 나는 &#x27;로드스터&#x27; 공개
+https://n.news.naver.com/mnews/article/629/0000542779
 
 파키스탄서 학교 지붕 &#x27;와르르&#x27;…학생·교사 35명 사망
 https://n.news.naver.com/mnews/article/057/0001973763
 
-트럼프, &#x27;총살형 생중계&#x27; 여론 역풍에 철회...소방관 살해범도 사형 추진
-https://n.news.naver.com/mnews/article/052/0002419441
+&quot;합격이 중요한가요? ㅎㅎ&quot;...부임 첫날부터 난리 난 백악관 상황 [자막뉴스]
+https://n.news.naver.com/mnews/article/052/0002419776
 
-IEA &quot;회원국, 경유 2000만배럴 조속 방출&quot;... &quot;시장 기대에 못 미쳤다&quot;
-https://n.news.naver.com/mnews/article/014/0005590367">🌏 [세계 뉴스]
+사우디·후티 전쟁은 왜 트럼프의 새 부담이 되는가?·韓국익 지키는 길…김태준의 美·이란戰 중계&lt;107&gt;[기고]
+https://n.news.naver.com/mnews/article/021/0002825711
+
+&#x27;삼성 밑으로 집합&#x27;…애플·나이키·도요타·소니 모조리 눌렀다
+https://n.news.naver.com/mnews/article/015/0005343281
+
+뉴욕시 감사원장, 앤트로픽에 “AI 위험 해소 전 IPO 중단해야”
+https://n.news.naver.com/mnews/article/056/0012274874
+
+&quot;레깅스 속이 다 비치잖아&quot;…&#x27;운동복계 샤넬&#x27; 룰루레몬, 결국 직원 7명 해고
+https://n.news.naver.com/mnews/article/057/0001973733
+
+룰라, &#x27;주말 대중교통 무료&#x27; 60조원 공약…보우소나루 &quot;선거용&quot;
+https://n.news.naver.com/mnews/article/001/0016382403">🌏 [세계 뉴스]
 26년 10월 17일 토요일
 
-<a href="https://n.news.naver.com/mnews/article/014/0005590358" target="_blank" rel="noopener noreferrer">백악관 신임 대변인 자카리아, 허위 경력 논란 확산</a>
-
-<a href="https://n.news.naver.com/mnews/article/056/0012275311" target="_blank" rel="noopener noreferrer">‘트럼프와 갈등 폭발’ 젤렌스키, EU 찾아 또 “무기·자금 좀”</a>
-
-<a href="https://n.news.naver.com/mnews/article/003/0014258565" target="_blank" rel="noopener noreferrer">주일 러시아대사, 일본인 기자 구금 관련 日요구 거부</a>
-
-<a href="https://n.news.naver.com/mnews/article/011/0004671940" target="_blank" rel="noopener noreferrer">미국 오리건주 초등학교서 총격 참사…어린이 3명 등 5명 사망</a>
-
-<a href="https://n.news.naver.com/mnews/article/052/0002419479" target="_blank" rel="noopener noreferrer">상장 앞둔 앤트로픽 3분기 흑자...성장세 둔화에 기업가치 기대감 &#x27;뚝&#x27;</a>
-
-<a href="https://n.news.naver.com/mnews/article/001/0016380264" target="_blank" rel="noopener noreferrer">&quot;&#x27;폐암 진단&#x27; 교황 수술 후 회복 순조&quot;…신자들 쾌유 빌어</a>
+<a href="https://n.news.naver.com/mnews/article/629/0000542779" target="_blank" rel="noopener noreferrer">차량 5대 뛰어넘고 공중 회전까지…테슬라, 하늘 나는 &#x27;로드스터&#x27; 공개</a>
 
 <a href="https://n.news.naver.com/mnews/article/057/0001973763" target="_blank" rel="noopener noreferrer">파키스탄서 학교 지붕 &#x27;와르르&#x27;…학생·교사 35명 사망</a>
 
-<a href="https://n.news.naver.com/mnews/article/052/0002419441" target="_blank" rel="noopener noreferrer">트럼프, &#x27;총살형 생중계&#x27; 여론 역풍에 철회...소방관 살해범도 사형 추진</a>
+<a href="https://n.news.naver.com/mnews/article/052/0002419776" target="_blank" rel="noopener noreferrer">&quot;합격이 중요한가요? ㅎㅎ&quot;...부임 첫날부터 난리 난 백악관 상황 [자막뉴스]</a>
 
-<a href="https://n.news.naver.com/mnews/article/014/0005590367" target="_blank" rel="noopener noreferrer">IEA &quot;회원국, 경유 2000만배럴 조속 방출&quot;... &quot;시장 기대에 못 미쳤다&quot;</a></div>
+<a href="https://n.news.naver.com/mnews/article/021/0002825711" target="_blank" rel="noopener noreferrer">사우디·후티 전쟁은 왜 트럼프의 새 부담이 되는가?·韓국익 지키는 길…김태준의 美·이란戰 중계&lt;107&gt;[기고]</a>
+
+<a href="https://n.news.naver.com/mnews/article/015/0005343281" target="_blank" rel="noopener noreferrer">&#x27;삼성 밑으로 집합&#x27;…애플·나이키·도요타·소니 모조리 눌렀다</a>
+
+<a href="https://n.news.naver.com/mnews/article/056/0012274874" target="_blank" rel="noopener noreferrer">뉴욕시 감사원장, 앤트로픽에 “AI 위험 해소 전 IPO 중단해야”</a>
+
+<a href="https://n.news.naver.com/mnews/article/057/0001973733" target="_blank" rel="noopener noreferrer">&quot;레깅스 속이 다 비치잖아&quot;…&#x27;운동복계 샤넬&#x27; 룰루레몬, 결국 직원 7명 해고</a>
+
+<a href="https://n.news.naver.com/mnews/article/001/0016382403" target="_blank" rel="noopener noreferrer">룰라, &#x27;주말 대중교통 무료&#x27; 60조원 공약…보우소나루 &quot;선거용&quot;</a></div>
+    
   </section>
   <section class="card">
     <div class="card-head">
       <h2>🌐 국제정세 논평 (AI)</h2>
       <button class="copy-btn" onclick="copySection('world_comment')">복사</button>
     </div>
-    <div class="textbox" id="world_comment">26년 10월 17일 토요일 국제정세 논평 (글로벌 브리핑) · 08월 31일 23:13 생성
+    <div class="textbox" id="world_comment" data-copy-text="26년 10월 17일 토요일 국제정세 논평 (글로벌 브리핑) · 08월 31일 23:13 생성
+
+# 오늘의 국제뉴스 브리핑
+
+**아시아 대홍수 비상, 한반도도 무관치 않다**
+
+네팔과 중국을 덮친 대홍수로 770명 이상이 숨지고 3,000명대가 실종되는 참사가 발생했습니다. 한국인 직원 9명도 구조되어 귀국했으나, 현장 관리자는 수색을 돕기 위해 현지에 남아있는 상황입니다. 한편 미국은 이란의 군사시설을 공격하고 중국의 과잉생산을 G20 의제로 제기하며 중동 긴장과 미중 갈등이 동시에 심화되고 있습니다. 아시아 이상기후 심화와 역내 지정학적 불안정이 우리의 기후·통상·외교 정책에 새로운 도전을 던지고 있습니다.">26년 10월 17일 토요일 국제정세 논평 (글로벌 브리핑) · 08월 31일 23:13 생성
 
 # 오늘의 국제뉴스 브리핑
 
 **아시아 대홍수 비상, 한반도도 무관치 않다**
 
 네팔과 중국을 덮친 대홍수로 770명 이상이 숨지고 3,000명대가 실종되는 참사가 발생했습니다. 한국인 직원 9명도 구조되어 귀국했으나, 현장 관리자는 수색을 돕기 위해 현지에 남아있는 상황입니다. 한편 미국은 이란의 군사시설을 공격하고 중국의 과잉생산을 G20 의제로 제기하며 중동 긴장과 미중 갈등이 동시에 심화되고 있습니다. 아시아 이상기후 심화와 역내 지정학적 불안정이 우리의 기후·통상·외교 정책에 새로운 도전을 던지고 있습니다.</div>
+    
   </section>
   <section class="card">
     <div class="card-head">
@@ -532,14 +707,17 @@ https://n.news.naver.com/mnews/article/003/0014259287
 &quot;200만원으로 시작해 10억 눈앞&quot;…40대 투자자의 자산 증식 비결
 https://n.news.naver.com/mnews/article/003/0014259285
 
-CJ·다우키움, 중앙일보 인수전 손잡나[마켓인]
-https://n.news.naver.com/mnews/article/018/0006389875
+&quot;주가 떨어져도 실패 아냐&quot;…금융 전문가가 전한 장기 투자 비법
+https://n.news.naver.com/mnews/article/003/0014259279
 
 [단독] &quot;돈 넣어둔 사람 많은데&quot;…&#x27;368곳&#x27; 경고등 켜졌다
 https://n.news.naver.com/mnews/article/015/0005343491
 
-경제부총리·한은 총재, 미 연준 의장과 첫 회동…환율 공조
-https://n.news.naver.com/mnews/article/417/0001161194
+[데일리안 오늘뉴스 종합] [단독] 정동영 태양광 가족 회사 본점 이전에 증자까지, 국힘 與 &#x27;조희대 탄핵&#x27; 추진 논의에 경고, 더 센 강경파 등장에 달라진 장동혁 등
+https://n.news.naver.com/mnews/article/119/0003143749
+
+법원, 삼바 노조 파업 제동…&quot;9개공정 쟁의 금지&quot;
+https://n.news.naver.com/mnews/article/003/0014259231
 
 “1명 환자에 연간 188회씩이나”…추나요법 보험 청구 진료비 6800억 넘었다
 https://n.news.naver.com/mnews/article/011/0004672160">🏦 [금융 뉴스]
@@ -551,24 +729,32 @@ https://n.news.naver.com/mnews/article/011/0004672160">🏦 [금융 뉴스]
 
 <a href="https://n.news.naver.com/mnews/article/003/0014259285" target="_blank" rel="noopener noreferrer">&quot;200만원으로 시작해 10억 눈앞&quot;…40대 투자자의 자산 증식 비결</a>
 
-<a href="https://n.news.naver.com/mnews/article/018/0006389875" target="_blank" rel="noopener noreferrer">CJ·다우키움, 중앙일보 인수전 손잡나[마켓인]</a>
+<a href="https://n.news.naver.com/mnews/article/003/0014259279" target="_blank" rel="noopener noreferrer">&quot;주가 떨어져도 실패 아냐&quot;…금융 전문가가 전한 장기 투자 비법</a>
 
 <a href="https://n.news.naver.com/mnews/article/015/0005343491" target="_blank" rel="noopener noreferrer">[단독] &quot;돈 넣어둔 사람 많은데&quot;…&#x27;368곳&#x27; 경고등 켜졌다</a>
 
-<a href="https://n.news.naver.com/mnews/article/417/0001161194" target="_blank" rel="noopener noreferrer">경제부총리·한은 총재, 미 연준 의장과 첫 회동…환율 공조</a>
+<a href="https://n.news.naver.com/mnews/article/119/0003143749" target="_blank" rel="noopener noreferrer">[데일리안 오늘뉴스 종합] [단독] 정동영 태양광 가족 회사 본점 이전에 증자까지, 국힘 與 &#x27;조희대 탄핵&#x27; 추진 논의에 경고, 더 센 강경파 등장에 달라진 장동혁 등</a>
+
+<a href="https://n.news.naver.com/mnews/article/003/0014259231" target="_blank" rel="noopener noreferrer">법원, 삼바 노조 파업 제동…&quot;9개공정 쟁의 금지&quot;</a>
 
 <a href="https://n.news.naver.com/mnews/article/011/0004672160" target="_blank" rel="noopener noreferrer">“1명 환자에 연간 188회씩이나”…추나요법 보험 청구 진료비 6800억 넘었다</a></div>
+    
   </section>
   <section class="card">
     <div class="card-head">
       <h2>🏦 금융시장 논평 (AI)</h2>
       <button class="copy-btn" onclick="copySection('finance_comment')">복사</button>
     </div>
-    <div class="textbox" id="finance_comment">26년 10월 17일 토요일 금융시장 논평 (마켓 브리핑) · 08월 31일 23:13 생성
+    <div class="textbox" id="finance_comment" data-copy-text="26년 10월 17일 토요일 금융시장 논평 (마켓 브리핑) · 08월 31일 23:13 생성
+
+# 금융시장 동향 정리
+
+원화 강세가 이어지며 환율이 13개월 만에 1,360원대로 하락했고, 반도체 수출 호조에 따른 달러 유입이 주효한 것으로 보입니다. 주식시장은 월가의 낙관적 전망에 힘입어 강세를 유지 중이며, 암호화폐는 비트코인에서 자금이 빠지면서도 이더리움으로 쏠리는 등 자산 재배치 움직임이 감지됩니다. 다만 저금리 기조 속 군인 대출 급증, 금융자사고 난항 등 금융 안정성 측면의 우려 요소들이 부각되고 있어 시장의 이면을 살펴볼 필요가 있습니다.">26년 10월 17일 토요일 금융시장 논평 (마켓 브리핑) · 08월 31일 23:13 생성
 
 # 금융시장 동향 정리
 
 원화 강세가 이어지며 환율이 13개월 만에 1,360원대로 하락했고, 반도체 수출 호조에 따른 달러 유입이 주효한 것으로 보입니다. 주식시장은 월가의 낙관적 전망에 힘입어 강세를 유지 중이며, 암호화폐는 비트코인에서 자금이 빠지면서도 이더리움으로 쏠리는 등 자산 재배치 움직임이 감지됩니다. 다만 저금리 기조 속 군인 대출 급증, 금융자사고 난항 등 금융 안정성 측면의 우려 요소들이 부각되고 있어 시장의 이면을 살펴볼 필요가 있습니다.</div>
+    
   </section>
   <section class="card">
     <div class="card-head">
@@ -588,31 +774,40 @@ https://n.news.naver.com/mnews/article/014/0005590304">🤖 [AI 뉴스]
 <a href="https://n.news.naver.com/mnews/article/421/0009233098" target="_blank" rel="noopener noreferrer">엔비디아, AI 모델 직접 구동하는 &#x27;RTX 스파크&#x27; 노트북 출시</a>
 
 <a href="https://n.news.naver.com/mnews/article/014/0005590304" target="_blank" rel="noopener noreferrer">애플도 중국선 알리바바 AI 쓴다...아이폰에 &#x27;중국산 두뇌&#x27; 탑재[1일IT템]</a></div>
+    
   </section>
   <section class="card">
     <div class="card-head">
       <h2>🤖 AI·테크 논평 (AI)</h2>
       <button class="copy-btn" onclick="copySection('ai_comment')">복사</button>
     </div>
-    <div class="textbox" id="ai_comment">26년 10월 17일 토요일 AI·테크 논평 (테크 트렌드 워치) · 08월 31일 23:13 생성
+    <div class="textbox" id="ai_comment" data-copy-text="26년 10월 17일 토요일 AI·테크 논평 (테크 트렌드 워치) · 08월 31일 23:13 생성
+
+# 오늘의 AI 뉴스 흐름
+
+AI 산업이 본격적인 &#x27;실용화 단계&#x27;로 진입하고 있습니다. 구글의 멀티 에이전트 시스템, 오픈AI의 게임 개발 도구 등 대형 기업들이 AI를 실제 업무에 적용할 수 있는 형태로 구체화하고 있고, 한국 기업들도 의료·보안·로봇 등 특정 분야에서 AI 기술을 상용화하려는 움직임을 보이고 있습니다. 동시에 SK하이닉스의 일본 합작공장 검토처럼 AI 수요 급증에 대비한 반도체 공급망 재편이 가속화되는 중입니다. 결국 &#x27;누가 더 빨리 쓸 수 있는 AI를 만드는가&#x27;가 경쟁력인 시대가 온 셈입니다.">26년 10월 17일 토요일 AI·테크 논평 (테크 트렌드 워치) · 08월 31일 23:13 생성
 
 # 오늘의 AI 뉴스 흐름
 
 AI 산업이 본격적인 &#x27;실용화 단계&#x27;로 진입하고 있습니다. 구글의 멀티 에이전트 시스템, 오픈AI의 게임 개발 도구 등 대형 기업들이 AI를 실제 업무에 적용할 수 있는 형태로 구체화하고 있고, 한국 기업들도 의료·보안·로봇 등 특정 분야에서 AI 기술을 상용화하려는 움직임을 보이고 있습니다. 동시에 SK하이닉스의 일본 합작공장 검토처럼 AI 수요 급증에 대비한 반도체 공급망 재편이 가속화되는 중입니다. 결국 &#x27;누가 더 빨리 쓸 수 있는 AI를 만드는가&#x27;가 경쟁력인 시대가 온 셈입니다.</div>
+    
   </section>
   <section class="card">
     <div class="card-head">
       <h2>⭕ 오늘의 부동산 OX</h2>
       <button class="copy-btn" onclick="copySection('daily19')">복사</button>
     </div>
-    <div class="textbox" id="daily19">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
+    <div class="textbox" id="daily19" data-copy-text="상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
 OX: 전자계약서는 별도 파일로 보관할 수 없다?
 정답: X
-국토교통부 FAQ는 전자계약서의 PDF 다운로드와 출력을 안내합니다. 필요한 계약서는 공식 시스템에서 확인하고 보관 방법을 살펴보세요. 모바일 직접 출력에는 제약이 있을 수 있어 PC 이용 안내도 함께 확인하세요.
+국토교통부 FAQ는 전자계약서의 PDF 다운로드와 출력을 안내합니다. 필요한 계약서는 공식 시스템에서 확인하고 보관 방법을 살펴보세요. 모바일 직접 출력에는 제약이 있을 수 있어 PC 이용 안내도 함께 확인하세요.">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
-공식 출처: 국토교통부·한국부동산원 부동산거래 전자계약시스템 FAQ
-https://irts.molit.go.kr/usr/brd/bscbrd/faq/RtecsFaqList.do
+OX: 전자계약서는 별도 파일로 보관할 수 없다?
+정답: X
+국토교통부 FAQ는 전자계약서의 PDF 다운로드와 출력을 안내합니다. 필요한 계약서는 공식 시스템에서 확인하고 보관 방법을 살펴보세요. 모바일 직접 출력에는 제약이 있을 수 있어 PC 이용 안내도 함께 확인하세요.</div>
+    <div class="source-note" aria-label="자료 출처">공식 출처: 국토교통부·한국부동산원 부동산거래 전자계약시스템 FAQ
+<a href="https://irts.molit.go.kr/usr/brd/bscbrd/faq/RtecsFaqList.do" target="_blank" rel="noopener noreferrer">https://irts.molit.go.kr/usr/brd/bscbrd/faq/RtecsFaqList.do</a>
 원자료: 상시 FAQ · 게시일 미표시
 편집 검토: 2026-10-17 · 공식 본문 연결 확인: 2026-10-17</div>
   </section>
@@ -621,13 +816,15 @@ https://irts.molit.go.kr/usr/brd/bscbrd/faq/RtecsFaqList.do
       <h2>🏠 집 보러 갈 때 한 가지</h2>
       <button class="copy-btn" onclick="copySection('daily20')">복사</button>
     </div>
-    <div class="textbox" id="daily20">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
+    <div class="textbox" id="daily20" data-copy-text="상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
 오늘의 확인: 집 밖 생활 동선
-집을 둘러본 뒤 대중교통 정류장, 장보는 곳, 공원까지의 동선을 확인해 보세요. 공식 이사 안내도 집 주변의 교통과 생활시설을 함께 조사하도록 안내합니다.
+집을 둘러본 뒤 대중교통 정류장, 장보는 곳, 공원까지의 동선을 확인해 보세요. 공식 이사 안내도 집 주변의 교통과 생활시설을 함께 조사하도록 안내합니다.">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
-공식 출처: 법제처 찾기쉬운 생활법령정보 · 이사할 곳 주변 조사하기
-https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&amp;csmSeq=666&amp;ccfNo=1&amp;cciNo=1&amp;cnpClsNo=3
+오늘의 확인: 집 밖 생활 동선
+집을 둘러본 뒤 대중교통 정류장, 장보는 곳, 공원까지의 동선을 확인해 보세요. 공식 이사 안내도 집 주변의 교통과 생활시설을 함께 조사하도록 안내합니다.</div>
+    <div class="source-note" aria-label="자료 출처">공식 출처: 법제처 찾기쉬운 생활법령정보 · 이사할 곳 주변 조사하기
+<a href="https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&amp;csmSeq=666&amp;ccfNo=1&amp;cciNo=1&amp;cnpClsNo=3" target="_blank" rel="noopener noreferrer">https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&amp;csmSeq=666&amp;ccfNo=1&amp;cciNo=1&amp;cnpClsNo=3</a>
 원자료: 상시 안내 · 게시일 미표시
 편집 검토: 2026-10-17 · 공식 본문 연결 확인: 2026-10-17</div>
   </section>
@@ -636,13 +833,15 @@ https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&amp;csmSeq=666&amp;ccfNo
       <h2>💬 부동산 광고 해석기</h2>
       <button class="copy-btn" onclick="copySection('daily21')">복사</button>
     </div>
-    <div class="textbox" id="daily21">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
+    <div class="textbox" id="daily21" data-copy-text="상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
 광고 읽기: 가격 옆의 조건도 함께
-매물 비교 메모에 면적, 입주가능일, 주차대수, 관리비를 따로 적어 보세요. 이 항목들은 공식 표시·광고 규정에서 확인할 수 있습니다. 광고에 없는 내용이나 표현이 모호한 부분은 중개사에게 구체적으로 질문하세요.
+매물 비교 메모에 면적, 입주가능일, 주차대수, 관리비를 따로 적어 보세요. 이 항목들은 공식 표시·광고 규정에서 확인할 수 있습니다. 광고에 없는 내용이나 표현이 모호한 부분은 중개사에게 구체적으로 질문하세요.">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
-공식 출처: 국가법령정보센터 · 공인중개사법 시행령 제17조의2
-https://www.law.go.kr/LSW/lsLinkCommonInfo.do?chrClsCd=010202&amp;lspttninfSeq=106742
+광고 읽기: 가격 옆의 조건도 함께
+매물 비교 메모에 면적, 입주가능일, 주차대수, 관리비를 따로 적어 보세요. 이 항목들은 공식 표시·광고 규정에서 확인할 수 있습니다. 광고에 없는 내용이나 표현이 모호한 부분은 중개사에게 구체적으로 질문하세요.</div>
+    <div class="source-note" aria-label="자료 출처">공식 출처: 국가법령정보센터 · 공인중개사법 시행령 제17조의2
+<a href="https://www.law.go.kr/LSW/lsLinkCommonInfo.do?chrClsCd=010202&amp;lspttninfSeq=106742" target="_blank" rel="noopener noreferrer">https://www.law.go.kr/LSW/lsLinkCommonInfo.do?chrClsCd=010202&amp;lspttninfSeq=106742</a>
 원자료: 시행 2026-08-28 · 원문에서 현행 여부 확인
 편집 검토: 2026-10-17 · 공식 본문 연결 확인: 2026-10-17</div>
   </section>
@@ -651,13 +850,15 @@ https://www.law.go.kr/LSW/lsLinkCommonInfo.do?chrClsCd=010202&amp;lspttninfSeq=1
       <h2>🧠 돈에 관한 착각</h2>
       <button class="copy-btn" onclick="copySection('daily22')">복사</button>
     </div>
-    <div class="textbox" id="daily22">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
+    <div class="textbox" id="daily22" data-copy-text="상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
 착각: 최고금리 숫자가 곧 내가 받을 금리다
-금융위원회는 우대금리 조건을 충족하지 못하면 광고의 최고금리보다 낮은 금리가 적용될 수 있다고 안내합니다. 상품설명서에서 기본금리와 우대조건을 나눠 확인하고, 내가 충족할 수 있는 조건을 표시해 보세요.
+금융위원회는 우대금리 조건을 충족하지 못하면 광고의 최고금리보다 낮은 금리가 적용될 수 있다고 안내합니다. 상품설명서에서 기본금리와 우대조건을 나눠 확인하고, 내가 충족할 수 있는 조건을 표시해 보세요.">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
-공식 출처: 금융위원회 · 특판 예·적금 가입할 때 우대금리 조건 꼼꼼히 확인하세요!
-https://www.fsc.go.kr/no040101/?cnId=1646&amp;curPage=248&amp;pastPage=248&amp;srchKey=&amp;srchText=
+착각: 최고금리 숫자가 곧 내가 받을 금리다
+금융위원회는 우대금리 조건을 충족하지 못하면 광고의 최고금리보다 낮은 금리가 적용될 수 있다고 안내합니다. 상품설명서에서 기본금리와 우대조건을 나눠 확인하고, 내가 충족할 수 있는 조건을 표시해 보세요.</div>
+    <div class="source-note" aria-label="자료 출처">공식 출처: 금융위원회 · 특판 예·적금 가입할 때 우대금리 조건 꼼꼼히 확인하세요!
+<a href="https://www.fsc.go.kr/no040101/?cnId=1646&amp;curPage=248&amp;pastPage=248&amp;srchKey=&amp;srchText=" target="_blank" rel="noopener noreferrer">https://www.fsc.go.kr/no040101/?cnId=1646&amp;curPage=248&amp;pastPage=248&amp;srchKey=&amp;srchText=</a>
 원자료: 2023-04-05
 편집 검토: 2026-10-17 · 공식 본문 연결 확인: 2026-10-17</div>
   </section>
@@ -666,13 +867,15 @@ https://www.fsc.go.kr/no040101/?cnId=1646&amp;curPage=248&amp;pastPage=248&amp;s
       <h2>🛠️ 오늘의 집 관리</h2>
       <button class="copy-btn" onclick="copySection('daily23')">복사</button>
     </div>
-    <div class="textbox" id="daily23">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
+    <div class="textbox" id="daily23" data-copy-text="상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
 오늘의 확인: 공동시설 수리 이력
-K-apt의 유지관리이력 메뉴는 공용부분의 시설교체·유지보수 정보를 안내합니다. 궁금한 공사가 있다면 공개된 기록을 먼저 살펴보고 관리사무소에 확인할 질문을 적어 보세요. 기록만으로 현재 시설 상태를 단정하지 마세요.
+K-apt의 유지관리이력 메뉴는 공용부분의 시설교체·유지보수 정보를 안내합니다. 궁금한 공사가 있다면 공개된 기록을 먼저 살펴보고 관리사무소에 확인할 질문을 적어 보세요. 기록만으로 현재 시설 상태를 단정하지 마세요.">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
-공식 출처: 국토교통부·한국부동산원 공동주택관리정보시스템 K-apt
-https://www.k-apt.go.kr/web/main/index.do
+오늘의 확인: 공동시설 수리 이력
+K-apt의 유지관리이력 메뉴는 공용부분의 시설교체·유지보수 정보를 안내합니다. 궁금한 공사가 있다면 공개된 기록을 먼저 살펴보고 관리사무소에 확인할 질문을 적어 보세요. 기록만으로 현재 시설 상태를 단정하지 마세요.</div>
+    <div class="source-note" aria-label="자료 출처">공식 출처: 국토교통부·한국부동산원 공동주택관리정보시스템 K-apt
+<a href="https://www.k-apt.go.kr/web/main/index.do" target="_blank" rel="noopener noreferrer">https://www.k-apt.go.kr/web/main/index.do</a>
 원자료: 상시 서비스 안내 · 게시일 미표시
 편집 검토: 2026-10-17 · 공식 본문 연결 확인: 2026-10-17</div>
   </section>
@@ -681,52 +884,196 @@ https://www.k-apt.go.kr/web/main/index.do
       <h2>📦 이사 준비 한 가지</h2>
       <button class="copy-btn" onclick="copySection('daily24')">복사</button>
     </div>
-    <div class="textbox" id="daily24">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
+    <div class="textbox" id="daily24" data-copy-text="상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
 오늘의 준비: 이사 견적의 포함 범위
-견적을 비교할 때 작업일시·인원과 사다리차 등 장비, 에어컨 탈부착 비용을 따로 확인해 보세요. 공식 이사 안내는 작업조건과 추가비용 여부를 계약 전에 확인하도록 안내합니다.
+견적을 비교할 때 작업일시·인원과 사다리차 등 장비, 에어컨 탈부착 비용을 따로 확인해 보세요. 공식 이사 안내는 작업조건과 추가비용 여부를 계약 전에 확인하도록 안내합니다.">상시 생활 가이드 · 날짜별 순환 (2026-10-17)
 
-공식 출처: 법제처 찾기쉬운 생활법령정보 · 이사업체 정하기
-https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&amp;csmSeq=666&amp;ccfNo=3&amp;cciNo=2&amp;cnpClsNo=1
+오늘의 준비: 이사 견적의 포함 범위
+견적을 비교할 때 작업일시·인원과 사다리차 등 장비, 에어컨 탈부착 비용을 따로 확인해 보세요. 공식 이사 안내는 작업조건과 추가비용 여부를 계약 전에 확인하도록 안내합니다.</div>
+    <div class="source-note" aria-label="자료 출처">공식 출처: 법제처 찾기쉬운 생활법령정보 · 이사업체 정하기
+<a href="https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&amp;csmSeq=666&amp;ccfNo=3&amp;cciNo=2&amp;cnpClsNo=1" target="_blank" rel="noopener noreferrer">https://www.easylaw.go.kr/CSP/CnpClsMain.laf?popMenu=ov&amp;csmSeq=666&amp;ccfNo=3&amp;cciNo=2&amp;cnpClsNo=1</a>
 원자료: 상시 안내 · 게시일 미표시
 편집 검토: 2026-10-17 · 공식 본문 연결 확인: 2026-10-17</div>
+  </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>🏢 전국 아파트 실거래가</h2>
+      <button class="copy-btn" onclick="copySection('transactions')">복사</button>
+    </div>
+    <div class="textbox" id="transactions" data-copy-text="2026-10-17 전국 아파트 매매 실거래가
+계약일 조회 범위: 2026-10-11 ~ 2026-10-17
+이번 조회 파일의 유효 사례 2,522건 중 12개 표시
+최근 계약일 순 (같은 날은 원자료 순서)
+
+충청남도 서산시 동문동 · 서산동문꿈에그린아파트
+계약 2026-10-15 · 전용 84.9463㎡ · 17층
+매매 26,000만원
+
+전북특별자치도 전주시 덕진구 만성동 · 제일풍경채
+계약 2026-10-15 · 전용 84.9334㎡ · 13층
+매매 53,800만원
+
+경기도 남양주시 진접읍 장현리 · 금강펜터리움
+계약 2026-10-15 · 전용 84.955㎡ · 8층
+매매 31,500만원
+
+인천광역시 부평구 청천동 · e편한세상부평그랑힐스
+계약 2026-10-15 · 전용 59.8924㎡ · 21층
+매매 54,500만원
+
+울산광역시 울주군 범서읍 구영리 · 호반베르디움
+계약 2026-10-15 · 전용 71.0548㎡ · 19층
+매매 37,000만원
+
+대구광역시 달서구 이곡동 · 성서보성화성타운
+계약 2026-10-15 · 전용 59.95㎡ · 12층
+매매 12,500만원
+
+부산광역시 영도구 동삼동 · 오션라이프에일린의뜰1단지
+계약 2026-10-15 · 전용 74.9694㎡ · 35층
+매매 42,500만원
+
+경기도 안양시 만안구 안양동 · 유일보노빌
+계약 2026-10-15 · 전용 16.22㎡ · 4층
+매매 8,500만원
+
+인천광역시 부평구 부평동 · 중앙하이츠프리미어부평
+계약 2026-10-15 · 전용 59.8979㎡ · 4층
+매매 41,300만원
+
+경기도 안양시 만안구 안양동 · 성원5차
+계약 2026-10-15 · 전용 60㎡ · 4층
+매매 28,300만원
+
+인천광역시 서해구 신현동 · 루원e-편한세상하늘채아파트
+계약 2026-10-15 · 전용 59.999㎡ · 12층
+매매 47,900만원
+
+전북특별자치도 전주시 덕진구 인후동1가 · 삼호
+계약 2026-10-15 · 전용 126.605㎡ · 11층
+매매 17,000만원
+
+개별 거래 참고용이며 전국 전체 거래 통계·신규 등록 순위가 아닙니다.
+계약일 기준으로, 아직 신고되지 않은 거래는 포함되지 않습니다.
+해제 신고된 사례는 제외하며 신고·정정·해제로 내용이 달라질 수 있습니다.
+확인: 2026-10-17 02:46 (한국시간)">2026-10-17 전국 아파트 매매 실거래가
+계약일 조회 범위: 2026-10-11 ~ 2026-10-17
+이번 조회 파일의 유효 사례 2,522건 중 12개 표시
+최근 계약일 순 (같은 날은 원자료 순서)
+
+충청남도 서산시 동문동 · 서산동문꿈에그린아파트
+계약 2026-10-15 · 전용 84.9463㎡ · 17층
+매매 26,000만원
+
+전북특별자치도 전주시 덕진구 만성동 · 제일풍경채
+계약 2026-10-15 · 전용 84.9334㎡ · 13층
+매매 53,800만원
+
+경기도 남양주시 진접읍 장현리 · 금강펜터리움
+계약 2026-10-15 · 전용 84.955㎡ · 8층
+매매 31,500만원
+
+인천광역시 부평구 청천동 · e편한세상부평그랑힐스
+계약 2026-10-15 · 전용 59.8924㎡ · 21층
+매매 54,500만원
+
+울산광역시 울주군 범서읍 구영리 · 호반베르디움
+계약 2026-10-15 · 전용 71.0548㎡ · 19층
+매매 37,000만원
+
+대구광역시 달서구 이곡동 · 성서보성화성타운
+계약 2026-10-15 · 전용 59.95㎡ · 12층
+매매 12,500만원
+
+부산광역시 영도구 동삼동 · 오션라이프에일린의뜰1단지
+계약 2026-10-15 · 전용 74.9694㎡ · 35층
+매매 42,500만원
+
+경기도 안양시 만안구 안양동 · 유일보노빌
+계약 2026-10-15 · 전용 16.22㎡ · 4층
+매매 8,500만원
+
+인천광역시 부평구 부평동 · 중앙하이츠프리미어부평
+계약 2026-10-15 · 전용 59.8979㎡ · 4층
+매매 41,300만원
+
+경기도 안양시 만안구 안양동 · 성원5차
+계약 2026-10-15 · 전용 60㎡ · 4층
+매매 28,300만원
+
+인천광역시 서해구 신현동 · 루원e-편한세상하늘채아파트
+계약 2026-10-15 · 전용 59.999㎡ · 12층
+매매 47,900만원
+
+전북특별자치도 전주시 덕진구 인후동1가 · 삼호
+계약 2026-10-15 · 전용 126.605㎡ · 11층
+매매 17,000만원
+
+개별 거래 참고용이며 전국 전체 거래 통계·신규 등록 순위가 아닙니다.
+계약일 기준으로, 아직 신고되지 않은 거래는 포함되지 않습니다.
+해제 신고된 사례는 제외하며 신고·정정·해제로 내용이 달라질 수 있습니다.
+확인: 2026-10-17 02:46 (한국시간)</div>
+    <div class="source-note" aria-label="자료 출처">자료: 국토교통부 실거래가 공개시스템 (무료 공개 CSV)
+<a href="https://rt.molit.go.kr/pt/xls/xls.do" target="_blank" rel="noopener noreferrer">https://rt.molit.go.kr/pt/xls/xls.do</a></div>
   </section>
   <section class="card">
     <div class="card-head">
       <h2>📍 서울 주요 상권</h2>
       <button class="copy-btn" onclick="copySection('seoulcommerce')">복사</button>
     </div>
-    <div class="textbox" id="seoulcommerce">2026-10-17 서울 주요 상권
-선택 상권 3곳 · 신한카드 내국인 소비 기준
+    <div class="textbox" id="seoulcommerce" data-copy-text="2026-10-17 서울 주요 상권
+선택 상권 4곳 · 신한카드 내국인 소비 기준
 
 강남역: 한산한
-1시간 전 대비 -22.9% · 지난주 동시간 대비 +64.7%
-자료 기준: 2026-10-17 02:00
+1시간 전 대비 -28.9% · 지난주 동시간 대비 +99.4%
+자료 기준: 2026-10-17 02:30
 
 건대입구역: 한산한
-1시간 전 대비 -27.6% · 지난주 동시간 대비 -17.2%
-자료 기준: 2026-10-17 02:00
+1시간 전 대비 -48.6% · 지난주 동시간 대비 -28.1%
+자료 기준: 2026-10-17 02:30
 
-가로수길: 보통
-1시간 전 대비 -48.0% · 지난주 동시간 대비 +169.6%
-자료 기준: 2026-10-17 02:00
+가로수길: 한산한
+1시간 전 대비 -50.7% · 지난주 동시간 대비 +97.5%
+자료 기준: 2026-10-17 02:30
 
-확인: 2026-10-17 02:15 (한국시간)
-상권 현황은 카드 소비 데이터를 가공한 지표로 실제 현장과 차이가 있을 수 있습니다.
-출처: 서울특별시 서울 실시간 도시데이터
-https://data.seoul.go.kr/SeoulRtd/map</div>
+명동 관광특구: 한산한
+1시간 전 대비 -32.7% · 지난주 동시간 대비 +79.6%
+자료 기준: 2026-10-17 02:30
+
+확인: 2026-10-17 02:46 (한국시간)
+상권 현황은 카드 소비 데이터를 가공한 지표로 실제 현장과 차이가 있을 수 있습니다.">2026-10-17 서울 주요 상권
+선택 상권 4곳 · 신한카드 내국인 소비 기준
+
+강남역: 한산한
+1시간 전 대비 -28.9% · 지난주 동시간 대비 +99.4%
+자료 기준: 2026-10-17 02:30
+
+건대입구역: 한산한
+1시간 전 대비 -48.6% · 지난주 동시간 대비 -28.1%
+자료 기준: 2026-10-17 02:30
+
+가로수길: 한산한
+1시간 전 대비 -50.7% · 지난주 동시간 대비 +97.5%
+자료 기준: 2026-10-17 02:30
+
+명동 관광특구: 한산한
+1시간 전 대비 -32.7% · 지난주 동시간 대비 +79.6%
+자료 기준: 2026-10-17 02:30
+
+확인: 2026-10-17 02:46 (한국시간)
+상권 현황은 카드 소비 데이터를 가공한 지표로 실제 현장과 차이가 있을 수 있습니다.</div>
+    <div class="source-note" aria-label="자료 출처">출처: 서울특별시 서울 실시간 도시데이터
+<a href="https://data.seoul.go.kr/SeoulRtd/map" target="_blank" rel="noopener noreferrer">https://data.seoul.go.kr/SeoulRtd/map</a></div>
   </section>
   <section class="card">
     <div class="card-head">
       <h2>📊 비트코인 공포·탐욕 지수</h2>
       <button class="copy-btn" onclick="copySection('cryptofear')">복사</button>
     </div>
-    <div class="textbox" id="cryptofear">공식 지수 기준일: 2026년 10월 16일 (UTC)
+    <div class="textbox" id="cryptofear" data-copy-text="공식 지수 기준일: 2026년 10월 16일 (UTC)
 
 비트코인 공포·탐욕 지수: 63/100 · 탐욕
-
-자료: Alternative.me (무료 공식 API)
-https://alternative.me/crypto/fear-and-greed-index/
 
 전일: 53/100 · 전일 대비 +10포인트
 
@@ -734,14 +1081,30 @@ https://alternative.me/crypto/fear-and-greed-index/
 
 0은 극도의 공포, 100은 극도의 탐욕을 뜻합니다.
 
-수집: 2026-10-17 02:15 (한국시간)</div>
+수집: 2026-10-17 02:46 (한국시간)">공식 지수 기준일: 2026년 10월 16일 (UTC)
+
+비트코인 공포·탐욕 지수: 63/100 · 탐욕
+
+전일: 53/100 · 전일 대비 +10포인트
+
+7일 전: 59/100 · 7일 전 대비 +4포인트
+
+0은 극도의 공포, 100은 극도의 탐욕을 뜻합니다.
+
+수집: 2026-10-17 02:46 (한국시간)</div>
+    <div class="source-note" aria-label="자료 출처">자료: Alternative.me (무료 공식 API)
+<a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener noreferrer">https://alternative.me/crypto/fear-and-greed-index/</a></div>
   </section>
   <section class="card">
     <div class="card-head">
       <h2>📖 경제 주제 읽기 관심도</h2>
       <button class="copy-btn" onclick="copySection('wikiinterest')">복사</button>
     </div>
-    <div class="textbox" id="wikiinterest">영어 위키백과 고정 8개 경제 문서의 읽기 관심도
+    <div class="textbox" id="wikiinterest" data-copy-text="경제 주제, 이번 주에 얼마나 읽었을까?
+
+이 지표는 영어 위키백과의 경제 관련 문서 8개를 최근 일주일 동안 사용자가 열어 본 횟수입니다. 이전 일주일과 비교해 어떤 주제에 관심이 늘거나 줄었는지 살펴봅니다.
+
+읽는 법: 어떤 문서가 1,000회로 표시되면 그 일주일에 1,000번 열렸다는 뜻입니다. 같은 사람이 여러 번 읽은 것도 포함되므로 사람 수와는 다릅니다. +20%는 이전 7일보다 조회수가 20% 늘었다는 뜻입니다.
 
 최근 7일: 2026-10-08 ~ 2026-10-14 (UTC)
 직전 7일: 2026-10-01 ~ 2026-10-07 (UTC)
@@ -764,10 +1127,145 @@ https://alternative.me/crypto/fear-and-greed-index/
 
 환율: 1,077회 · 직전 7일 1,166회 · -7.6%
 
-수집: 2026-10-17 02:15 (한국시간)
+수집: 2026-10-17 02:46 (한국시간)">경제 주제, 이번 주에 얼마나 읽었을까?
 
-자료: Wikimedia Analytics API (무료 공식 API, CC0)
-https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/reference/page-views.html</div>
+이 지표는 영어 위키백과의 경제 관련 문서 8개를 최근 일주일 동안 사용자가 열어 본 횟수입니다. 이전 일주일과 비교해 어떤 주제에 관심이 늘거나 줄었는지 살펴봅니다.
+
+읽는 법: 어떤 문서가 1,000회로 표시되면 그 일주일에 1,000번 열렸다는 뜻입니다. 같은 사람이 여러 번 읽은 것도 포함되므로 사람 수와는 다릅니다. +20%는 이전 7일보다 조회수가 20% 늘었다는 뜻입니다.
+
+최근 7일: 2026-10-08 ~ 2026-10-14 (UTC)
+직전 7일: 2026-10-01 ~ 2026-10-07 (UTC)
+
+사용자 조회수 합계입니다. 전체 인기 주제 순위나 투자심리 지수가 아닙니다.
+
+비트코인: 26,363회 · 직전 7일 15,935회 · +65.4%
+
+금: 14,221회 · 직전 7일 14,424회 · -1.4%
+
+인플레이션: 4,700회 · 직전 7일 4,633회 · +1.4%
+
+경제: 2,698회 · 직전 7일 2,655회 · +1.6%
+
+주식시장: 2,582회 · 직전 7일 3,131회 · -17.5%
+
+부동산: 2,541회 · 직전 7일 2,864회 · -11.3%
+
+금리: 1,341회 · 직전 7일 1,307회 · +2.6%
+
+환율: 1,077회 · 직전 7일 1,166회 · -7.6%
+
+수집: 2026-10-17 02:46 (한국시간)</div>
+    <div class="source-note" aria-label="자료 출처">자료: Wikimedia Analytics API (무료 공식 API, CC0)
+<a href="https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/reference/page-views.html" target="_blank" rel="noopener noreferrer">https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/reference/page-views.html</a></div>
+  </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>🏘️ 공공임대 모집공고</h2>
+      <button class="copy-btn" onclick="copySection('publicrental')">복사</button>
+    </div>
+    <div class="textbox" id="publicrental" data-copy-text="최신 공식 모집공고 목록을 확인하지 못했습니다. 이전 공고를 오늘 모집중인 공고로 표시하지 않습니다.
+
+마이홈 공식 목록에서 지역과 모집상태를 선택해 확인하세요.">최신 공식 모집공고 목록을 확인하지 못했습니다. 이전 공고를 오늘 모집중인 공고로 표시하지 않습니다.
+
+마이홈 공식 목록에서 지역과 모집상태를 선택해 확인하세요.</div>
+    <div class="source-note" aria-label="자료 출처">자료: 마이홈포털 · 국토교통부·LH 공식 공개 모집공고
+<a href="https://www.myhome.go.kr/hws/portal/sch/selectRsdtRcritNtcView.do" target="_blank" rel="noopener noreferrer">https://www.myhome.go.kr/hws/portal/sch/selectRsdtRcritNtcView.do</a></div>
+  </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>🛡️ 전세보증금 지키기</h2>
+      <button class="copy-btn" onclick="copySection('rentalguarantee')">복사</button>
+    </div>
+    <div class="textbox" id="rentalguarantee" data-copy-text="상시 확인 가이드 · 공식 안내 확인일: 2026-10-17
+
+전세보증금반환보증은 계약 종료 후 돌려받지 못한 전세보증금의 반환을 보장하는 상품입니다. 계약 전에 가입 가능 여부부터 확인하세요.
+
+① 대상 주택·보증금·신청기한을 확인합니다. 신청 가능한 기간을 넘기지 않도록 계약 일정과 함께 점검하세요.
+
+② 등기부의 소유자와 권리침해, 선순위채권을 확인합니다. 다가구주택은 다른 세입자의 선순위 보증금도 확인 대상입니다.
+
+③ 전입신고·확정일자·실제 거주, 전세계약서 및 건축물대장 관련 요건을 HUG 공식 조건과 대조합니다.
+
+④ 보증 가입 가능 여부와 제출서류를 HUG에서 확인합니다. 전세대출 보증과 보증금 반환보증은 역할이 다릅니다.
+
+이 카드는 무료 공식 정보 안내입니다. 실제 보증 가입에는 보증료가 발생할 수 있습니다.">상시 확인 가이드 · 공식 안내 확인일: 2026-10-17
+
+전세보증금반환보증은 계약 종료 후 돌려받지 못한 전세보증금의 반환을 보장하는 상품입니다. 계약 전에 가입 가능 여부부터 확인하세요.
+
+① 대상 주택·보증금·신청기한을 확인합니다. 신청 가능한 기간을 넘기지 않도록 계약 일정과 함께 점검하세요.
+
+② 등기부의 소유자와 권리침해, 선순위채권을 확인합니다. 다가구주택은 다른 세입자의 선순위 보증금도 확인 대상입니다.
+
+③ 전입신고·확정일자·실제 거주, 전세계약서 및 건축물대장 관련 요건을 HUG 공식 조건과 대조합니다.
+
+④ 보증 가입 가능 여부와 제출서류를 HUG에서 확인합니다. 전세대출 보증과 보증금 반환보증은 역할이 다릅니다.
+
+이 카드는 무료 공식 정보 안내입니다. 실제 보증 가입에는 보증료가 발생할 수 있습니다.</div>
+    <div class="source-note" aria-label="자료 출처">자료: HUG 주택도시보증공사 · 전세보증금반환보증 상품개요
+<a href="https://www.khug.or.kr/hug/web/ig/dr/igdr000001.jsp?tabId=1" target="_blank" rel="noopener noreferrer">https://www.khug.or.kr/hug/web/ig/dr/igdr000001.jsp?tabId=1</a></div>
+  </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>🏦 내집마련 대출 확인 순서</h2>
+      <button class="copy-btn" onclick="copySection('housingfinance')">복사</button>
+    </div>
+    <div class="textbox" id="housingfinance" data-copy-text="상시 확인 가이드 · 공식 안내 확인일: 2026-10-17
+
+집값만 보기 전에 내 자금과 월 상환액을 함께 계산하세요. HF의 보금자리론·디딤돌대출 공식 안내에서 아래 항목을 비교할 수 있습니다.
+
+① 신청대상: 세대·주택 보유수, 부부합산 소득, 생애최초·신혼 등 구분을 확인합니다. 디딤돌대출은 자산 기준도 확인합니다.
+
+② 대상주택: 주택가격·전용면적·주택 유형을 확인합니다. 내가 보는 매물이 상품의 대상인지 먼저 대조하세요.
+
+③ 자금계획: 대출한도, LTV·DTI, 만기와 상환방식을 확인한 뒤 월 원금+이자에 관리비·세금·수리비를 더해 봅니다.
+
+④ 실행일정: 상품별 신청·심사·실행 절차를 잔금 일정과 맞춥니다. 금리·우대조건·중도상환 조건은 공식 최신 안내로 확인하세요.
+
+여기에 표시한 것은 비교 순서이며 개인별 승인 한도나 적용 금리 계산 결과가 아닙니다.">상시 확인 가이드 · 공식 안내 확인일: 2026-10-17
+
+집값만 보기 전에 내 자금과 월 상환액을 함께 계산하세요. HF의 보금자리론·디딤돌대출 공식 안내에서 아래 항목을 비교할 수 있습니다.
+
+① 신청대상: 세대·주택 보유수, 부부합산 소득, 생애최초·신혼 등 구분을 확인합니다. 디딤돌대출은 자산 기준도 확인합니다.
+
+② 대상주택: 주택가격·전용면적·주택 유형을 확인합니다. 내가 보는 매물이 상품의 대상인지 먼저 대조하세요.
+
+③ 자금계획: 대출한도, LTV·DTI, 만기와 상환방식을 확인한 뒤 월 원금+이자에 관리비·세금·수리비를 더해 봅니다.
+
+④ 실행일정: 상품별 신청·심사·실행 절차를 잔금 일정과 맞춥니다. 금리·우대조건·중도상환 조건은 공식 최신 안내로 확인하세요.
+
+여기에 표시한 것은 비교 순서이며 개인별 승인 한도나 적용 금리 계산 결과가 아닙니다.</div>
+    <div class="source-note" aria-label="자료 출처">자료: 한국주택금융공사 · 보금자리론 / 디딤돌대출 상품소개
+<a href="https://www.hf.go.kr/ko/sub01/sub01_01_01.do" target="_blank" rel="noopener noreferrer">https://www.hf.go.kr/ko/sub01/sub01_01_01.do</a>
+<a href="https://www.hf.go.kr/ko/sub01/sub01_02_01.do" target="_blank" rel="noopener noreferrer">https://www.hf.go.kr/ko/sub01/sub01_02_01.do</a></div>
+  </section>
+  <section class="card">
+    <div class="card-head">
+      <h2>🗺️ 계약 전 토지·규제 확인</h2>
+      <button class="copy-btn" onclick="copySection('landcheck')">복사</button>
+    </div>
+    <div class="textbox" id="landcheck" data-copy-text="상시 확인 가이드 · 공식 안내 확인일: 2026-10-17
+
+같은 동네라도 필지마다 허용 용도와 규제가 다릅니다. 토지·상가·주택을 검토할 때 주소를 정확히 넣고 확인하세요.
+
+① 토지이음에서 지번·도로명으로 대상 필지를 찾고 지목·면적·지역·지구 지정현황을 확인합니다.
+
+② 「행위제한내용설명」에서 건축 가능한 용도, 건폐율·용적률, 층수·높이, 건축선·도로조건을 살펴봅니다.
+
+③ 도시계획과 고시정보에서 관련 결정고시·도면을 확인합니다. 개발계획이 있다는 말과 실제 결정된 고시는 구분해서 봅니다.
+
+④ 계획한 건축·용도변경의 가능 여부는 표시된 근거 법령과 담당 지자체의 허가 요건까지 확인합니다.">상시 확인 가이드 · 공식 안내 확인일: 2026-10-17
+
+같은 동네라도 필지마다 허용 용도와 규제가 다릅니다. 토지·상가·주택을 검토할 때 주소를 정확히 넣고 확인하세요.
+
+① 토지이음에서 지번·도로명으로 대상 필지를 찾고 지목·면적·지역·지구 지정현황을 확인합니다.
+
+② 「행위제한내용설명」에서 건축 가능한 용도, 건폐율·용적률, 층수·높이, 건축선·도로조건을 살펴봅니다.
+
+③ 도시계획과 고시정보에서 관련 결정고시·도면을 확인합니다. 개발계획이 있다는 말과 실제 결정된 고시는 구분해서 봅니다.
+
+④ 계획한 건축·용도변경의 가능 여부는 표시된 근거 법령과 담당 지자체의 허가 요건까지 확인합니다.</div>
+    <div class="source-note" aria-label="자료 출처">자료: 국토교통부 토지이음 · 주요 서비스와 열람 안내
+<a href="https://www.eum.go.kr/web/am/visit.jsp" target="_blank" rel="noopener noreferrer">https://www.eum.go.kr/web/am/visit.jsp</a></div>
   </section>
   <section class="card">
     <div class="card-head">
@@ -776,6 +1274,15 @@ https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/reference/pa
     </div>
     <div class="textbox" id="entertainment" data-copy-text="🌟 [연예 뉴스]
 26년 10월 17일 토요일
+
+NMIXX(엔믹스), 신보 수록 전곡 일부를 미리 들려주는 ‘오리지널 하이라이트 메들리’ 공개
+https://m.entertain.naver.com/now/article/144/0001144589
+
+&#x27;호화 감방생활&#x27; 힙합거물 퍼프 대디, 논란 2주만에 결국 이감
+https://m.entertain.naver.com/now/article/001/0016382404
+
+‘스마트폰 하나로 실감나는 사운드 레코딩’ 소니코리아, 스마트폰용 공간 음향 마이크 ‘ECM-AX10’ 출시
+https://m.entertain.naver.com/now/article/144/0001144588
 
 ‘나를 충전해줘’ 김혜은, 욕망 뒤 감춰진 상처까지 그려내며 존재감 구축
 https://m.entertain.naver.com/now/article/144/0001144587
@@ -790,17 +1297,14 @@ YS Block(와이에스 블락), 견고한 음악적 색깔과 새로운 이정표
 https://m.entertain.naver.com/now/article/144/0001144585
 
 “군대서 휴지 치우는데 내 노래가”…개코, ‘죽일 놈’에 얽힌 웃픈 사연 (‘성시경의 고막남친’)
-https://m.entertain.naver.com/now/article/445/0000478103
-
-디오디, 아티스트 쿄카(KYOKA)와 함께한 ‘빈틈없는 다운’[화보]
-https://m.entertain.naver.com/now/article/144/0001144584
-
-제니, 계곡서 과감한 블랙 비키니…화장기 없는 얼굴도 매력적이네 [★해시태그]
-https://m.entertain.naver.com/now/article/311/0002069505
-
-&#x27;핑클 컴백&#x27; 이효리, 꾸밈없는 민낯 공개..더 사랑스러워
-https://m.entertain.naver.com/now/article/109/0005624472">🌟 [연예 뉴스]
+https://m.entertain.naver.com/now/article/445/0000478103">🌟 [연예 뉴스]
 26년 10월 17일 토요일
+
+<a href="https://m.entertain.naver.com/now/article/144/0001144589" target="_blank" rel="noopener noreferrer">NMIXX(엔믹스), 신보 수록 전곡 일부를 미리 들려주는 ‘오리지널 하이라이트 메들리’ 공개</a>
+
+<a href="https://m.entertain.naver.com/now/article/001/0016382404" target="_blank" rel="noopener noreferrer">&#x27;호화 감방생활&#x27; 힙합거물 퍼프 대디, 논란 2주만에 결국 이감</a>
+
+<a href="https://m.entertain.naver.com/now/article/144/0001144588" target="_blank" rel="noopener noreferrer">‘스마트폰 하나로 실감나는 사운드 레코딩’ 소니코리아, 스마트폰용 공간 음향 마이크 ‘ECM-AX10’ 출시</a>
 
 <a href="https://m.entertain.naver.com/now/article/144/0001144587" target="_blank" rel="noopener noreferrer">‘나를 충전해줘’ 김혜은, 욕망 뒤 감춰진 상처까지 그려내며 존재감 구축</a>
 
@@ -810,13 +1314,8 @@ https://m.entertain.naver.com/now/article/109/0005624472">🌟 [연예 뉴스]
 
 <a href="https://m.entertain.naver.com/now/article/144/0001144585" target="_blank" rel="noopener noreferrer">YS Block(와이에스 블락), 견고한 음악적 색깔과 새로운 이정표 담아낸 새 EP ‘블랙플래그’</a>
 
-<a href="https://m.entertain.naver.com/now/article/445/0000478103" target="_blank" rel="noopener noreferrer">“군대서 휴지 치우는데 내 노래가”…개코, ‘죽일 놈’에 얽힌 웃픈 사연 (‘성시경의 고막남친’)</a>
-
-<a href="https://m.entertain.naver.com/now/article/144/0001144584" target="_blank" rel="noopener noreferrer">디오디, 아티스트 쿄카(KYOKA)와 함께한 ‘빈틈없는 다운’[화보]</a>
-
-<a href="https://m.entertain.naver.com/now/article/311/0002069505" target="_blank" rel="noopener noreferrer">제니, 계곡서 과감한 블랙 비키니…화장기 없는 얼굴도 매력적이네 [★해시태그]</a>
-
-<a href="https://m.entertain.naver.com/now/article/109/0005624472" target="_blank" rel="noopener noreferrer">&#x27;핑클 컴백&#x27; 이효리, 꾸밈없는 민낯 공개..더 사랑스러워</a></div>
+<a href="https://m.entertain.naver.com/now/article/445/0000478103" target="_blank" rel="noopener noreferrer">“군대서 휴지 치우는데 내 노래가”…개코, ‘죽일 놈’에 얽힌 웃픈 사연 (‘성시경의 고막남친’)</a></div>
+    
   </section>
   <section class="card">
     <div class="card-head">
@@ -825,6 +1324,12 @@ https://m.entertain.naver.com/now/article/109/0005624472">🌟 [연예 뉴스]
     </div>
     <div class="textbox" id="romance" data-copy-text="💕 [열애·결혼 소식]
 26년 10월 17일 토요일
+
+기성용♥한혜진 딸, 이강인 모르는 이모에 깜짝…&quot;그게 가능해?&quot; (김강우)
+https://m.entertain.naver.com/now/article/311/0002069511
+
+&#x27;비서진&#x27; 지예은, 결혼 서두르지 말라는 이서진에 &quot;아직 진짜 사랑 안 해본 듯&quot;
+https://m.entertain.naver.com/now/article/416/0000327425
 
 그리, 십자인대 파열 수술 직후 ♥여친과 결혼 얘기…“축가는 변우석”
 https://m.entertain.naver.com/now/article/382/0001299443
@@ -842,14 +1347,12 @@ https://m.entertain.naver.com/now/article/109/0005624467
 https://m.entertain.naver.com/now/article/213/0001404938
 
 &#x27;돌싱맘&#x27; 한그루, 연애 의지 밝히더니…과감한 브이넥 패션으로 뽐낸 몸매
-https://m.entertain.naver.com/now/article/117/0004115730
-
-&#x27;진짜가 나타났다&#x27; 유재이, 알고 보니 결혼 1년 차 새댁..&quot;♥남편과 꿀 뚝뚝&quot;
-https://m.entertain.naver.com/now/article/109/0005624463
-
-지예은 &quot;12월 결혼 아직 안 믿겨...지석진, ♥바타와 썸 눈치 못채&quot; (&#x27;비서진&#x27;)[종합]
-https://m.entertain.naver.com/now/article/213/0001404936">💕 [열애·결혼 소식]
+https://m.entertain.naver.com/now/article/117/0004115730">💕 [열애·결혼 소식]
 26년 10월 17일 토요일
+
+<a href="https://m.entertain.naver.com/now/article/311/0002069511" target="_blank" rel="noopener noreferrer">기성용♥한혜진 딸, 이강인 모르는 이모에 깜짝…&quot;그게 가능해?&quot; (김강우)</a>
+
+<a href="https://m.entertain.naver.com/now/article/416/0000327425" target="_blank" rel="noopener noreferrer">&#x27;비서진&#x27; 지예은, 결혼 서두르지 말라는 이서진에 &quot;아직 진짜 사랑 안 해본 듯&quot;</a>
 
 <a href="https://m.entertain.naver.com/now/article/382/0001299443" target="_blank" rel="noopener noreferrer">그리, 십자인대 파열 수술 직후 ♥여친과 결혼 얘기…“축가는 변우석”</a>
 
@@ -861,11 +1364,8 @@ https://m.entertain.naver.com/now/article/213/0001404936">💕 [열애·결혼 �
 
 <a href="https://m.entertain.naver.com/now/article/213/0001404938" target="_blank" rel="noopener noreferrer">상견례 앞둔 여친 살해 후 뻔뻔 변명...안정환 &quot;말도 안 되는 소리&quot; 분노 (&#x27;용형5&#x27;)</a>
 
-<a href="https://m.entertain.naver.com/now/article/117/0004115730" target="_blank" rel="noopener noreferrer">&#x27;돌싱맘&#x27; 한그루, 연애 의지 밝히더니…과감한 브이넥 패션으로 뽐낸 몸매</a>
-
-<a href="https://m.entertain.naver.com/now/article/109/0005624463" target="_blank" rel="noopener noreferrer">&#x27;진짜가 나타났다&#x27; 유재이, 알고 보니 결혼 1년 차 새댁..&quot;♥남편과 꿀 뚝뚝&quot;</a>
-
-<a href="https://m.entertain.naver.com/now/article/213/0001404936" target="_blank" rel="noopener noreferrer">지예은 &quot;12월 결혼 아직 안 믿겨...지석진, ♥바타와 썸 눈치 못채&quot; (&#x27;비서진&#x27;)[종합]</a></div>
+<a href="https://m.entertain.naver.com/now/article/117/0004115730" target="_blank" rel="noopener noreferrer">&#x27;돌싱맘&#x27; 한그루, 연애 의지 밝히더니…과감한 브이넥 패션으로 뽐낸 몸매</a></div>
+    
   </section>
   <section class="card">
     <div class="card-head">
@@ -874,6 +1374,9 @@ https://m.entertain.naver.com/now/article/213/0001404936">💕 [열애·결혼 �
     </div>
     <div class="textbox" id="broadcast" data-copy-text="📺 [방송 화제]
 26년 10월 17일 토요일
+
+&#x27;비서진&#x27; 이서진, &quot;지석진, 너무 좋아하는 사람…짠해서 울 뻔&quot;
+https://m.entertain.naver.com/now/article/416/0000327424
 
 [스브스夜] &#x27;닥터X&#x27; 김지원, 고난도 개두술 성공…장승조 등장에 추가 계약 보류
 https://m.entertain.naver.com/now/article/416/0000327423
@@ -887,18 +1390,17 @@ https://m.entertain.naver.com/now/article/311/0002069499
 서범준, 대전 &#x27;빵지순례 버스&#x27; 예약 성공..&#x27;45인승&#x27; 전 좌석 만석 [나혼산][★밤TView]
 https://m.entertain.naver.com/now/article/108/0003479376
 
+지예은 &quot;12월 결혼 아직 안 믿겨...지석진, ♥바타와 썸 눈치 못채&quot; (&#x27;비서진&#x27;)[종합]
+https://m.entertain.naver.com/now/article/213/0001404936
+
 &quot;좀 천천히 하지&quot;…지예은, 결혼 앞두고 초 치는 이서진에 폭발 &quot;뭘 안다고&quot; (비서진)[종합]
 https://m.entertain.naver.com/now/article/311/0002069498
 
 ‘비서진’ 지예은, 바타 친누나 기습 만남
-https://m.entertain.naver.com/now/article/440/0000049055
-
-&#x27;나 혼자 산다&#x27;가 대전 빵 버스 투어에 떴다… 서범준, 선착순 타르트 사수하려 달리기까지
-https://m.entertain.naver.com/now/article/445/0000478100
-
-구성환, 번지점프 첫 성공에 웃음바다…&quot;사실 실수로 뛰어내려&quot; (&#x27;나혼산&#x27;) [종합]
-https://m.entertain.naver.com/now/article/213/0001404935">📺 [방송 화제]
+https://m.entertain.naver.com/now/article/440/0000049055">📺 [방송 화제]
 26년 10월 17일 토요일
+
+<a href="https://m.entertain.naver.com/now/article/416/0000327424" target="_blank" rel="noopener noreferrer">&#x27;비서진&#x27; 이서진, &quot;지석진, 너무 좋아하는 사람…짠해서 울 뻔&quot;</a>
 
 <a href="https://m.entertain.naver.com/now/article/416/0000327423" target="_blank" rel="noopener noreferrer">[스브스夜] &#x27;닥터X&#x27; 김지원, 고난도 개두술 성공…장승조 등장에 추가 계약 보류</a>
 
@@ -908,13 +1410,12 @@ https://m.entertain.naver.com/now/article/213/0001404935">📺 [방송 화제]
 
 <a href="https://m.entertain.naver.com/now/article/108/0003479376" target="_blank" rel="noopener noreferrer">서범준, 대전 &#x27;빵지순례 버스&#x27; 예약 성공..&#x27;45인승&#x27; 전 좌석 만석 [나혼산][★밤TView]</a>
 
+<a href="https://m.entertain.naver.com/now/article/213/0001404936" target="_blank" rel="noopener noreferrer">지예은 &quot;12월 결혼 아직 안 믿겨...지석진, ♥바타와 썸 눈치 못채&quot; (&#x27;비서진&#x27;)[종합]</a>
+
 <a href="https://m.entertain.naver.com/now/article/311/0002069498" target="_blank" rel="noopener noreferrer">&quot;좀 천천히 하지&quot;…지예은, 결혼 앞두고 초 치는 이서진에 폭발 &quot;뭘 안다고&quot; (비서진)[종합]</a>
 
-<a href="https://m.entertain.naver.com/now/article/440/0000049055" target="_blank" rel="noopener noreferrer">‘비서진’ 지예은, 바타 친누나 기습 만남</a>
-
-<a href="https://m.entertain.naver.com/now/article/445/0000478100" target="_blank" rel="noopener noreferrer">&#x27;나 혼자 산다&#x27;가 대전 빵 버스 투어에 떴다… 서범준, 선착순 타르트 사수하려 달리기까지</a>
-
-<a href="https://m.entertain.naver.com/now/article/213/0001404935" target="_blank" rel="noopener noreferrer">구성환, 번지점프 첫 성공에 웃음바다…&quot;사실 실수로 뛰어내려&quot; (&#x27;나혼산&#x27;) [종합]</a></div>
+<a href="https://m.entertain.naver.com/now/article/440/0000049055" target="_blank" rel="noopener noreferrer">‘비서진’ 지예은, 바타 친누나 기습 만남</a></div>
+    
   </section>
   <footer>daily-briefing · 자동 생성</footer>
 </div>
