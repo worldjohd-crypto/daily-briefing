@@ -117,37 +117,24 @@ def local_article_link(url):
     return SHORT_LINK_BASE + key
 
 
+def is_naver_article(url):
+    parsed = urlparse(url)
+    return (parsed.scheme == 'https' and parsed.hostname in
+            {'news.naver.com', 'n.news.naver.com', 'm.entertain.naver.com', 'entertain.naver.com'}
+            and re.search(r'/article/\d+/\d+', parsed.path) is not None)
+
+
 def prepare_news_text(body, section_id):
-    original_links = {}
-    if section_id in NEWS_HEADINGS:
-        try:
-            original_links = {v: k for k, v in json.loads((Path(__file__).resolve().parent.parent / 'news-shortlinks.json').read_text(encoding='utf-8')).items()}
-        except (OSError, ValueError):
-            pass
-        # Recover original destinations from already-published local short links.
-        try:
-            original_links.update({SHORT_LINK_BASE + k: v for k, v in json.loads(ARTICLE_LINKS_FILE.read_text(encoding='utf-8')).items()})
-        except (OSError, ValueError):
-            pass
+    """Publish original Naver article URLs, with identical clipboard text."""
     blocks = []
     for block in body.split('\n\n'):
         lines = block.splitlines()
         if len(lines) in (2, 3) and urlparse(lines[-1]).scheme == 'https':
-            url = original_links.get(lines[-1], lines[-1])
-            if section_id in NEWS_HEADINGS:
-                if not verify_news_article(requests.get, url):
-                    continue
-                url = external_article_link(url)
-            parsed = urlparse(url)
-            if parsed.scheme != 'https' or parsed.hostname not in ARTICLE_HOSTS | {'news.google.com', 'm.site.naver.com', 'da.gd'}:
-                url = lines[-1]
-            blocks.append(lines[0] + '\n' + url)
+            if is_naver_article(lines[-1]):
+                blocks.append(lines[0] + '\n' + lines[-1])
         else:
             blocks.append(block)
-    result = '\n\n'.join(blocks)
-    if re.search(r'^https://', body, re.M) and not re.search(r'^https://', result, re.M):
-        result += '\n\n열람 조건에 맞는 기사를 확인하지 못했습니다. 다음 자동 업데이트에서 다시 확인합니다.'
-    return result
+    return '\n\n'.join(blocks)
 
 
 def render_news_links(body):
@@ -158,7 +145,7 @@ def render_news_links(body):
         if len(lines) in (2, 3):
             title, url = lines[0], lines[-1]
             parsed = urlparse(url)
-            if parsed.scheme == 'https' and parsed.hostname in ARTICLE_HOSTS | {'news.google.com', 'm.site.naver.com', 'da.gd'}:
+            if is_naver_article(url):
                 blocks.append('<a href="' + html.escape(url, quote=True)
                               + '" target="_blank" rel="noopener noreferrer">'
                               + html.escape(title) + '</a>')
@@ -271,37 +258,46 @@ def _verify_portal_article(get, url):
     return _VERIFIED_PORTAL_ARTICLES[url]
 
 
+_NAVER_ENTERTAINMENT = None
+
+
+def naver_entertainment(get, now):
+    global _NAVER_ENTERTAINMENT
+    if _NAVER_ENTERTAINMENT is None:
+        items = []
+        for days in (0, 1):
+            date = (now - datetime.timedelta(days=days)).strftime('%Y%m%d')
+            response = get('https://api-gw.entertain.naver.com/news/articles',
+                           params={'date': date, 'page': 1, 'pageSize': 100}, timeout=20)
+            response.raise_for_status()
+            data = response.json()
+            if data.get('success'):
+                items.extend(data.get('result', {}).get('newsList', []))
+        _NAVER_ENTERTAINMENT = items
+    return _NAVER_ENTERTAINMENT
+
+
 def news_text(get, now, label, query, used):
-    lines = [f'{now:%Y-%m-%d %H:%M} 수집 · {label}', '']
+    blocks = [f'{now:%Y-%m-%d %H:%M} 수집 · {label}']
     count = 0
-    try:
-        source_audit = json.loads(NEWS_SOURCE_AUDIT_FILE.read_text(encoding='utf-8'))
-    except FileNotFoundError:
-        source_audit = {}
-    for title, link, stamp in _portal_candidates(get):
-        published = datetime.datetime.strptime(stamp, '%Y%m%d%H%M%S').replace(tzinfo=now.tzinfo)
-        if not 0 <= (now - published).total_seconds() <= 172800 or title in used:
+    for item in naver_entertainment(get, now):
+        title, link = html.unescape(item.get('title', '')).strip(), item.get('url', '')
+        if not title or title in used or not is_naver_article(link):
+            continue
+        if AD_WALL_RE.search(item.get('subContent', '')):
             continue
         if '열애' in label and not ROMANCE_NEWS_RE.search(title):
             continue
         if '방송' in label and not BROADCAST_NEWS_RE.search(title):
             continue
-        checked = _verify_portal_article(get, link)
-        if not checked:
-            continue
-        title = checked['title'] or title
-        if title in used:
-            continue
         used.add(title)
-        source_audit[link] = {'title': title, 'sourceUrl': 'https://v.daum.net', 'collectedAt': now.isoformat(), 'policy': 'direct_portal_no_detected_ad_wall', **checked}
-        lines.extend([title, link, ''])
+        blocks.append(title + '\n' + link)
         count += 1
         if count == 8:
             break
     if not count:
-        lines.append('최근 48시간 내 열람 조건에 맞는 포털 기사가 없습니다. 광고 시청 유도 기사나 일반 언론사 사이트로 대체하지 않습니다.')
-    NEWS_SOURCE_AUDIT_FILE.write_text(json.dumps(source_audit, ensure_ascii=False, indent=2), encoding='utf-8')
-    return '\n'.join(lines).strip()
+        blocks.append('조건에 맞는 네이버 기사를 확인하지 못했습니다. 다음 자동 업데이트에서 다시 확인합니다.')
+    return '\n\n'.join(blocks)
 
 
 def extend_sections(sections, get, now):

@@ -29,7 +29,7 @@ import re
 import sys
 import time
 import traceback
-from free_content import extend_sections, render_news_links, prepare_news_text, format_news_heading, NEWS_HEADINGS
+from free_content import extend_sections, render_news_links, prepare_news_text, format_news_heading, NEWS_HEADINGS, is_naver_article, AD_WALL_RE
 from collections import Counter
 from urllib.parse import quote
 
@@ -529,33 +529,13 @@ def _daum_news_cached():
 
 @safe("퀵뉴스")
 def build_shortnews():
-    header = f"{DATE_HEAD} 오늘의 퀵뉴스⚡"
-    news_items = _daum_news_cached()
-
-    lines = [header, ""]
-    if news_items:
-        for emoji, label, summary in news_items:
-            lines.extend([f"{emoji} ({label}) {summary}", _QUICKNEWS_LINKS.get(summary, ""), ""])
-        lines.append("")
-    else:
-        lines.append("(오늘 뉴스 수집에 실패했습니다)")
-        lines.append("")
-
-    quote_txt = _todays_quote()
-    if quote_txt:
-        lines.append("[오늘의 명언]")
-        lines.append(quote_txt)
-        lines.append("")
-
-    indicators = _get_market_indicators()
-    if indicators:
-        lines.append("[주요 경제 지표]")
-        for name, val in indicators:
-            lines.append(f"  - {name} : {val}")
-
-    if not news_items and not indicators:
-        return None
-    return "\n".join(lines).strip()
+    articles, seen = [], set()
+    for section in ('100', '101', '102', '104'):
+        for article in _naver_section_headlines('https://news.naver.com/section/' + section, max_articles=5):
+            if article['url'] not in seen:
+                seen.add(article['url'])
+                articles.append(article)
+    return _render_news_section('⚡', '오늘의 퀵뉴스', articles) if articles else None
 
 
 # ---------------------------------------------------------------------------
@@ -1157,6 +1137,8 @@ def _naver_section_headlines(urls, max_articles=10):
                 continue
             if href.startswith("/"):
                 href = "https://news.naver.com" + href
+            if not is_naver_article(href):
+                continue
             articles.append({"title": title, "url": href})
             seen_links.add(href)
             if len(articles) >= max_articles:
@@ -1169,6 +1151,15 @@ def _naver_section_headlines(urls, max_articles=10):
 def _render_news_section(emoji, label, articles):
     lines = [f"{emoji} {DATE_HEAD} {label}", ""]
     for art in articles:
+        if not is_naver_article(art["url"]):
+            continue
+        try:
+            response = get(art["url"], timeout=15)
+            response.encoding = "utf-8"
+            if AD_WALL_RE.search(response.text):
+                continue
+        except Exception:
+            continue
         lines.append(art["title"])
         lines.append(art["url"])
         lines.append("")
@@ -1314,10 +1305,10 @@ def _fetch_ai_articles():
 
 @safe("AI 뉴스")
 def build_ai_news():
-    articles = _fetch_ai_articles()
-    if not articles:
-        return None
-    return _render_news_section("🤖", "AI 뉴스", articles)
+    articles = _naver_section_headlines(
+        ['https://news.naver.com/breakingnews/section/105/731', 'https://news.naver.com/section/105'], max_articles=50)
+    articles = [a for a in articles if re.search(r'AI|인공지능|오픈AI|챗GPT|제미나이|클로드|앤트로픽|LLM', a['title'], re.I)][:10]
+    return _render_news_section('🤖', 'AI 뉴스', articles) if articles else None
 
 
 @safe("AI·테크 논평", fallback=COMMENT_FALLBACK)

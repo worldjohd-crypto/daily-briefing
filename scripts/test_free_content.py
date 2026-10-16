@@ -14,42 +14,28 @@ class FreeContentTests(unittest.TestCase):
         self.assertIn('오늘 OX', f.source_sections(get, NOW)['daily19'])
         self.assertEqual(f.source_sections(get, NOW + datetime.timedelta(days=1)), {})
 
-    def test_portal_dates_duplicates_adwall_and_redirects(self):
-        valid = 'https://v.daum.net/v/20261016100000000'
-        old = 'https://v.daum.net/v/20261009100000000'
-        gated = 'https://v.daum.net/v/20261016110000000'
-        redirected = 'https://v.daum.net/v/20261016120000000'
-        listing = ''.join(f'<a href="{url}"><strong class="tit_txt">{title}</strong></a>' for title, url in [('정상 기사', valid), ('오래된 기사', old), ('광고 유도', gated), ('언론사 재연결', redirected), ('지원하지 않는 주소', 'https://ads.example/a')])
-        article = '<meta property="og:title" content="정상 기사"><article>' + '본문 내용입니다. ' * 30 + '</article>'
-        def get(url, **kwargs):
-            if url == 'https://entertain.daum.net/news':
-                return SimpleNamespace(text=listing)
-            if url == gated:
-                return SimpleNamespace(text=article + '계속하려면 광고를 시청하세요', url=url)
-            return SimpleNamespace(text=article, url='https://publisher.example/article' if url == redirected else url)
-        with patch.object(f, '_PORTAL_CANDIDATES', None), patch.object(f, '_VERIFIED_PORTAL_ARTICLES', {}), patch.object(f, 'NEWS_SOURCE_AUDIT_FILE') as audit:
-            audit.read_text.return_value = '{}'
+    def test_naver_entertainment_and_topic_selection(self):
+        items = [{'title': title, 'url': 'https://m.entertain.naver.com/now/article/001/' + str(1000+i), 'subContent': ''} for i, title in enumerate(['배우 결혼 발표', '예능 방송 출연', '가수 신곡 발표'])]
+        items.append({'title':'외부 기사', 'url':'https://da.gd/test'})
+        get = lambda *a, **k: SimpleNamespace(raise_for_status=lambda: None, json=lambda: {'success':True,'result':{'newsList':items}})
+        with patch.object(f, '_NAVER_ENTERTAINMENT', None):
             used = set()
-            text = f.news_text(get, NOW, '연예', 'query', used)
-            self.assertIn('정상 기사', text)
-            self.assertNotIn(old, text)
-            self.assertNotIn(gated, text)
-            self.assertNotIn(redirected, text)
-            self.assertIn('기사가 없습니다', f.news_text(get, NOW, '연예', 'query', used))
+            romance = f.news_text(get, NOW, '열애·결혼 소식', '', used)
+            broadcast = f.news_text(get, NOW, '방송 화제', '', used)
+            general = f.news_text(get, NOW, '연예 뉴스', '', used)
+            self.assertIn('배우 결혼 발표', romance)
+            self.assertIn('예능 방송 출연', broadcast)
+            self.assertIn('가수 신곡 발표', general)
+            self.assertNotIn('da.gd', romance + broadcast + general)
 
-    def test_all_news_reject_gate_and_keep_external_copy_links(self):
+    def test_all_news_original_naver_urls_no_shortener(self):
         url = 'https://n.news.naver.com/mnews/article/001/123'
-        def response(text):
-            return SimpleNamespace(text=text, url=url, raise_for_status=lambda: None)
-        good = '<article>' + 'readable news body ' * 20 + '</article>'
         for sid in f.NEWS_HEADINGS:
-            with patch.object(f, '_VERIFIED_PORTAL_ARTICLES', {}), patch.object(f.requests, 'get', return_value=response(good)), patch.object(f, 'external_article_link', return_value='https://da.gd/test'), patch.object(f, 'NEWS_SOURCE_AUDIT_FILE') as audit:
-                audit.read_text.return_value = '{}'
+            with patch.object(f.requests, 'get', side_effect=AssertionError('no shortener calls')):
                 result = f.prepare_news_text('heading\n\nTitle\n' + url, sid)
-                self.assertIn('Title\nhttps://da.gd/test', result)
-                self.assertIn('href="https://da.gd/test"', f.render_news_links(result))
-            with patch.object(f, '_VERIFIED_PORTAL_ARTICLES', {}), patch.object(f.requests, 'get', return_value=response(good + '계속하려면 광고를 시청하세요')):
-                self.assertNotIn(url, f.prepare_news_text('heading\n\nTitle\n' + url, sid))
+                self.assertIn('Title\n' + url, result)
+                self.assertIn('href="' + url + '"', f.render_news_links(result))
+                self.assertNotIn('da.gd', f.prepare_news_text('heading\n\nTitle\nhttps://da.gd/test', sid))
 
     def test_failures_preserve_ai(self):
         sections = [('ai_comment', '🤖', 'AI', 'cached commentary')]
