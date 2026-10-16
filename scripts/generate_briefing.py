@@ -29,7 +29,7 @@ import re
 import sys
 import time
 import traceback
-from free_content import extend_sections, render_news_links, prepare_news_text
+from free_content import extend_sections, render_news_links, prepare_news_text, format_news_heading
 from collections import Counter
 from urllib.parse import quote
 
@@ -1337,6 +1337,7 @@ def esc(s):
 
 
 def render_section(section_id, emoji, title, body_text):
+    body_text = format_news_heading(section_id, body_text, NOW)
     linked_news = section_id in ('entertainment', 'romance', 'broadcast')
     if linked_news:
         body_text = prepare_news_text(body_text, section_id)

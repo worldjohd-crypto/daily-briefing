@@ -31,6 +31,30 @@ NEWS = [
 ARTICLE_LINKS_FILE = Path(__file__).resolve().parent.parent / 'article-links.json'
 SHORT_LINK_BASE = 'https://worldjohd-crypto.github.io/daily-briefing/go.html#'
 
+NEWS_HEADINGS = {
+    'shortnews': ('⚡', '오늘의 퀵뉴스'),
+    'realestate': ('🏠', '부동산 주요뉴스'),
+    'world': ('🌏', '세계 뉴스'),
+    'finance': ('🏦', '금융 뉴스'),
+    'ai': ('🤖', 'AI 뉴스'),
+    'entertainment': ('🌟', '연예 뉴스'),
+    'romance': ('💕', '열애·결혼 소식'),
+    'broadcast': ('📺', '방송 화제'),
+}
+
+
+def format_news_heading(section_id, body, now):
+    if section_id not in NEWS_HEADINGS:
+        return body
+    emoji, label = NEWS_HEADINGS[section_id]
+    weekday = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'][now.weekday()]
+    heading = f'{emoji} {now.year % 100}년 {now.month}월 {now.day}일 {weekday} [{label}]'
+    parts = body.split('\n\n', 1)
+    # Replace only the generated header, preserving article text and failures.
+    if re.search(r'\d{2,4}(?:년|-)\s*\d{1,2}(?:월|-)', parts[0].splitlines()[0]):
+        body = parts[1] if len(parts) > 1 else ''
+    return heading + '\n\n' + body
+
 
 def local_article_link(url):
     # Keep old destinations forever; daily refreshes only add new entries.
