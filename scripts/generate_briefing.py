@@ -29,6 +29,7 @@ import re
 import sys
 import time
 import traceback
+from free_content import extend_sections
 from collections import Counter
 from urllib.parse import quote
 
@@ -1433,6 +1434,7 @@ def build_page():
         ("ai", "🤖", "AI 뉴스", build_ai_news()),
         ("ai_comment", "🤖", "AI·테크 논평 (AI)", build_ai_comment()),
     ]
+    sections_data = extend_sections(sections_data, get, NOW)
     sections_html = "".join(
         render_section(sid, emoji, title, body) for sid, emoji, title, body in sections_data
     )

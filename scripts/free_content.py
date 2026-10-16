@@ -1,0 +1,91 @@
+"""Public-source additions. No AI clients, credentials or paid APIs."""
+import datetime
+import json
+import re
+import xml.etree.ElementTree as ET
+from email.utils import parsedate_to_datetime
+from urllib.parse import quote, urlparse
+
+SOURCE = 'https://busanfransisco-source.github.io/naver-realestate-bot/briefing.html'
+EXTRA = [
+    ('daily19', '⭕', '오늘의 부동산 OX'),
+    ('daily20', '🏠', '집 보러 갈 때 한 가지'),
+    ('daily21', '💬', '부동산 광고 해석기'),
+    ('daily22', '🧠', '돈에 관한 착각'),
+    ('daily23', '🛠️', '오늘의 집 관리'),
+    ('daily24', '📦', '이사 준비 한 가지'),
+    ('transactions', '🏢', '전국 신규 등록 실거래가'),
+    ('seoulcommerce', '📍', '서울 주요 상권'),
+    ('cryptofear', '📊', '비트코인 공포·탐욕 지수'),
+    ('wikiinterest', '📖', '경제 주제 읽기 관심도'),
+]
+NEWS = [
+    ('entertainment', '🌟', '연예 뉴스', '연예 배우 가수'),
+    ('romance', '💕', '열애·결혼 소식', '연예인 열애 결혼 결별'),
+    ('broadcast', '📺', '방송 화제', '드라마 예능 방송 화제'),
+]
+
+
+def source_sections(get, now):
+    """Parse JSON literals only. Preserve original dates; reject old editions."""
+    response = get(SOURCE, timeout=25)
+    response.encoding = 'utf-8'
+    page = response.text
+    if not re.search(r'<h1[^>]*>[^<]*' + re.escape(f'{now.year}년 {now.month}월 {now.day}일'), page):
+        return {}
+    result = {}
+    for sid in [x[0] for x in EXTRA] + ['fuelfx', 'metalcoin', 'trend']:
+        match = re.search(r'window\.__content_' + sid + r'\s*=\s*("(?:[^"\\]|\\.)*")\s*;', page)
+        if match:
+            value = json.loads(match.group(1)).strip()
+            if value and not re.search('수집 중|수집중|업데이트 예정|데이터를 가져오지 못', value):
+                result[sid] = value + '\n\n자료: ' + SOURCE
+    return result
+
+
+def news_text(get, now, label, query, used):
+    url = 'https://news.google.com/rss/search?q=' + quote(query + ' when:2d') + '&hl=ko&gl=KR&ceid=KR:ko'
+    root = ET.fromstring(get(url, timeout=20).content)
+    lines = [f'{now:%Y-%m-%d %H:%M} 수집 · {label}', '기사 제목·출처·원문 링크 (AI 생성 없음)', '']
+    count = 0
+    for item in root.findall('./channel/item'):
+        title = item.findtext('title', '').strip()
+        link = item.findtext('link', '').strip()
+        try:
+            published = parsedate_to_datetime(item.findtext('pubDate', '')).astimezone(now.tzinfo)
+        except (ValueError, TypeError, OverflowError):
+            continue
+        if not title or title in used or not 0 <= (now - published).total_seconds() <= 172800:
+            continue
+        if urlparse(link).scheme != 'https' or urlparse(link).hostname != 'news.google.com':
+            continue
+        used.add(title)
+        source = item.findtext('source', '언론사 미표시')
+        lines.extend([title, f'{source} · {published:%m/%d %H:%M}', link, ''])
+        count += 1
+        if count == 8:
+            break
+    if not count:
+        lines.append('최근 48시간 내 수집된 기사가 없습니다.')
+    return '\n'.join(lines).strip()
+
+
+def extend_sections(sections, get, now):
+    try:
+        upstream = source_sections(get, now)
+    except Exception:
+        upstream = {}
+    # Only replace failed free market data, never a commentary section.
+    sections = [(sid, emoji, title, upstream.get(sid, body)
+                 if sid in ('fuelfx', 'metalcoin', 'trend') and (body == '데이터를 가져오지 못했습니다.' or '설정되지 않아' in body) else body)
+                for sid, emoji, title, body in sections]
+    for sid, emoji, label in EXTRA:
+        sections.append((sid, emoji, label, upstream.get(sid, '오늘 자료를 확인하지 못했습니다. 이전 날짜 자료를 오늘 정보로 표시하지 않습니다.\n자료: ' + SOURCE)))
+    used = set()
+    for sid, emoji, label, query in NEWS:
+        try:
+            body = news_text(get, now, label, query, used)
+        except Exception:
+            body = '뉴스 수집에 실패했습니다. 다음 무료 자동 갱신에서 다시 확인합니다.'
+        sections.append((sid, emoji, label, body))
+    return sections
