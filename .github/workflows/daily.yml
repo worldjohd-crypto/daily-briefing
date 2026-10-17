@@ -32,22 +32,61 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt -r requirements-checks.txt
+
+      - name: Check AI cache before free generation
+        id: preflight
+        run: >-
+          python scripts/history_health.py preflight
+          --snapshot "$RUNNER_TEMP/history-ai-before.json"
+          --refresh-comments "${{ github.event_name == 'workflow_dispatch' && inputs.refresh_comments }}"
+
+      - name: Install browser for clipboard checks
+        run: python -m playwright install --with-deps chromium
 
       - name: Generate briefing
+        id: generate
         env:
           OPINET_KEY: ${{ secrets.OPINET_KEY }}
           RONE_KEY: ${{ secrets.RONE_KEY }}
           ALADIN_TTB_KEY: ${{ secrets.ALADIN_TTB_KEY }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_comments && secrets.ANTHROPIC_API_KEY || '' }}
           REFRESH_COMMENTS: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_comments }}
         run: python scripts/generate_briefing.py
 
+      - name: Validate historical matching and monthly prices
+        id: history_content
+        if: ${{ always() && steps.generate.outcome == 'success' }}
+        continue-on-error: true
+        env:
+          HISTORY_REFRESH_REQUESTED: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_comments }}
+        run: |
+          args=(--html briefing.html --report reports/content.json --event "$GITHUB_EVENT_NAME" --started-at "${{ steps.preflight.outputs.started_at }}")
+          if [ "$HISTORY_REFRESH_REQUESTED" != "true" ]; then
+            args+=(--ai-before "$RUNNER_TEMP/history-ai-before.json")
+          fi
+          python scripts/verify_history_content.py "${args[@]}"
+
+      - name: Check actual browser clipboard and both matching modes
+        id: history_browser
+        if: ${{ always() && steps.generate.outcome == 'success' }}
+        continue-on-error: true
+        run: >-
+          python scripts/check_history_browser.py
+          --html briefing.html --report reports/browser.json
+          --screenshot-dir reports/screenshots
+
+      - name: Require all checks before publication
+        id: history_health
+        if: ${{ always() }}
+        run: python scripts/history_health.py finalize
+
       - name: Commit and push if changed
+        id: publish
         run: |
           git config user.name "briefing-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add briefing.html index.html
+          git add briefing.html index.html history-health.json
           [ ! -f article-links.json ] || git add article-links.json
           [ ! -f external-shortlinks.json ] || git add external-shortlinks.json
           [ ! -f news-source-audit.json ] || git add news-source-audit.json
@@ -56,3 +95,15 @@ jobs:
           done
           git diff --quiet --cached || git commit -m "chore: update daily briefing ($(date -u +'%Y-%m-%d %H:%M UTC'))"
           git push
+          python scripts/history_health.py deployment
+
+      - name: Save automatic check evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: history-validation-${{ github.run_id }}
+          path: |
+            reports/
+            history-health.json
+          if-no-files-found: warn
+          retention-days: 14

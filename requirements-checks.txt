@@ -1,0 +1,2 @@
+# Free open-source browser checks. Separate from content-provider dependencies.
+playwright==1.64.0

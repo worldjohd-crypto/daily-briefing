@@ -1,3 +1,4 @@
 .local-deps/
 __pycache__/
 generation.log
+reports/
