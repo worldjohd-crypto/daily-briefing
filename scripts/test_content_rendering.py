@@ -13,6 +13,7 @@ class ContentRenderingTests(unittest.TestCase):
         self.assertNotIn('<a', render_notice_links('bad\njavascript:alert(1)'))
         self.assertIn('>LH 공고</a>', render_notice_links('LH 공고\n게시일 2026-10-17\nhttps://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=123'))
         self.assertIn('>도시계획 변경 고시</a>', render_notice_links('도시계획 변경 고시\n고시일 2026-10-16\nhttps://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=643082'))
+        self.assertIn('>주택사업 고시</a>', render_notice_links('주택사업 고시\n등록일 2026-10-16\nhttps://www.molit.go.kr/USR/BORD0201/m_69/DTL.jsp?id=N01_B&mode=view&idx=269970'))
         self.assertNotIn('<a', render_notice_links('외부 링크\nhttps://www.eum.go.kr.evil.example/web/gs/gv/gvGosiDet.jsp?seq=1'))
 
     def test_live_property_cards_keep_reading_dates_but_exclude_source_footers(self):

@@ -46,7 +46,9 @@ def render_notice_links(text):
                    or (parsed.hostname == 'apply.lh.or.kr'
                        and parsed.path.endswith('/selectWrtancInfo.do'))
                    or (parsed.hostname == 'www.eum.go.kr'
-                       and parsed.path == '/web/gs/gv/gvGosiDet.jsp'))
+                       and parsed.path == '/web/gs/gv/gvGosiDet.jsp')
+                   or (parsed.hostname == 'www.molit.go.kr'
+                       and parsed.path == '/USR/BORD0201/m_69/DTL.jsp'))
         if parsed.scheme == 'https' and allowed:
             blocks.append('<a href="' + html.escape(url, quote=True)
                           + '" target="_blank" rel="noopener noreferrer">'

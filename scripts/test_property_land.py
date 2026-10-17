@@ -84,6 +84,49 @@ class LandUpdatesTests(unittest.TestCase):
         self.assertEqual(get.call_args.kwargs['params']['enddt'], '2026-10-17')
         self.assertIn('수집: 2026-10-17 01:00', body)
 
+    def molit_row(self, identity='269970', title='남양주왕숙2 공공주택지구 지구지정 변경(5차)', date='2026-10-16', href=None):
+        href = href or ('./DTL.jsp?id=N01_B&amp;mode=view&amp;idx=' + identity)
+        return (f'<tr><td>1524</td><td><a href="{href}">{title}</a></td>'
+                f'<td>{date}</td><td>공공택지관리과</td><td>186</td></tr>')
+
+    def fallback_getter(self, rows):
+        response = self.getter(rows, headings=['번호', '제목', '등록일자', '담당부서', '조회']).return_value
+        return Mock(side_effect=[requests.ConnectTimeout('Eum unreachable'), response])
+
+    def test_ministry_fallback_has_real_scope_original_url_and_registration_date(self):
+        get = self.fallback_getter(self.molit_row() + self.molit_row()
+                                  + self.molit_row('2', title='항공안전 시설 기준 일부개정')
+                                  + self.molit_row('3', date='2026-10-18'))
+        body = land.build_land_updates(get, self.now)
+        self.assertIn('국토교통부 공식 공지사항에서 확인', body)
+        self.assertIn('지자체 전체 고시 목록이 아니며', body)
+        self.assertIn('게시일 2026-10-16 · 국토교통부 공공택지관리과', body)
+        self.assertEqual(body.count(land.MOLIT_DETAIL), 1)
+        self.assertNotIn('항공안전 시설', body)
+        self.assertEqual(get.call_args_list[1].args[0], land.MOLIT_LIST)
+        self.assertEqual(get.call_args_list[1].kwargs['params'],
+                         {'search_regdate_s': '2026-09-18', 'search_regdate_e': '2026-10-17'})
+        from content_rendering import split_content_sources
+        copy, sources = split_content_sources(body)
+        self.assertIn(land.MOLIT_DETAIL + '269970', copy)
+        self.assertNotIn(land.MOLIT_LIST, copy)
+        self.assertNotIn('자료:', copy)
+        self.assertIn(land.MOLIT_LIST, sources)
+
+    def test_ministry_fallback_rejects_external_or_ambiguous_detail_links(self):
+        for href in ('https://evil.example/USR/BORD0201/m_69/DTL.jsp?id=N01_B&mode=view&idx=2',
+                     './DTL.jsp?id=N01_B&mode=view&idx=2&idx=3',
+                     './DTL.jsp?id=OTHER&mode=view&idx=2'):
+            body = land.build_land_updates(self.fallback_getter(self.molit_row(href=href)), self.now)
+            self.assertIn('최신 공식 토지·도시계획 고시 목록을 확인하지 못했습니다', body)
+            self.assertNotIn(land.MOLIT_DETAIL, body)
+
+    def test_ministry_fallback_no_relevant_topics_is_not_all_nationwide_zero(self):
+        body = land.build_land_updates(self.fallback_getter(self.molit_row(title='항공안전 시설 기준 일부개정')), self.now)
+        self.assertIn('현재 조회한 국토교통부 목록에 해당 주제 공지가 없습니다', body)
+        self.assertIn('지자체 전체 고시 목록이 아니며', body)
+        self.assertNotIn('최근 30일 조회 조건에 해당하는 공식 고시가 없습니다', body)
+
 
 if __name__ == '__main__':
     unittest.main()

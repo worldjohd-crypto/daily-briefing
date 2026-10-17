@@ -143,7 +143,15 @@
       "cost": "free_public_information",
       "keyRequired": false,
       "collection": "public_server_rendered_html",
-      "scope": "nationwide first public list page; last 30 calendar days; up to five dated official notices; not parcel-specific advice"
+      "scope": "nationwide first public list page; last 30 calendar days; up to five dated official notices; not parcel-specific advice",
+      "fallback": {
+        "provider": "국토교통부",
+        "source": "https://www.molit.go.kr/USR/BORD0201/m_69/BRD.jsp",
+        "cost": "free_public_information",
+        "keyRequired": false,
+        "collection": "public_server_rendered_html",
+        "scope": "MOLIT notice board first page filtered to land, urban planning and housing project notices; last 30 calendar days; not all local-government notices"
+      }
     }
   },
   "copyPolicy": "Source attribution and URLs remain visible below each card but are excluded from the copy button; article/notice detail links stay in the copied body."
