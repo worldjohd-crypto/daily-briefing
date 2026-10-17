@@ -71,7 +71,7 @@ class PropertyResourcesTests(unittest.TestCase):
             self.assertNotIn('해당하는 공식 모집공고가 없습니다', body)
             self.assertNotIn(resources.MYHOME_DETAIL, body)
 
-    def test_empty_source_is_explicit_and_guides_survive_outage(self):
+    def test_empty_source_is_explicit_and_all_cards_report_outage(self):
         body = resources.build_public_rental(self.getter([]), self.now)
         self.assertIn('해당하는 공식 모집공고가 없습니다', body)
         cards = resources.build_property_resources(Mock(side_effect=requests.ConnectionError('offline')), self.now)
@@ -79,7 +79,9 @@ class PropertyResourcesTests(unittest.TestCase):
         self.assertEqual(len({card[0] for card in cards}), 4)
         for _, _, _, text in cards:
             self.assertIn('\n\n자료:', text)
-        self.assertIn('상시 확인 가이드', cards[1][3])
+        for _, _, _, text in cards[1:]:
+            self.assertIn('확인하지 못', text)
+            self.assertNotIn('상시 확인 가이드', text)
 
     def test_official_lh_html_recovers_myhome_failure_and_identifies_actual_scope(self):
         rows = ''.join(self.lh_row(identity=str(2015122300020922 + index),

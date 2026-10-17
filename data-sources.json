@@ -118,25 +118,32 @@
       "provider": "HUG 주택도시보증공사",
       "source": "https://www.khug.or.kr/hug/web/ig/dr/igdr000001.jsp?tabId=1",
       "cost": "free_public_information",
-      "collection": "evergreen_guide",
-      "reviewed": "2026-10-17"
+      "keyRequired": false,
+      "collection": "public_product_table_and_linked_notice",
+      "scope": "current application deadline, eligible housing and deposit conditions; optional conversion-rate notice linked by the product page",
+      "dates": "collection time is distinct from optional notice publication date; product page itself has no stated publication date"
     },
     "housingfinance": {
       "provider": "한국주택금융공사",
       "sources": [
         "https://www.hf.go.kr/ko/sub01/sub01_01_01.do",
-        "https://www.hf.go.kr/ko/sub01/sub01_02_01.do"
+        "https://www.hf.go.kr/ko/sub01/sub01_01_04.do",
+        "https://www.hf.go.kr/ko/sub01/sub01_02_01.do",
+        "https://www.hf.go.kr/ko/sub01/sub01_02_03.do"
       ],
       "cost": "free_public_information",
-      "collection": "evergreen_guide",
-      "reviewed": "2026-10-17"
+      "keyRequired": false,
+      "collection": "live_official_product_summary_and_monthly_rate_html",
+      "scope": "general product summary; published current KST month rates before individual discounts",
+      "failurePolicy": "show unavailable portion; never substitute stale or hard-coded terms/rates"
     },
     "landcheck": {
       "provider": "국토교통부 토지이음",
-      "source": "https://www.eum.go.kr/web/am/visit.jsp",
+      "source": "https://www.eum.go.kr/web/gs/gv/gvGosiList.jsp",
       "cost": "free_public_information",
-      "collection": "evergreen_guide",
-      "reviewed": "2026-10-17"
+      "keyRequired": false,
+      "collection": "public_server_rendered_html",
+      "scope": "nationwide first public list page; last 30 calendar days; up to five dated official notices; not parcel-specific advice"
     }
   },
   "copyPolicy": "Source attribution and URLs remain visible below each card but are excluded from the copy button; article/notice detail links stay in the copied body."

@@ -1310,7 +1310,7 @@ def render_section(section_id, emoji, title, body_text):
     if linked_news:
         body_text = prepare_news_text(body_text, section_id)
     body_text, source_text = split_content_sources(body_text) if not section_id.endswith('_comment') else (body_text, '')
-    body_html = render_news_links(body_text) if linked_news else render_notice_links(body_text) if section_id == 'publicrental' else esc(body_text)
+    body_html = render_news_links(body_text) if linked_news else render_notice_links(body_text) if section_id in ('publicrental', 'landcheck') else esc(body_text)
     copy_attribute = f' data-copy-text="{esc(body_text)}"'
     source_html = f'<div class="source-note" aria-label="자료 출처">{render_sources(source_text)}</div>' if source_text else ''
     return f"""

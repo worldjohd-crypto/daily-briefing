@@ -12,6 +12,24 @@ class ContentRenderingTests(unittest.TestCase):
         self.assertIn('pblancId=123', body)
         self.assertNotIn('<a', render_notice_links('bad\njavascript:alert(1)'))
         self.assertIn('>LH 공고</a>', render_notice_links('LH 공고\n게시일 2026-10-17\nhttps://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=123'))
+        self.assertIn('>도시계획 변경 고시</a>', render_notice_links('도시계획 변경 고시\n고시일 2026-10-16\nhttps://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=643082'))
+        self.assertNotIn('<a', render_notice_links('외부 링크\nhttps://www.eum.go.kr.evil.example/web/gs/gv/gvGosiDet.jsp?seq=1'))
+
+    def test_live_property_cards_keep_reading_dates_but_exclude_source_footers(self):
+        from bs4 import BeautifulSoup
+        from generate_briefing import render_section
+        for sid in ('rentalguarantee', 'housingfinance', 'landcheck'):
+            body = ('공시일: 2026-10-01\n\n공식 자료에서 확인한 내용\n\n'
+                    '고시 제목\n고시일 2026-10-16\nhttps://www.eum.go.kr/web/gs/gv/gvGosiDet.jsp?seq=643082\n\n'
+                    '수집: 2026-10-17 10:00 (한국시간)\n\n자료: 공식 기관\nhttps://www.hf.go.kr/ko/sub01/sub01_01_04.do')
+            page = BeautifulSoup(render_section(sid, '🏠', '부동산 정보', body), 'html.parser')
+            copied = page.find(id=sid)['data-copy-text']
+            self.assertIn('공시일: 2026-10-01', copied)
+            self.assertIn('수집: 2026-10-17 10:00', copied)
+            self.assertIn('gvGosiDet.jsp?seq=643082', copied)
+            self.assertNotIn('자료:', copied)
+            self.assertNotIn('hf.go.kr', copied)
+            self.assertIn('공식 기관', page.select_one('.source-note').get_text())
 
     def test_middle_and_trailing_sources_removed_but_reading_dates_and_news_links_stay(self):
         text = ('기준일: 2026-10-17\n\n63/100\n\n자료 : Alternative.me\n'

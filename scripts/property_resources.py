@@ -2,8 +2,8 @@
 
 MyHome's public website search response needs no account or API key. It is a
 website endpoint, not an OpenAPI with a promised schema; fail visibly on changes.
-Other cards are dated editorial guides based on the linked official pages, not
-live loan quotations, paid services or AI-generated commentary.
+Guarantee terms, mortgage rates/terms and land-use notices are also fetched
+from their official public pages on every build, without a paid client.
 """
 
 import datetime as dt
@@ -13,6 +13,10 @@ from urllib.parse import urlencode
 
 import requests
 from bs4 import BeautifulSoup
+
+from property_guarantee import build_rental_guarantee, SOURCES as GUARANTEE_SOURCES
+from property_finance import build_housing_finance, SOURCES as FINANCE_SOURCES
+from property_land import build_land_updates, SOURCES as LAND_SOURCES
 
 
 KST = dt.timezone(dt.timedelta(hours=9))
@@ -30,11 +34,6 @@ LH_HOUSING_TYPES = {
     '신축다세대매입임대': ('06', '27'), '매입임대': ('13', '26'), '전세임대': ('13', '17'),
     '집주인임대': ('13', '36'), '6년 공공임대주택': ('06', '52'),
 }
-HUG_SOURCE = 'https://www.khug.or.kr/hug/web/ig/dr/igdr000001.jsp?tabId=1'
-HF_HOMELOAN = 'https://www.hf.go.kr/ko/sub01/sub01_01_01.do'
-HF_DIDIMDOL = 'https://www.hf.go.kr/ko/sub01/sub01_02_01.do'
-EUM_SOURCE = 'https://www.eum.go.kr/web/am/visit.jsp'
-GUIDE_REVIEWED = '2026-10-17'
 USER_AGENT = 'DailyBriefing/1.0 (https://worldjohd-crypto.github.io/daily-briefing/) requests'
 SOURCES = {
     'publicrental': {
@@ -48,19 +47,10 @@ SOURCES = {
             'scope': 'LH rental supply only; current and previous month; active status and nonexpired closing date',
         },
     },
-    'rentalguarantee': {
-        'provider': 'HUG 주택도시보증공사', 'source': HUG_SOURCE,
-        'cost': 'free_public_information', 'collection': 'evergreen_guide', 'reviewed': GUIDE_REVIEWED,
-    },
-    'housingfinance': {
-        'provider': '한국주택금융공사', 'sources': [HF_HOMELOAN, HF_DIDIMDOL],
-        'cost': 'free_public_information', 'collection': 'evergreen_guide', 'reviewed': GUIDE_REVIEWED,
-    },
-    'landcheck': {
-        'provider': '국토교통부 토지이음', 'source': EUM_SOURCE,
-        'cost': 'free_public_information', 'collection': 'evergreen_guide', 'reviewed': GUIDE_REVIEWED,
-    },
 }
+SOURCES.update(GUARANTEE_SOURCES)
+SOURCES.update(FINANCE_SOURCES)
+SOURCES.update(LAND_SOURCES)
 
 
 def _clean(value):
@@ -221,40 +211,10 @@ def build_public_rental(get, now):
 
 
 def build_property_resources(get, now):
-    """Return (id, emoji, title, plain body) cards for the existing renderer."""
-    reviewed = f'상시 확인 가이드 · 공식 안내 확인일: {GUIDE_REVIEWED}'
-    hug = '\n\n'.join([
-        reviewed,
-        '전세보증금반환보증은 계약 종료 후 돌려받지 못한 전세보증금의 반환을 보장하는 상품입니다. 계약 전에 가입 가능 여부부터 확인하세요.',
-        '① 대상 주택·보증금·신청기한을 확인합니다. 신청 가능한 기간을 넘기지 않도록 계약 일정과 함께 점검하세요.',
-        '② 등기부의 소유자와 권리침해, 선순위채권을 확인합니다. 다가구주택은 다른 세입자의 선순위 보증금도 확인 대상입니다.',
-        '③ 전입신고·확정일자·실제 거주, 전세계약서 및 건축물대장 관련 요건을 HUG 공식 조건과 대조합니다.',
-        '④ 보증 가입 가능 여부와 제출서류를 HUG에서 확인합니다. 전세대출 보증과 보증금 반환보증은 역할이 다릅니다.',
-        '이 카드는 무료 공식 정보 안내입니다. 실제 보증 가입에는 보증료가 발생할 수 있습니다.',
-        '자료: HUG 주택도시보증공사 · 전세보증금반환보증 상품개요\n' + HUG_SOURCE,
-    ])
-    loans = '\n\n'.join([
-        reviewed,
-        '집값만 보기 전에 내 자금과 월 상환액을 함께 계산하세요. HF의 보금자리론·디딤돌대출 공식 안내에서 아래 항목을 비교할 수 있습니다.',
-        '① 신청대상: 세대·주택 보유수, 부부합산 소득, 생애최초·신혼 등 구분을 확인합니다. 디딤돌대출은 자산 기준도 확인합니다.',
-        '② 대상주택: 주택가격·전용면적·주택 유형을 확인합니다. 내가 보는 매물이 상품의 대상인지 먼저 대조하세요.',
-        '③ 자금계획: 대출한도, LTV·DTI, 만기와 상환방식을 확인한 뒤 월 원금+이자에 관리비·세금·수리비를 더해 봅니다.',
-        '④ 실행일정: 상품별 신청·심사·실행 절차를 잔금 일정과 맞춥니다. 금리·우대조건·중도상환 조건은 공식 최신 안내로 확인하세요.',
-        '여기에 표시한 것은 비교 순서이며 개인별 승인 한도나 적용 금리 계산 결과가 아닙니다.',
-        '자료: 한국주택금융공사 · 보금자리론 / 디딤돌대출 상품소개\n' + HF_HOMELOAN + '\n' + HF_DIDIMDOL,
-    ])
-    land = '\n\n'.join([
-        reviewed,
-        '같은 동네라도 필지마다 허용 용도와 규제가 다릅니다. 토지·상가·주택을 검토할 때 주소를 정확히 넣고 확인하세요.',
-        '① 토지이음에서 지번·도로명으로 대상 필지를 찾고 지목·면적·지역·지구 지정현황을 확인합니다.',
-        '② 「행위제한내용설명」에서 건축 가능한 용도, 건폐율·용적률, 층수·높이, 건축선·도로조건을 살펴봅니다.',
-        '③ 도시계획과 고시정보에서 관련 결정고시·도면을 확인합니다. 개발계획이 있다는 말과 실제 결정된 고시는 구분해서 봅니다.',
-        '④ 계획한 건축·용도변경의 가능 여부는 표시된 근거 법령과 담당 지자체의 허가 요건까지 확인합니다.',
-        '자료: 국토교통부 토지이음 · 주요 서비스와 열람 안내\n' + EUM_SOURCE,
-    ])
+    """Read each official provider on every build; builders isolate outages."""
     return [
         ('publicrental', '🏘️', '공공임대 모집공고', build_public_rental(get, now)),
-        ('rentalguarantee', '🛡️', '전세보증금 지키기', hug),
-        ('housingfinance', '🏦', '내집마련 대출 확인 순서', loans),
-        ('landcheck', '🗺️', '계약 전 토지·규제 확인', land),
+        ('rentalguarantee', '🛡️', '전세보증금 지키기', build_rental_guarantee(get, now)),
+        ('housingfinance', '🏦', '내집마련 대출 정보', build_housing_finance(get, now)),
+        ('landcheck', '🗺️', '토지·규제 최신 고시', build_land_updates(get, now)),
     ]

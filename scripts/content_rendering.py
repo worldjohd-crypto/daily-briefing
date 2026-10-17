@@ -44,7 +44,9 @@ def render_notice_links(text):
         allowed = ((parsed.hostname == 'www.myhome.go.kr'
                     and parsed.path.endswith('/selectRsdtRcritNtcDetailView.do'))
                    or (parsed.hostname == 'apply.lh.or.kr'
-                       and parsed.path.endswith('/selectWrtancInfo.do')))
+                       and parsed.path.endswith('/selectWrtancInfo.do'))
+                   or (parsed.hostname == 'www.eum.go.kr'
+                       and parsed.path == '/web/gs/gv/gvGosiDet.jsp'))
         if parsed.scheme == 'https' and allowed:
             blocks.append('<a href="' + html.escape(url, quote=True)
                           + '" target="_blank" rel="noopener noreferrer">'
