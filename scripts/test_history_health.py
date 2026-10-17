@@ -53,6 +53,17 @@ class HistoryHealthTests(unittest.TestCase):
         rows.pop()
         self.assertFalse(h.browser_proof(report, hashes))
 
+    def test_story_requires_its_own_actual_copy_evidence_and_generated_hash(self):
+        report = {'summary': {'actualBrowser': True}, 'storyCheck': {
+            'page': 'generated', 'card': 'housingstory', 'status': 'passed',
+            'clipboardEqualsDataCopyText': True, 'attributionExcluded': True,
+            'visibleSourceFooter': True, 'articleDetailUrlsRetained': 1, 'copyTextSha256': 'story'}}
+        self.assertTrue(h.story_browser_proof(report, {'housingstory': {'copyTextSha256': 'story'}}))
+        self.assertFalse(h.story_browser_proof(report, {}))
+        self.assertFalse(h.story_browser_proof(report, {'housingstory': {'copyTextSha256': 'different'}}))
+        report['storyCheck']['attributionExcluded'] = False
+        self.assertFalse(h.story_browser_proof(report, {'housingstory': {'copyTextSha256': 'story'}}))
+
 
 if __name__ == '__main__':
     unittest.main()

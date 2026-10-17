@@ -66,6 +66,7 @@ class HousingHistoryTests(unittest.TestCase):
         sections = [('realestate', '🏠', '부동산 주요뉴스', CURRENT),
                     ('realestate_comment', '🧠', 'AI 논평', 'keep cached text')]
         with patch.object(hh, 'build_history_comparison', return_value='free comparison') as build, \
+                patch('housing_story.build_story_section', return_value='free story') as story, \
                 patch('official_guides.build_guides', return_value={}), \
                 patch('official_metrics.build_cryptofear', return_value=None), \
                 patch('official_metrics.build_wikiinterest', return_value=None), \
@@ -75,8 +76,10 @@ class HousingHistoryTests(unittest.TestCase):
             result = f.extend_sections(sections.copy(), lambda *a, **k: (_ for _ in ()).throw(RuntimeError()), NOW)
         self.assertEqual(result[0], sections[0])
         self.assertEqual(result[1], ('historycompare', '🕰️', '과거 상승기 뉴스·집값 비교', 'free comparison'))
-        self.assertEqual(result[2], sections[1])
+        self.assertEqual(result[2], ('housingstory', '📚', '실거래로 읽는 투자 이야기', 'free story'))
+        self.assertEqual(result[3], sections[1])
         build.assert_called_once_with(CURRENT, unittest.mock.ANY, NOW)
+        story.assert_called_once_with(CURRENT, unittest.mock.ANY, NOW)
         self.assertNotIn('historycompare', f.NEWS_HEADINGS)
 
 

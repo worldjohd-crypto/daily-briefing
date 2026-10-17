@@ -1312,7 +1312,7 @@ def render_section(section_id, emoji, title, body_text):
     body_text, source_text = split_content_sources(body_text) if not section_id.endswith('_comment') else (body_text, '')
     if linked_news:
         body_html = render_news_links(body_text)
-    elif section_id == 'historycompare':
+    elif section_id in ('historycompare', 'housingstory'):
         body_html = render_history_links(body_text)
     elif section_id in ('publicrental', 'landcheck'):
         body_html = render_notice_links(body_text)
@@ -1353,7 +1353,7 @@ PAGE_TEMPLATE = """<!doctype html>
   .refresh-box a {{ display:inline-block; margin-top:6px; background:#f7a44a; color:#fff; text-decoration:none; border-radius:6px; padding:6px 14px; font-size:0.85rem; font-weight:600; }}
   .refresh-box a:active {{ background:#e08e33; }}
   .textbox {{ white-space:pre-wrap; word-break:break-word; max-height:180px; overflow-y:auto; border:1px solid #e2e2e2; border-radius:6px; padding:10px 12px; font-size:0.88rem; line-height:1.5; background:#fafafa; }}
-  #historycompare {{ max-height:520px; }}
+  #historycompare, #housingstory {{ max-height:520px; }}
   .textbox a {{ color:#2453c4; text-decoration:underline; text-underline-offset:3px; }}
   .source-note {{ margin-top:9px; color:#667085; font-size:0.76rem; line-height:1.5; white-space:pre-line; overflow-wrap:anywhere; }}
   .source-note a {{ color:#536780; }}

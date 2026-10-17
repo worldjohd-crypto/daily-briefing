@@ -176,6 +176,11 @@ def _check_card(page, card_id, table_urls, expected_detail_urls=None):
                  "Historical comparison lost a statistics table/method source link.")
         _require(all(label in expected for label in ("이후 6개월", "이후 1년", "이후 2년")),
                  "price_horizon_missing", "Historical comparison lost a required price horizon.")
+    if card_id == "housingstory":
+        _require(bool(source_text.strip()) and SOURCE_LABEL.search(source_text),
+                 "story_source_footer_missing", "The story must retain visible attribution.")
+        _require(all(label in expected for label in ("[실거래 확인]", "[가상 인물·재구성]", "[비용 가정]", "[한계]")),
+                 "story_fact_fiction_split_missing", "The story lost its fact/fiction/cost distinction.")
     errors = _copy_policy_errors(expected, expected_urls, source_urls, table_urls, source_text)
     _require(not errors, errors[0] if errors else "copy_policy_failed",
              "The copy text violates the attribution/detail-link policy.")
@@ -224,7 +229,7 @@ def run_checks(args, report):
         shutil.copyfile(html_path, serving_dir / "generated.html")
         fixtures, table_urls = _build_fixture_pages(repo_dir, serving_dir)
         cases = [{"name": "generated", "file": "generated.html",
-                  "cards": ("realestate", "historycompare")},
+                  "cards": ("realestate", "historycompare", "housingstory")},
                  *[{**fixture, "cards": ("historycompare",)} for fixture in fixtures]]
         with _serve_only(serving_dir) as origin, sync_playwright() as playwright:
             try:
@@ -259,7 +264,10 @@ def run_checks(args, report):
                             item["page"] = case["name"]
                             if case.get("mode"):
                                 item["fixtureMode"] = case["mode"]
-                            report["checks"].append(item)
+                            if card_id == "housingstory":
+                                report["storyCheck"] = item
+                            else:
+                                report["checks"].append(item)
                         except Exception as exc:
                             code = exc.code if isinstance(exc, CheckFailure) else "browser_operation_failed"
                             message = str(exc) if isinstance(exc, CheckFailure) else "Chromium copy verification failed."
@@ -271,8 +279,11 @@ def run_checks(args, report):
                             except Exception:
                                 error["screenshotUnavailable"] = True
                             report["errors"].append(error)
-                            report["checks"].append({"page": case["name"], "card": card_id,
-                                                     "status": "failed", "code": code})
+                            failed = {"page": case["name"], "card": card_id, "status": "failed", "code": code}
+                            if card_id == "housingstory":
+                                report["storyCheck"] = failed
+                            else:
+                                report["checks"].append(failed)
                 context.close()
             finally:
                 browser.close()
@@ -296,9 +307,10 @@ def main(argv=None):
             "check": "browser_setup", "code": exc.code if isinstance(exc, CheckFailure) else "setup_failed",
             "message": str(exc) if isinstance(exc, CheckFailure) else "Offline browser check setup failed."})
     report["status"] = "failed" if report["errors"] else "passed"
-    report["summary"].update({"passed": sum(x["status"] == "passed" for x in report["checks"]),
+    report["summary"].update({"passed": sum(x["status"] == "passed" for x in report["checks"])
+                                      + int(report.get("storyCheck", {}).get("status") == "passed"),
                          "failed": len(report["errors"]),
-                         "scope": "generated realestate/historycompare and offline matched/no-match fixtures",
+                         "scope": "generated realestate/historycompare/housingstory and offline matched/no-match fixtures",
                          "externalNetworkPolicy": "loopback-only", "aiInvoked": False})
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

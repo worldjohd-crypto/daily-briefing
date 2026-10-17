@@ -138,6 +138,7 @@ def extend_sections(sections, get, now):
     from official_metrics import build_cryptofear, build_wikiinterest
     from official_housing import build_transactions, build_seoulcommerce
     from housing_history import build_history_comparison
+    from housing_story import build_story_section
 
     # Reuse the already collected headlines, leaving the original news untouched.
     news_position = next((i for i, value in enumerate(sections) if value[0] == 'realestate'), None)
@@ -147,6 +148,8 @@ def extend_sections(sections, get, now):
         except Exception:
             history = '과거 뉴스·집값 비교 자료 확인에 실패했습니다. 다음 무료 자동 갱신에서 다시 확인합니다. 수치를 추정하지 않습니다.'
         sections.insert(news_position + 1, ('historycompare', '🕰️', '과거 상승기 뉴스·집값 비교', history))
+        story = build_story_section(sections[news_position][3], get, now)
+        sections.insert(news_position + 2, ('housingstory', '📚', '실거래로 읽는 투자 이야기', story))
 
     # Every extra reads its provider directly; unavailable sources never use a mirror.
     try:

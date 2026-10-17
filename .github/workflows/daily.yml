@@ -76,6 +76,15 @@ jobs:
           --html briefing.html --report reports/browser.json
           --screenshot-dir reports/screenshots
 
+      - name: Validate official transactions and reconstructed story
+        id: housing_story
+        if: ${{ always() && steps.generate.outcome == 'success' }}
+        continue-on-error: true
+        run: >-
+          python scripts/verify_housing_story.py
+          --html briefing.html --report reports/story.json
+          --started-at "${{ steps.preflight.outputs.started_at }}"
+
       - name: Require all checks before publication
         id: history_health
         if: ${{ always() }}

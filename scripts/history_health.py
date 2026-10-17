@@ -60,7 +60,7 @@ def preflight(args):
 def cards(html):
     soup = BeautifulSoup(Path(html).read_text(encoding='utf-8'), 'html.parser')
     result = {}
-    for sid in ('historycompare', 'realestate'):
+    for sid in ('historycompare', 'realestate', 'housingstory'):
         box = soup.find(id=sid)
         if box is None or not box.has_attr('data-copy-text'):
             raise ValueError('Required card missing')
@@ -98,10 +98,22 @@ def browser_proof(report, card_hashes):
     return True
 
 
+def story_browser_proof(report, card_hashes):
+    row = report.get('storyCheck', {})
+    expected_hash = card_hashes.get('housingstory', {}).get('copyTextSha256')
+    return (report.get('summary', {}).get('actualBrowser') is True
+            and bool(expected_hash)
+            and row.get('page') == 'generated' and row.get('card') == 'housingstory'
+            and row.get('status') == 'passed' and row.get('clipboardEqualsDataCopyText') is True
+            and row.get('attributionExcluded') is True and row.get('visibleSourceFooter') is True
+            and type(row.get('articleDetailUrlsRetained')) is int and row['articleDetailUrlsRetained'] > 0
+            and row.get('copyTextSha256') == expected_hash)
+
+
 def finalize(args):
     reports = {}
     errors = []
-    for name in ('preflight', 'content', 'browser'):
+    for name in ('preflight', 'content', 'browser', 'story'):
         try:
             report = read_json(Path(args.report_dir) / (name + '.json'))
             if not isinstance(report, dict):
@@ -129,6 +141,11 @@ def finalize(args):
               'prices': content_passed and content.get('prices') is True,
               'clipboard': reports['browser'].get('status') == 'passed' and browser_proof(reports['browser'], card_hashes),
               'ai': bool(ai) and reports['preflight'].get('status') == 'passed'}
+    story = reports['story'].get('checks', {})
+    checks['story'] = (reports['story'].get('status') == 'passed'
+                       and all(story.get(key) is True for key in (
+                           'actualCsvEvidence', 'currentLinkage', 'scenarioAccounting', 'sourceSeparation'))
+                       and story_browser_proof(reports['browser'], card_hashes))
     for name, passed in checks.items():
         if not passed:
             errors.append({'code': name.upper() + '_PROOF_INCOMPLETE', 'message': name + ' evidence is missing or incomplete'})

@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-17T23:47:35.012586+00:00",
+  "reviewedAtKst": "2026-10-18T08:47:35.012586+09:00",
+  "status": "verified_free_official_records_not_personal_success_proof",
+  "source": {
+    "provider": "국토교통부 실거래가 공개시스템",
+    "url": "https://rt.molit.go.kr/pt/xls/xls.do",
+    "method": "공식 자료제공 화면의 익명 공개 세션으로 마포래미안푸르지오1단지 2017·2018·2019년만 좁혀 각 1회 CSV 조회",
+    "endpoint": "https://rt.molit.go.kr/pt/xls/ptXlsCSVDown.do",
+    "cost": "free",
+    "authentication": "ordinary_public_session_in_memory_only",
+    "downloadCount": 3,
+    "totalValidRecordCount": 124,
+    "totalBytes": 23415,
+    "query": {
+      "srhThingNo": "A",
+      "srhDelngSecd": "1",
+      "srhSidoCd": "11000",
+      "srhSggCd": "11440",
+      "srhEmdCd": "10100",
+      "srhHsmpCd": "20302476",
+      "years": [
+        2017,
+        2018,
+        2019
+      ]
+    },
+    "cancellation": "해제사유발생일이 빈칸 또는 -인 정상 거래만 사용",
+    "dateBasis": "contract_date",
+    "downloadedAtUtc": "2026-10-17T23:47:35.012586+00:00",
+    "downloadedAtKst": "2026-10-18T08:47:35.012586+09:00"
+  },
+  "documents": [
+    {
+      "id": "molit-20170802",
+      "provider": "국토교통부",
+      "date": "2017-08-02",
+      "title": "실수요 보호와 단기 투기수요 억제를 통한 주택시장 안정화 방안 발표",
+      "url": "https://www.molit.go.kr/USR/NEWS/m_71/dtl.jsp?id=95079498",
+      "role": "당시 정부 정책의 공식 발표 원문",
+      "verifiedSummary": "서울 전역의 투기과열지구 지정 등 거래·세금·대출 규제와 실수요 중심 정책을 담은 8·2 대책의 공식 발표입니다."
+    },
+    {
+      "id": "fsc-20170823",
+      "provider": "금융위원회",
+      "date": "2017-08-23",
+      "title": "8.2 주택시장 안정화 방안 관련 5개 감독규정 개정",
+      "url": "https://www.fsc.go.kr/po010101/72791?srchCtgry=1",
+      "role": "당시 일반 LTV·DTI 제도의 공식 맥락",
+      "verifiedSummary": "투기과열지구·투기지역 주택담보대출에 일반 LTV·DTI 각 40% 적용을 설명합니다. 개별 대출 승인이나 현재 조건을 증명하는 자료가 아닙니다."
+    },
+    {
+      "id": "mk-20171110",
+      "provider": "매일경제",
+      "date": "2017-11-10",
+      "title": "교통, 생활 인프라 완벽한 아현동 마포래미안푸르지오 최근 시세는?",
+      "url": "https://www.mk.co.kr/estate/news/2017/746801",
+      "role": "단지 현장의 당시 1차 보도와 입지 맥락",
+      "verifiedSummary": "8·2 대책 뒤 매수 문의 감소와 실거주 임차 수요를 현장 중개업소가 전한 보도입니다. 아현역·애오개역과 주요 업무지구 접근성을 설명하지만, 이후 가격 상승의 원인을 입증하지는 않습니다. 2017년 11월 보도이므로 8월 가상 인물의 사전 판단 근거로 소급하지 않습니다."
+    }
+  ],
+  "evidenceExports": [
+    {
+      "file": "housing-story-evidence/mapo1-2017.csv",
+      "sha256": "728864642177ef7c262618d045a7338d7c234e0e31fb7a2e4ebcf971a8f4c433",
+      "validRecords": 56,
+      "bytes": 10214,
+      "year": 2017
+    },
+    {
+      "file": "housing-story-evidence/mapo1-2018.csv",
+      "sha256": "00ab4eeec254b443295247b2f8b10eb725bd2a6420dbc65e1da93d5d77140c8f",
+      "validRecords": 28,
+      "bytes": 5599,
+      "year": 2018
+    },
+    {
+      "file": "housing-story-evidence/mapo1-2019.csv",
+      "sha256": "8a3b0ead732963c7746f2b5d511c56b3748b0d8448b867e80389fc83ac371e34",
+      "validRecords": 40,
+      "bytes": 7602,
+      "year": 2019
+    }
+  ],
+  "cases": [
+    {
+      "id": "mapo1-848919-201708-credit",
+      "location": "서울특별시 마포구 아현동",
+      "apartment": "마포래미안푸르지오1단지",
+      "areaSqm": "84.8919",
+      "historicalArticleIds": [
+        "moon-credit-20170802"
+      ],
+      "topics": [
+        "credit"
+      ],
+      "government": "문재인 정부",
+      "policyDate": "2017-08-02",
+      "evidenceType": "actual_anonymous_transactions",
+      "personStatus": "fictional_reconstruction_only",
+      "selectionMethod": "8·2 대책 발표월인 2017년 8월의 이 단지·정확히 같은 전용면적 첫 공개 거래와, 24개월 뒤 같은 달(2019년 8월)의 첫 공개 거래를 선택했습니다. 비교기간의 최저가·최고가를 골라 수익을 최대화하지 않았습니다. 상승이 확인된 한 단지를 사후 선정한 사례이므로 전체 시장·미래 수익을 대표하지 않습니다.",
+      "transactions": [
+        {
+          "date": "2017-08-29",
+          "address": "서울특별시 마포구 아현동",
+          "apartment": "마포래미안푸르지오1단지",
+          "areaSqm": "84.8919",
+          "priceManwon": 99000,
+          "floor": 21,
+          "cancelled": false,
+          "evidenceFile": "housing-story-evidence/mapo1-2017.csv",
+          "evidenceSha256": "728864642177ef7c262618d045a7338d7c234e0e31fb7a2e4ebcf971a8f4c433",
+          "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+        },
+        {
+          "date": "2018-08-11",
+          "address": "서울특별시 마포구 아현동",
+          "apartment": "마포래미안푸르지오1단지",
+          "areaSqm": "84.8919",
+          "priceManwon": 136000,
+          "floor": 9,
+          "cancelled": false,
+          "evidenceFile": "housing-story-evidence/mapo1-2018.csv",
+          "evidenceSha256": "00ab4eeec254b443295247b2f8b10eb725bd2a6420dbc65e1da93d5d77140c8f",
+          "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+        },
+        {
+          "date": "2018-09-10",
+          "address": "서울특별시 마포구 아현동",
+          "apartment": "마포래미안푸르지오1단지",
+          "areaSqm": "84.8919",
+          "priceManwon": 150000,
+          "floor": 19,
+          "cancelled": false,
+          "evidenceFile": "housing-story-evidence/mapo1-2018.csv",
+          "evidenceSha256": "00ab4eeec254b443295247b2f8b10eb725bd2a6420dbc65e1da93d5d77140c8f",
+          "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+        },
+        {
+          "date": "2019-06-20",
+          "address": "서울특별시 마포구 아현동",
+          "apartment": "마포래미안푸르지오1단지",
+          "areaSqm": "84.8919",
+          "priceManwon": 125000,
+          "floor": 13,
+          "cancelled": false,
+          "evidenceFile": "housing-story-evidence/mapo1-2019.csv",
+          "evidenceSha256": "8a3b0ead732963c7746f2b5d511c56b3748b0d8448b867e80389fc83ac371e34",
+          "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+        },
+        {
+          "date": "2019-08-01",
+          "address": "서울특별시 마포구 아현동",
+          "apartment": "마포래미안푸르지오1단지",
+          "areaSqm": "84.8919",
+          "priceManwon": 142000,
+          "floor": 17,
+          "cancelled": false,
+          "evidenceFile": "housing-story-evidence/mapo1-2019.csv",
+          "evidenceSha256": "8a3b0ead732963c7746f2b5d511c56b3748b0d8448b867e80389fc83ac371e34",
+          "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+        }
+      ],
+      "coverageNote": "8·2 대책 발표월 기준 6개월 뒤인 2018년 2월에는 이 단지·정확히 같은 면적(84.8919㎡)의 공개 거래가 0건이어서 개별 아파트 6개월 수익률을 만들지 않습니다. 1년·2년 뒤 달은 각각 2018년 8월·2019년 8월의 최초 공개 거래를 사용합니다. 기존 서울 월간 지수 비교 카드의 6개월·1년·2년 지수 변화와 별개입니다.",
+      "observedGrossChangeManwon": 43000,
+      "observedGrossChangePercent": "43.43434343434343434343434340",
+      "calendarMonthOffset": 24,
+      "elapsedDays": 702,
+      "timeline": [
+        {
+          "label": "기사 발표월(2017-08) 최초 거래",
+          "monthOffset": 0,
+          "record": {
+            "date": "2017-08-29",
+            "address": "서울특별시 마포구 아현동",
+            "apartment": "마포래미안푸르지오1단지",
+            "areaSqm": "84.8919",
+            "priceManwon": 99000,
+            "floor": 21,
+            "cancelled": false,
+            "evidenceFile": "housing-story-evidence/mapo1-2017.csv",
+            "evidenceSha256": "728864642177ef7c262618d045a7338d7c234e0e31fb7a2e4ebcf971a8f4c433",
+            "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+          },
+          "countInMonth": 1
+        },
+        {
+          "label": "6개월 뒤 달(2018-02)",
+          "monthOffset": 6,
+          "record": null,
+          "countInMonth": 0,
+          "status": "no_same_area_transaction_in_official_export",
+          "note": "2018년 2월에 이 단지·정확히 같은 면적의 공개 거래가 없어 개별 아파트의 6개월 수익률을 만들지 않습니다. 기존 별도 카드의 서울 지수 변화와 혼동하면 안 됩니다."
+        },
+        {
+          "label": "1년 뒤 달(2018-08) 최초 거래",
+          "monthOffset": 12,
+          "record": {
+            "date": "2018-08-11",
+            "address": "서울특별시 마포구 아현동",
+            "apartment": "마포래미안푸르지오1단지",
+            "areaSqm": "84.8919",
+            "priceManwon": 136000,
+            "floor": 9,
+            "cancelled": false,
+            "evidenceFile": "housing-story-evidence/mapo1-2018.csv",
+            "evidenceSha256": "00ab4eeec254b443295247b2f8b10eb725bd2a6420dbc65e1da93d5d77140c8f",
+            "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+          },
+          "countInMonth": 5
+        },
+        {
+          "label": "2년 뒤 달(2019-08) 최초 거래",
+          "monthOffset": 24,
+          "record": {
+            "date": "2019-08-01",
+            "address": "서울특별시 마포구 아현동",
+            "apartment": "마포래미안푸르지오1단지",
+            "areaSqm": "84.8919",
+            "priceManwon": 142000,
+            "floor": 17,
+            "cancelled": false,
+            "evidenceFile": "housing-story-evidence/mapo1-2019.csv",
+            "evidenceSha256": "8a3b0ead732963c7746f2b5d511c56b3748b0d8448b867e80389fc83ac371e34",
+            "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+          },
+          "countInMonth": 2
+        }
+      ],
+      "riskObservations": [
+        {
+          "description": "보유기간에도 가격이 계속 오른 것은 아닙니다. 같은 단지·같은 면적의 서로 다른 거래에서 2018-09-10 19층 15억원과 2019-06-20 13층 12억5000만원이 관측됐습니다. 층·동·향 등 차이가 있으므로 동일 주택의 16.7% 하락률로 단정할 수는 없지만 중간 변동을 보여주는 사례입니다.",
+          "transactions": [
+            {
+              "date": "2018-09-10",
+              "address": "서울특별시 마포구 아현동",
+              "apartment": "마포래미안푸르지오1단지",
+              "areaSqm": "84.8919",
+              "priceManwon": 150000,
+              "floor": 19,
+              "cancelled": false,
+              "evidenceFile": "housing-story-evidence/mapo1-2018.csv",
+              "evidenceSha256": "00ab4eeec254b443295247b2f8b10eb725bd2a6420dbc65e1da93d5d77140c8f",
+              "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+            },
+            {
+              "date": "2019-06-20",
+              "address": "서울특별시 마포구 아현동",
+              "apartment": "마포래미안푸르지오1단지",
+              "areaSqm": "84.8919",
+              "priceManwon": 125000,
+              "floor": 13,
+              "cancelled": false,
+              "evidenceFile": "housing-story-evidence/mapo1-2019.csv",
+              "evidenceSha256": "8a3b0ead732963c7746f2b5d511c56b3748b0d8448b867e80389fc83ac371e34",
+              "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+            }
+          ],
+          "observedPairChangePercent": "-16.66666666666666666666666667"
+        }
+      ],
+      "sourceIds": [
+        "molit-20170802",
+        "fsc-20170823",
+        "mk-20171110"
+      ],
+      "limitations": [
+        "공개자료는 익명 거래입니다. 매수자·매도자가 같은 사람인지, 같은 동·호수인지, 실제 개인이 얼마를 벌었는지 확인하지 못했습니다.",
+        "전용면적은 같지만 기준은 21층, 비교는 17층입니다. 동·향·수리 상태·권리·거래 조건을 통제한 반복매매 지수가 아닙니다.",
+        "24개월 뒤 달의 거래 표본이지 정확히 2년 보유한 동일 주택 매도 실적이 아닙니다. 두 계약일 간격은 702일입니다.",
+        "실제 가격 관측과 가상 인물의 직업·동기·종잣돈·대출·비용을 본문에서 분리해야 합니다.",
+        "가상의 3억원 대출이라도 매수가 9억9000만원에서는 주택대금만 6억9000만원의 자기자금이 필요합니다. 소액으로 누구나 부자가 된 사례처럼 쓰지 않습니다.",
+        "대출금리·상환·취득 및 보유·매도 비용·양도세는 실제 사람의 확인된 비용이 아닙니다. 고정 가정과 제외 항목을 적고 세후 순이익으로 부르지 않아야 합니다.",
+        "당시 정책·입지와 가격 상승이 함께 관측됐다는 것만으로 규제가 상승을 일으켰다고 주장할 수 없습니다. 현재도 같은 상승이 반복된다는 예측 근거가 아닙니다.",
+        "현재의 정정·해제 상태를 확인한 자료이며 나중에 신고·정정·해제로 바뀔 수 있습니다. 날짜 제목만 갱신하면서 실거래를 재조회했다고 표시하면 안 됩니다."
+      ],
+      "suggestedStoryTitle": "규제 뉴스 뒤 9억9000만원짜리 집을 산 사람 — 실제 거래를 바탕으로 한 가상 재구성",
+      "storyAngle": "가상 인물이 공포나 집값 급등 예측 대신 직주근접·실거주 가능성·자기자금·월 상환 여력을 검토하는 이야기입니다. 주택가격이 오른 관측 사실과 현금흐름·남는 돈의 모형을 분리합니다. 부자가 된 실존 인물의 성공담으로 포장하지 않습니다."
+    }
+  ],
+  "editorialChecks": {
+    "timelineCountCrossChecked": true,
+    "correction": "2018-08 exact 84.8919 sqm count corrected from 6 to 5 by direct official CSV row recount; prices and selected first contract unchanged.",
+    "checkedAtUtc": "2026-10-17T23:53:22.472437+00:00"
+  }
+}
