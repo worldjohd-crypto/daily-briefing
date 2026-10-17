@@ -1,0 +1,2 @@
+# Preserve exact official-export bytes for evidence hashes.
+housing-story-evidence/*.csv -text
