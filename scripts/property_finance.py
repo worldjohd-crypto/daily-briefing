@@ -36,7 +36,17 @@ def _text(node):
 
 
 def _page(get, url, expected_title):
-    response = get(url, headers={'User-Agent': USER_AGENT}, timeout=25)
+    # A transient network failure must not silently remove one product for the
+    # whole scheduled edition. Retry only the failed GET, once; HTTP responses
+    # and parser/schema failures still fail immediately without retry or cache.
+    for attempt in range(2):
+        try:
+            response = get(url, headers={'User-Agent': USER_AGENT}, timeout=25)
+            break
+        except (requests.Timeout, requests.ConnectionError) as exc:
+            if attempt:
+                raise
+            print(f'[WARN] HF network error ({type(exc).__name__}); retrying once.', file=sys.stderr)
     response.raise_for_status()
     if response.status_code != 200:
         raise ValueError('HF page did not return HTTP 200')

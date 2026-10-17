@@ -92,6 +92,56 @@ class FinanceTests(unittest.TestCase):
         self.assertIn('금리 기준:', copy)
         self.assertTrue(sources)
 
+    def test_timed_out_didimdol_product_recovers_with_one_fresh_request(self):
+        normal = self.getter()
+        calls = []
+
+        def intermittent(url, **kwargs):
+            calls.append(url)
+            if url == finance.HF_DIDIMDOL and calls.count(url) == 1:
+                raise requests.ReadTimeout('temporary slow official response')
+            return normal(url, **kwargs)
+
+        body = finance.build_housing_finance(intermittent, self.now)
+        self.assertEqual(calls.count(finance.HF_DIDIMDOL), 2)
+        self.assertEqual(len(calls), 5)
+        self.assertIn('순자산 가액 5.11억원', body)
+        self.assertNotIn('확인하지 못했습니다', body)
+
+    def test_network_retry_is_bounded_and_never_uses_old_conditions(self):
+        for failure in (requests.ReadTimeout, requests.ConnectTimeout, requests.ConnectionError):
+            with self.subTest(failure=failure.__name__):
+                normal = self.getter()
+                calls = []
+
+                def unavailable_product(url, **kwargs):
+                    calls.append(url)
+                    if url == finance.HF_DIDIMDOL:
+                        raise failure('still unavailable')
+                    return normal(url, **kwargs)
+
+                body = finance.build_housing_finance(unavailable_product, self.now)
+                self.assertEqual(calls.count(finance.HF_DIDIMDOL), 2)
+                self.assertEqual(len(calls), 5)
+                self.assertEqual(body.count('확인하지 못했습니다'), 1)
+                self.assertNotIn('순자산', body)
+                self.assertEqual(body.count('공시일 2026-10-01'), 2)
+
+    def test_http_and_schema_errors_are_not_retried(self):
+        http = Mock(status_code=503)
+        http.raise_for_status.side_effect = requests.HTTPError('503 from official page')
+        get = Mock(return_value=http)
+        with self.assertRaises(requests.HTTPError):
+            finance._page(get, finance.HF_DIDIMDOL, '디딤돌대출')
+        self.assertEqual(get.call_count, 1)
+
+        for malformed in ('<title>로그인</title>', product(True).replace('순자산', '다른말')):
+            get = self.getter({finance.HF_DIDIMDOL: malformed})
+            body = finance.build_housing_finance(get, self.now)
+            self.assertEqual(get.call_count, 4)
+            self.assertEqual(sum(call.args[0] == finance.HF_DIDIMDOL for call in get.call_args_list), 1)
+            self.assertEqual(body.count('상품 조건: 최신 공식 내용을 확인하지 못했습니다'), 1)
+
 
 if __name__ == '__main__':
     unittest.main()
