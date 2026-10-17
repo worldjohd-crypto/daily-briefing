@@ -45,6 +45,7 @@ class HousingHistoryTests(unittest.TestCase):
         with patch.object(hh, 'load_history_prices', return_value={'status': 'unavailable', 'series': {}}):
             body = hh.build_history_comparison(news, None, NOW)
         self.assertNotIn('유사점:', body)
+        self.assertIn('유사점(두 과거 기사):', body)
         self.assertIn('유사 사례가 아닌', body)
         self.assertIn('수치를 추정하지 않습니다', body)
         self.assertNotRegex(body, r'[+-]\d+\.\d+%')

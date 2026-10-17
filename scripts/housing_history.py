@@ -87,6 +87,8 @@ def build_history_comparison(current_news, get, now, dataset=None, catalog_path=
             blocks.append('현재 기사: ' + group['current']['title'] + '\n' + group['current']['url'])
             blocks.append('유사점: 현재 제목의 ‘' + '·'.join(group['hits'])
                           + '’와 과거 보도의 ‘' + group['label'] + '’ 주제가 겹칩니다. 조치의 강도·효과까지 같다는 뜻은 아닙니다.')
+        else:
+            blocks.append('유사점(두 과거 기사): 모두 장래 주택 공급을 늘려 가격 안정을 도모한 계획을 보도했습니다. 발표 당시 물량이 즉시 입주 물량인 것은 아닙니다.\n차이점(두 시기): 2006년은 공공택지·분양가·대출을 묶은 대책, 2018년은 수도권 신규 택지·교통 인프라 공급계획을 다뤘습니다.')
         for article in group['references']:
             blocks.append(f"과거 기사 · {article['era']} · {article['date']}\n"
                           + article['title'] + '\n' + article['url'])
