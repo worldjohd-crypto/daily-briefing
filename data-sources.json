@@ -154,5 +154,40 @@
       }
     }
   },
-  "copyPolicy": "Source attribution and URLs remain visible below each card but are excluded from the copy button; article/notice detail links stay in the copied body."
+  "copyPolicy": "Source attribution and URLs remain visible below each card but are excluded from the copy button; article/notice detail links stay in the copied body.",
+  "historyComparison": {
+    "title": "과거 상승기 뉴스·집값 비교",
+    "separateFrom": "realestate",
+    "currentNews": "reuse_current_build_naver_headlines",
+    "articles": "housing-history-articles.json",
+    "catalogReviewed": "2026-10-17",
+    "matching": "deterministic_headline_topic_keywords_among_reviewed_original_articles_not_full_archive_search",
+    "maximumCurrentTopics": 2,
+    "noMatch": "labelled_historical_supply_reference_not_a_current_news_match",
+    "prices": {
+      "provider": "한국부동산원",
+      "table": "A_2024_00045",
+      "url": "https://www.reb.or.kr/r-one/portal/stat/easyStatPage/A_2024_00045.do",
+      "api": "https://www.reb.or.kr/r-one/openapi/SttsApiTblData.do",
+      "metadata": "https://www.reb.or.kr/r-one/openapi/SttsApiTbl.do",
+      "cycle": "MM",
+      "item": "100001",
+      "region": "서울",
+      "cache": "history-price-cache.json",
+      "refreshDays": 30,
+      "cost": "free",
+      "authentication": "existing_RONE_KEY_secret_only",
+      "fallback": "verified_direct_official_cache_with_original_collection_time_or_no_numbers"
+    },
+    "method": "(index at article month + 6/12/24 months / article-month index - 1)*100; nominal; same table and region; negative changes retained",
+    "limitations": [
+      "Headline topic similarity is not equivalent situations or causal effect",
+      "Reviewed historical article sample does not represent all eras or articles",
+      "Article-month average can include observations after publication day",
+      "24-month endpoint may extend into next administration",
+      "Seoul apartment index is not nationwide or individual transaction return"
+    ],
+    "copy": "article detail URLs remain; source attribution and source-list URLs excluded",
+    "paidAI": false
+  }
 }

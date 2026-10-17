@@ -57,3 +57,45 @@ def render_notice_links(text):
         else:
             blocks.append(html.escape(block))
     return '\n\n'.join(blocks)
+
+
+def _is_history_article_url(url):
+    """Only link the current-news and checked historical-article publishers."""
+    if not re.fullmatch(r'https://\S+', url):
+        return False
+    try:
+        parsed = urlparse(url)
+        if not parsed.hostname or parsed.netloc.lower() != parsed.hostname:
+            return False
+    except ValueError:
+        return False
+    if parsed.hostname in {'news.naver.com', 'n.news.naver.com',
+                           'm.entertain.naver.com', 'entertain.naver.com'}:
+        return re.search(r'/article/\d+/\d+', parsed.path) is not None
+    if parsed.hostname == 'www.edaily.co.kr':
+        return parsed.path == '/News/Read'
+    if parsed.hostname == 'www.seoul.co.kr':
+        return parsed.path.startswith('/news/') and len(parsed.path) > len('/news/')
+    if parsed.hostname == 'www.donga.com':
+        return parsed.path.startswith('/news/Economy/article/all/') and len(parsed.path) > len('/news/Economy/article/all/')
+    if parsed.hostname == 'news.sbs.co.kr':
+        return parsed.path == '/news/endPage.do'
+    return parsed.hostname == 'www.korea.kr'
+
+
+def render_history_links(text):
+    """Render adjacent title/URL lines; the caller keeps original copy text."""
+    lines, rendered = text.splitlines(), []
+    index = 0
+    while index < len(lines):
+        title = lines[index]
+        url = lines[index + 1] if index + 1 < len(lines) else ''
+        if title.strip() and not re.match(r'^\s*https?://', title) and _is_history_article_url(url):
+            rendered.append('<a href="' + html.escape(url, quote=True)
+                            + '" target="_blank" rel="noopener noreferrer">'
+                            + html.escape(title) + '</a>')
+            index += 2
+        else:
+            rendered.append(html.escape(title))
+            index += 1
+    return '\n'.join(rendered)

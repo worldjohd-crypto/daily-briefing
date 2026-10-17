@@ -30,7 +30,7 @@ import sys
 import time
 import traceback
 from free_content import extend_sections, render_news_links, prepare_news_text, format_news_heading, NEWS_HEADINGS, is_naver_article, AD_WALL_RE
-from content_rendering import split_content_sources, render_sources, render_notice_links
+from content_rendering import split_content_sources, render_sources, render_notice_links, render_history_links
 from collections import Counter
 from urllib.parse import quote
 
@@ -1310,7 +1310,14 @@ def render_section(section_id, emoji, title, body_text):
     if linked_news:
         body_text = prepare_news_text(body_text, section_id)
     body_text, source_text = split_content_sources(body_text) if not section_id.endswith('_comment') else (body_text, '')
-    body_html = render_news_links(body_text) if linked_news else render_notice_links(body_text) if section_id in ('publicrental', 'landcheck') else esc(body_text)
+    if linked_news:
+        body_html = render_news_links(body_text)
+    elif section_id == 'historycompare':
+        body_html = render_history_links(body_text)
+    elif section_id in ('publicrental', 'landcheck'):
+        body_html = render_notice_links(body_text)
+    else:
+        body_html = esc(body_text)
     copy_attribute = f' data-copy-text="{esc(body_text)}"'
     source_html = f'<div class="source-note" aria-label="자료 출처">{render_sources(source_text)}</div>' if source_text else ''
     return f"""
