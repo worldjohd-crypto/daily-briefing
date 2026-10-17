@@ -1,0 +1,30 @@
+{
+  "ai": {
+    "cacheCount": 6,
+    "refreshComments": false,
+    "unchanged": true
+  },
+  "cards": {
+    "historycompare": {
+      "copyTextSha256": "2ead69394880a613ab4bf933b9ee3c70fd4ccd2501087eff3fca999166934abf",
+      "sourceTextSha256": "c92570fd929402e298846e2e3dfb3445fe6bc7456993000e579ca5dd6fb33ec4"
+    },
+    "realestate": {
+      "copyTextSha256": "7791217fe330b97624aeef881fa41c2e58f7598c7458968fc666b5ba35653a91",
+      "sourceTextSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "checks": {
+    "ai": true,
+    "clipboard": true,
+    "content": true,
+    "prices": true
+  },
+  "generatedAtUtc": "2026-10-17T16:00:56.602770+00:00",
+  "headSha": "2a15e786637f2708e80c5c4848d4245af7554d4c",
+  "reportArtifact": "history-validation-39047014295",
+  "reportSha256": "0e600ddf8d3df25d3c15848b1e9afdbc27d945a5946eacd00ab582a702437d04",
+  "runId": "39047014295",
+  "schemaVersion": 1,
+  "status": "passed"
+}
