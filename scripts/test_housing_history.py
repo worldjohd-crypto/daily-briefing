@@ -31,12 +31,14 @@ class HousingHistoryTests(unittest.TestCase):
             result = hp.compare_price_changes(dataset, date)
             for h in result['horizons'].values():
                 self.assertIn(f"{h['change_pct']:+.2f}%", content)
-                self.assertIn(h['month'], content)
+                self.assertIn(h['month'][:4] + '-' + h['month'][4:], content)
         self.assertNotIn('확인하지 못했습니다', content)
         self.assertIn('https://news.sbs.co.kr/news/endPage.do?', content)
         self.assertNotIn('자료:', content)
         self.assertNotIn(hp.TABLE_URL, content)
         self.assertIn(hp.TABLE_URL, sources)
+        self.assertNotIn('SBS', content)
+        self.assertIn('SBS', sources)
 
     def test_unrelated_obituary_does_not_force_similarity(self):
         news = '건설사 전무 모친상\nhttps://n.news.naver.com/mnews/article/001/1234'

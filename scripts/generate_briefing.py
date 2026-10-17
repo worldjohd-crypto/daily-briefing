@@ -1353,6 +1353,7 @@ PAGE_TEMPLATE = """<!doctype html>
   .refresh-box a {{ display:inline-block; margin-top:6px; background:#f7a44a; color:#fff; text-decoration:none; border-radius:6px; padding:6px 14px; font-size:0.85rem; font-weight:600; }}
   .refresh-box a:active {{ background:#e08e33; }}
   .textbox {{ white-space:pre-wrap; word-break:break-word; max-height:180px; overflow-y:auto; border:1px solid #e2e2e2; border-radius:6px; padding:10px 12px; font-size:0.88rem; line-height:1.5; background:#fafafa; }}
+  #historycompare {{ max-height:520px; }}
   .textbox a {{ color:#2453c4; text-decoration:underline; text-underline-offset:3px; }}
   .source-note {{ margin-top:9px; color:#667085; font-size:0.76rem; line-height:1.5; white-space:pre-line; overflow-wrap:anywhere; }}
   .source-note a {{ color:#536780; }}
