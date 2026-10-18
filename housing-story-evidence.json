@@ -1,35 +1,64 @@
 {
   "schemaVersion": 1,
-  "reviewedAt": "2026-10-17T23:47:35.012586+00:00",
-  "reviewedAtKst": "2026-10-18T08:47:35.012586+09:00",
+  "reviewedAt": "2026-10-18T08:55:14.453879+00:00",
+  "reviewedAtKst": "2026-10-18T17:55:14.453879+09:00",
   "status": "verified_free_official_records_not_personal_success_proof",
   "source": {
     "provider": "국토교통부 실거래가 공개시스템",
     "url": "https://rt.molit.go.kr/pt/xls/xls.do",
-    "method": "공식 자료제공 화면의 익명 공개 세션으로 마포래미안푸르지오1단지 2017·2018·2019년만 좁혀 각 1회 CSV 조회",
+    "method": "공식 자료제공 화면의 익명 공개 세션으로 단지별 2017·2018·2019년만 좁혀 각 연도 1회 CSV 조회. 수집일과 조건은 collections에 각각 보존",
     "endpoint": "https://rt.molit.go.kr/pt/xls/ptXlsCSVDown.do",
     "cost": "free",
     "authentication": "ordinary_public_session_in_memory_only",
-    "downloadCount": 3,
-    "totalValidRecordCount": 124,
-    "totalBytes": 23415,
-    "query": {
-      "srhThingNo": "A",
-      "srhDelngSecd": "1",
-      "srhSidoCd": "11000",
-      "srhSggCd": "11440",
-      "srhEmdCd": "10100",
-      "srhHsmpCd": "20302476",
-      "years": [
-        2017,
-        2018,
-        2019
-      ]
-    },
+    "downloadCount": 6,
+    "totalValidRecordCount": 167,
+    "totalBytes": 32802,
     "cancellation": "해제사유발생일이 빈칸 또는 -인 정상 거래만 사용",
     "dateBasis": "contract_date",
-    "downloadedAtUtc": "2026-10-17T23:47:35.012586+00:00",
-    "downloadedAtKst": "2026-10-18T08:47:35.012586+09:00"
+    "collections": [
+      {
+        "query": {
+          "srhThingNo": "A",
+          "srhDelngSecd": "1",
+          "srhSidoCd": "11000",
+          "srhSggCd": "11440",
+          "srhEmdCd": "10100",
+          "srhHsmpCd": "20302476",
+          "years": [
+            2017,
+            2018,
+            2019
+          ]
+        },
+        "downloadedAtUtc": "2026-10-17T23:47:35.012586+00:00",
+        "downloadedAtKst": "2026-10-18T08:47:35.012586+09:00",
+        "downloadCount": 3,
+        "totalValidRecordCount": 124,
+        "totalBytes": 23415,
+        "apartment": "마포래미안푸르지오1단지"
+      },
+      {
+        "apartment": "서서울삼성",
+        "query": {
+          "srhSidoCd": "11000",
+          "srhSggCd": "11440",
+          "srhEmdCd": "10100",
+          "srhHsmpCd": "682",
+          "srhThingNo": "A",
+          "srhDelngSecd": "1",
+          "years": [
+            2017,
+            2018,
+            2019
+          ]
+        },
+        "downloadedAtUtc": "2026-10-18T08:55:14.453879+00:00",
+        "downloadedAtKst": "2026-10-18T17:55:14.453879+09:00",
+        "downloadCount": 3,
+        "totalValidRecordCount": 43,
+        "totalBytes": 9387
+      }
+    ]
   },
   "documents": [
     {
@@ -81,9 +110,220 @@
       "validRecords": 40,
       "bytes": 7602,
       "year": 2019
+    },
+    {
+      "file": "housing-story-evidence/seoseoul-samsung-2017.csv",
+      "sha256": "a6fffe610c4c0d7f1a4122310838e0c3adb3ed95e2201eb94b0adb81f3acbebd",
+      "validRecords": 18,
+      "bytes": 3687,
+      "year": 2017
+    },
+    {
+      "file": "housing-story-evidence/seoseoul-samsung-2018.csv",
+      "sha256": "e33a4ab7639cbba402bf462d5cd8baca9c27a4c71da78d26f69040e0dbc0d085",
+      "validRecords": 12,
+      "bytes": 2774,
+      "year": 2018
+    },
+    {
+      "file": "housing-story-evidence/seoseoul-samsung-2019.csv",
+      "sha256": "b0a0a012af868e9670542371279c4b17873e7ad9bbdcd57c78c0e5dbecb3e652",
+      "validRecords": 13,
+      "bytes": 2926,
+      "year": 2019
     }
   ],
   "cases": [
+    {
+      "id": "seoseoul-samsung-4892-201708-credit",
+      "location": "서울특별시 마포구 아현동",
+      "apartment": "서서울삼성",
+      "areaSqm": "48.92",
+      "reviewedAt": "2026-10-18T08:55:14.453879+00:00",
+      "historicalArticleIds": [
+        "moon-credit-20170802"
+      ],
+      "topics": [
+        "credit"
+      ],
+      "government": "문재인 정부",
+      "policyDate": "2017-08-02",
+      "evidenceType": "actual_anonymous_transactions",
+      "personStatus": "fictional_reconstruction_only",
+      "selectionMethod": "8·2 대책 발표월인 2017년 8월의 이 단지·정확히 같은 전용면적 첫 공개 거래와, 24개월 뒤 같은 달(2019년 8월)의 첫 공개 거래를 선택했습니다. 비교기간의 최저가·최고가를 골라 수익을 최대화하지 않았습니다. 상승이 확인된 한 단지를 사후 선정한 사례이므로 전체 시장·미래 수익을 대표하지 않습니다.",
+      "transactions": [
+        {
+          "date": "2017-08-25",
+          "address": "서울특별시 마포구 아현동",
+          "apartment": "서서울삼성",
+          "areaSqm": "48.9200",
+          "priceManwon": 41500,
+          "floor": 6,
+          "cancelled": false,
+          "evidenceFile": "housing-story-evidence/seoseoul-samsung-2017.csv",
+          "evidenceSha256": "a6fffe610c4c0d7f1a4122310838e0c3adb3ed95e2201eb94b0adb81f3acbebd",
+          "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+        },
+        {
+          "date": "2017-12-26",
+          "address": "서울특별시 마포구 아현동",
+          "apartment": "서서울삼성",
+          "areaSqm": "48.9200",
+          "priceManwon": 39000,
+          "floor": 11,
+          "cancelled": false,
+          "evidenceFile": "housing-story-evidence/seoseoul-samsung-2017.csv",
+          "evidenceSha256": "a6fffe610c4c0d7f1a4122310838e0c3adb3ed95e2201eb94b0adb81f3acbebd",
+          "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+        },
+        {
+          "date": "2018-02-05",
+          "address": "서울특별시 마포구 아현동",
+          "apartment": "서서울삼성",
+          "areaSqm": "48.9200",
+          "priceManwon": 46000,
+          "floor": 16,
+          "cancelled": false,
+          "evidenceFile": "housing-story-evidence/seoseoul-samsung-2018.csv",
+          "evidenceSha256": "e33a4ab7639cbba402bf462d5cd8baca9c27a4c71da78d26f69040e0dbc0d085",
+          "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+        },
+        {
+          "date": "2018-09-21",
+          "address": "서울특별시 마포구 아현동",
+          "apartment": "서서울삼성",
+          "areaSqm": "48.9200",
+          "priceManwon": 65000,
+          "floor": 7,
+          "cancelled": false,
+          "evidenceFile": "housing-story-evidence/seoseoul-samsung-2018.csv",
+          "evidenceSha256": "e33a4ab7639cbba402bf462d5cd8baca9c27a4c71da78d26f69040e0dbc0d085",
+          "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+        },
+        {
+          "date": "2019-08-31",
+          "address": "서울특별시 마포구 아현동",
+          "apartment": "서서울삼성",
+          "areaSqm": "48.9200",
+          "priceManwon": 59500,
+          "floor": 10,
+          "cancelled": false,
+          "evidenceFile": "housing-story-evidence/seoseoul-samsung-2019.csv",
+          "evidenceSha256": "b0a0a012af868e9670542371279c4b17873e7ad9bbdcd57c78c0e5dbecb3e652",
+          "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+        }
+      ],
+      "timeline": [
+        {
+          "label": "기사월(2017-08) 최초 거래",
+          "monthOffset": 0,
+          "countInMonth": 1,
+          "record": {
+            "date": "2017-08-25",
+            "address": "서울특별시 마포구 아현동",
+            "apartment": "서서울삼성",
+            "areaSqm": "48.9200",
+            "priceManwon": 41500,
+            "floor": 6,
+            "cancelled": false,
+            "evidenceFile": "housing-story-evidence/seoseoul-samsung-2017.csv",
+            "evidenceSha256": "a6fffe610c4c0d7f1a4122310838e0c3adb3ed95e2201eb94b0adb81f3acbebd",
+            "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+          }
+        },
+        {
+          "label": "6개월 뒤 달(2018-02) 최초 거래",
+          "monthOffset": 6,
+          "countInMonth": 1,
+          "record": {
+            "date": "2018-02-05",
+            "address": "서울특별시 마포구 아현동",
+            "apartment": "서서울삼성",
+            "areaSqm": "48.9200",
+            "priceManwon": 46000,
+            "floor": 16,
+            "cancelled": false,
+            "evidenceFile": "housing-story-evidence/seoseoul-samsung-2018.csv",
+            "evidenceSha256": "e33a4ab7639cbba402bf462d5cd8baca9c27a4c71da78d26f69040e0dbc0d085",
+            "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+          }
+        },
+        {
+          "label": "1년 뒤 달(2018-08) 거래 없음",
+          "monthOffset": 12,
+          "countInMonth": 0,
+          "record": null,
+          "status": "no_same_area_transaction_in_official_export"
+        },
+        {
+          "label": "2년 뒤 달(2019-08) 최초 거래",
+          "monthOffset": 24,
+          "countInMonth": 1,
+          "record": {
+            "date": "2019-08-31",
+            "address": "서울특별시 마포구 아현동",
+            "apartment": "서서울삼성",
+            "areaSqm": "48.9200",
+            "priceManwon": 59500,
+            "floor": 10,
+            "cancelled": false,
+            "evidenceFile": "housing-story-evidence/seoseoul-samsung-2019.csv",
+            "evidenceSha256": "b0a0a012af868e9670542371279c4b17873e7ad9bbdcd57c78c0e5dbecb3e652",
+            "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+          }
+        }
+      ],
+      "coverageNote": "2017·2018·2019년 국토부 원본에서 해제 표시 없는 동일 면적 거래를 확인했습니다. 기사월(2017-08) 1건, 6개월 뒤 달(2018-02) 1건(4억6,000만원), 1년 뒤 달(2018-08) 0건, 2년 뒤 달(2019-08) 1건입니다. 1년 뒤 개별 거래 가격은 자료 없음이며 보간하거나 다른 면적으로 대체하지 않았습니다.",
+      "fictionalPerson": "이 씨",
+      "fictionalBackground": "그는 저축과 전세보증금을 합쳐 작은 집의 자기자금을 마련한 직장인으로 설정했습니다. 대출 규제 뉴스를 본 뒤 더 큰 집을 좇는 대신 48.92㎡에서 가족이 살 수 있을지 따져 봅니다. 현장에서는 출퇴근과 집 상태를 확인하고, 수리 예산이 모자라면 계약을 미루기로 합니다. 계약 뒤 더 낮은 표본 가격이 보여도 생활비와 이자를 낼 돈을 따로 남겨 버티고, 마지막에는 집값 차이와 실제 남을 돈이 다르다는 사실을 계산합니다. 이 직업·자금·방문·판단·매도는 모두 재구성이며 실제 거래 당사자의 경험이 아닙니다.",
+      "riskObservations": [
+        {
+          "description": "서로 다른 층의 공개 표본은 2017년 8월 4억1500만원 뒤 12월 3억9000만원, 2018년 9월 6억5000만원 뒤 2019년 8월 5억9500만원을 보였습니다. 같은 집의 하락률이 아니며 상승 과정에 변동이 있었다는 참고입니다.",
+          "transactions": [
+            {
+              "date": "2018-09-21",
+              "address": "서울특별시 마포구 아현동",
+              "apartment": "서서울삼성",
+              "areaSqm": "48.9200",
+              "priceManwon": 65000,
+              "floor": 7,
+              "cancelled": false,
+              "evidenceFile": "housing-story-evidence/seoseoul-samsung-2018.csv",
+              "evidenceSha256": "e33a4ab7639cbba402bf462d5cd8baca9c27a4c71da78d26f69040e0dbc0d085",
+              "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+            },
+            {
+              "date": "2019-08-31",
+              "address": "서울특별시 마포구 아현동",
+              "apartment": "서서울삼성",
+              "areaSqm": "48.9200",
+              "priceManwon": 59500,
+              "floor": 10,
+              "cancelled": false,
+              "evidenceFile": "housing-story-evidence/seoseoul-samsung-2019.csv",
+              "evidenceSha256": "b0a0a012af868e9670542371279c4b17873e7ad9bbdcd57c78c0e5dbecb3e652",
+              "sourceUrl": "https://rt.molit.go.kr/pt/xls/xls.do"
+            }
+          ],
+          "observedPairChangePercent": "-8.461538461538461538461538460"
+        }
+      ],
+      "sourceIds": [
+        "molit-20170802",
+        "fsc-20170823"
+      ],
+      "limitations": [
+        "익명 공개 계약이며 동일 호실·동일 소유자의 실제 매수·매도 수익을 확인하지 못했습니다.",
+        "전용면적은 같지만 기준은 6층, 마지막 비교는 10층입니다. 동·향·수리 상태와 거래 조건을 통제하지 않았습니다.",
+        "24개월 뒤 달의 표본이며 두 계약의 간격은 736일입니다. 정확히 2년 보유한 동일 주택의 매도 실적이 아닙니다.",
+        "1년 뒤 비교월의 같은 면적 거래는 0건입니다. 가격이나 수익률을 보간하지 않습니다.",
+        "직업·자금 출처·의사결정은 창작입니다. 대출 30%·연 4.5%·예비비는 실제 승인·세율·비용을 확인한 수치가 아닙니다.",
+        "양도세·보유세 등을 확정 계산하지 않아 세후 순이익이나 실존 인물의 부자가 된 경로로 제시하지 않습니다.",
+        "정책과 상승의 인과관계 또는 현재의 재현 가능성을 입증하지 않습니다. 사후 선정한 상승 표본입니다."
+      ],
+      "suggestedStoryTitle": "작은 집을 고르고 이자를 버틴 시간 — 서서울삼성 실거래와 가상 이 씨의 가계부",
+      "storyAngle": "48.92㎡의 실제 계약과 직장인의 가상 현금흐름을 구분하고, 거래 공백·중간 낮은 가격·수리 및 생활비 부담을 함께 읽는 재구성입니다."
+    },
     {
       "id": "mapo1-848919-201708-credit",
       "location": "서울특별시 마포구 아현동",
@@ -276,12 +516,25 @@
         "현재의 정정·해제 상태를 확인한 자료이며 나중에 신고·정정·해제로 바뀔 수 있습니다. 날짜 제목만 갱신하면서 실거래를 재조회했다고 표시하면 안 됩니다."
       ],
       "suggestedStoryTitle": "규제 뉴스 뒤 9억9000만원짜리 집을 산 사람 — 실제 거래를 바탕으로 한 가상 재구성",
-      "storyAngle": "가상 인물이 공포나 집값 급등 예측 대신 직주근접·실거주 가능성·자기자금·월 상환 여력을 검토하는 이야기입니다. 주택가격이 오른 관측 사실과 현금흐름·남는 돈의 모형을 분리합니다. 부자가 된 실존 인물의 성공담으로 포장하지 않습니다."
+      "storyAngle": "가상 인물이 공포나 집값 급등 예측 대신 직주근접·실거주 가능성·자기자금·월 상환 여력을 검토하는 이야기입니다. 주택가격이 오른 관측 사실과 현금흐름·남는 돈의 모형을 분리합니다. 부자가 된 실존 인물의 성공담으로 포장하지 않습니다.",
+      "reviewedAt": "2026-10-17T23:47:35.012586+00:00"
     }
   ],
   "editorialChecks": {
     "timelineCountCrossChecked": true,
     "correction": "2018-08 exact 84.8919 sqm count corrected from 6 to 5 by direct official CSV row recount; prices and selected first contract unchanged.",
-    "checkedAtUtc": "2026-10-17T23:53:22.472437+00:00"
+    "checkedAtUtc": "2026-10-17T23:53:22.472437+00:00",
+    "additionalCase": {
+      "id": "seoseoul-samsung-4892-201708-credit",
+      "checkedAtUtc": "2026-10-18T08:55:14.453879+00:00",
+      "sameAreaMonthlyCounts": [
+        1,
+        1,
+        0,
+        1
+      ],
+      "oldCaseAndSourceBytesPreserved": true,
+      "selectionPriority": "new reviewed case first; prior case retained"
+    }
   }
 }

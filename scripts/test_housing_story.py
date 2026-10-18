@@ -85,6 +85,51 @@ class HousingStoryTests(unittest.TestCase):
         self.assertFalse(report['networkUsed'])
         json.dumps(report)
 
+    def test_per_case_review_date_does_not_refresh_previous_downloads(self):
+        previous = NOW - dt.timedelta(days=1)
+        self.data['cases'][0]['reviewedAt'] = previous.isoformat()
+        case = hs.validate_story_data(self.data, self.folder.name)['cases'][0]
+        self.assertEqual(case['reviewedAt'], previous)
+        self.assertIn('거래 원본 검토: 2026-10-17 10:15', self.body())
+        for invalid in ('invalid', '2026-10-17T10:15:00', (NOW + dt.timedelta(days=1)).isoformat()):
+            self.data['cases'][0]['reviewedAt'] = invalid
+            result = hs.validate_story_data(self.data, self.folder.name)
+            self.assertEqual(result['errors'][0]['code'], 'invalid_case_review_time')
+
+    def test_case_specific_fiction_stays_explicit_and_safe(self):
+        self.data['cases'][0].update(fictionalPerson='이 씨', fictionalBackground='저축을 모은 직장인으로 설정했습니다.')
+        body = self.body()
+        self.assertIn('아래의 이 씨는 창작한 인물입니다. 저축을 모은 직장인으로 설정했습니다.', body)
+        self.assertIn('이 씨에게 필요한 것은', body)
+        self.assertNotIn('김 씨', body)
+        for key in ('fictionalPerson', 'fictionalBackground'):
+            bad = copy.deepcopy(self.data)
+            bad['cases'][0][key] = '<script>unsafe</script>'
+            self.assertEqual(hs.validate_story_data(bad, self.folder.name)['cases'], [])
+
+    def test_retained_real_cases_have_distinct_contracts_and_honest_missing_month(self):
+        evidence = hs.load_story_evidence()
+        self.assertEqual(evidence['errors'], [])
+        cases = evidence['cases']
+        self.assertEqual([case['id'] for case in cases], [
+            'seoseoul-samsung-4892-201708-credit', 'mapo1-848919-201708-credit'])
+        new = cases[0]
+        self.assertEqual([row['countInMonth'] for row in new['timeline']], [1, 1, 0, 1])
+        self.assertIsNone(new['timeline'][2]['record'])
+        self.assertEqual(new['transactions'][0]['priceManwon'], 41500)
+        self.assertEqual(new['transactions'][-1]['priceManwon'], 59500)
+        model = hs.scenario_calculation(new)
+        self.assertEqual(model['days'], 736)
+        self.assertEqual(model['initialCapital'], Decimal('30710'))
+        self.assertEqual(model['illustrativeGainBeforeTax'].quantize(Decimal('1')), Decimal('14252'))
+        for news in (NEWS, '건설사 임원 부고\nhttps://n.news.naver.com/mnews/article/001/123456'):
+            body = hs.build_story_section(news, lambda *a, **k: self.fail('network called'), NOW)
+            copied, _ = split_content_sources(body)
+            self.assertIn(new['id'], copied)
+            self.assertIn('1년 뒤 달(2018-08) 0건', copied)
+            self.assertIn('창작한 인물', copied)
+            self.assertLessEqual(len(copied.encode('utf-16-le')) // 2, 4096)
+
     def test_displayed_price_matches_raw_not_merely_metadata(self):
         bad = copy.deepcopy(self.data)
         bad['cases'][0]['transactions'][1]['priceManwon'] = 90000

@@ -143,6 +143,16 @@ def validate_story_data(data, base_dir=ROOT):
                 normalized[key] = _plain(case.get(key), key)
             if case.get('coverageNote'):
                 normalized['coverageNote'] = _plain(case['coverageNote'], 'coverage_note')
+            for key in ('fictionalPerson', 'fictionalBackground'):
+                if key in case:
+                    normalized[key] = _plain(case[key], key)
+            try:
+                case_reviewed = dt.datetime.fromisoformat(
+                    case.get('reviewedAt', reviewed).replace('Z', '+00:00'))
+                if case_reviewed.tzinfo is None or case_reviewed > reviewed_stamp:
+                    raise ValueError()
+            except (AttributeError, TypeError, ValueError):
+                raise EvidenceError('invalid_case_review_time') from None
             if normalized['id'] in seen:
                 raise EvidenceError('duplicate_case_id')
             seen.add(normalized['id'])
@@ -165,7 +175,7 @@ def validate_story_data(data, base_dir=ROOT):
             if first['priceManwon'] >= last['priceManwon']:
                 raise EvidenceError('not_an_observed_rising_case')
             normalized['areaSqm'] = _decimal(case.get('areaSqm'), 'case_area')
-            normalized['reviewedAt'] = reviewed_stamp
+            normalized['reviewedAt'] = case_reviewed
             valid.append(normalized)
         except (EvidenceError, TypeError, KeyError) as exc:
             errors.append({'casePosition': position,
@@ -311,6 +321,8 @@ def build_story_section(current_news, get, now, catalog_path=CATALOG,
     case = selection['case']
     first, last = case['transactions'][0], case['transactions'][-1]
     model = scenario_calculation(case)
+    person = case.get('fictionalPerson', '김 씨')
+    background = case.get('fictionalBackground', '그는 기존 저축과 살던 집을 정리한 현금을 가진 사람으로 설정했습니다. 작은 종잣돈이나 무자본으로 누구나 부자가 된 이야기가 아닙니다. 가족과 오래 살 집을 찾던 그는 대책 기사만 읽고 매수 버튼을 누르지 않았습니다. 출퇴근 거리와 단지 상태를 직접 확인하고, 같은 면적의 계약 가격을 비교한 뒤에도 잔금에 쓸 돈과 매달 남는 돈을 먼저 적었습니다.')
     blocks = [_heading(now),
               '구분: [실거래 확인] 실제 거래기록으로 확인한 가격 사례 + [가상 인물·재구성] 창작한 투자 과정입니다. 실존 인물의 성공담·실제 매수인 수익을 확인한 전기가 아닙니다.',
               f"사례 ID: {case['id']}\n{case['location']} · {case['apartment']} · 전용 {case['areaSqm'].normalize():f}㎡"]
@@ -347,11 +359,11 @@ def build_story_section(current_news, get, now, catalog_path=CATALOG,
     if model['illustrativeGainBeforeTax'] <= 0:
         blocks.append('비용을 반영한 위 가정에서는 예시 차익이 0 이하입니다. 거래 가격이 올랐다는 이유만으로 투자에 성공했다고 해석할 수 없습니다.')
     blocks.extend([
-        '② [가상 인물·재구성] 가격표보다 먼저 가계부를 펼치다\n아래의 김 씨는 창작한 인물입니다. 그는 기존 저축과 살던 집을 정리한 현금을 가진 사람으로 설정했습니다. 작은 종잣돈이나 무자본으로 누구나 부자가 된 이야기가 아닙니다. 가족과 오래 살 집을 찾던 그는 대책 기사만 읽고 매수 버튼을 누르지 않았습니다. 출퇴근 거리와 단지 상태를 직접 확인하고, 같은 면적의 계약 가격을 비교한 뒤에도 잔금에 쓸 돈과 매달 남는 돈을 먼저 적었습니다. 이 자금의 유래·심리·현장 방문은 실제 매수인의 행동을 확인한 내용이 아닙니다.',
+        f'② [가상 인물·재구성] 가격표보다 먼저 가계부를 펼치다\n아래의 {person}는 창작한 인물입니다. {background} 이 자금의 유래·심리·현장 방문은 실제 매수인의 행동을 확인한 내용이 아닙니다.',
         '③ [비용 가정] 당시 대출 승인을 뜻하지 않습니다\n'
         + f"첫 거래 가격 {_amount(model['purchase'])}에 매수했다고 가정합니다. 대출은 가격의 30%인 {_amount(model['loan'])}, 자기자금은 {_amount(model['purchase'] - model['loan'])}입니다. 취득세·중개·등기 등을 합친 매수 부대비용 예산을 가격의 4%인 {_amount(model['acquisitionReserve'])}으로 정하면 시작 자금은 {_amount(model['initialCapital'])}입니다. 매각 부대비용은 양도세를 제외한 매도가의 1%인 {_amount(model['saleReserve'])}, 보유 중 관리·소수선 예산은 월 {_amount(model['monthlyHoldingBudget'])}, 전체 기간 예산 {_amount(model['holdingBudget'])}을 전액 쓴다고 가정합니다. 예산은 실제 세율·중개보수·수리비를 조회해 확정한 금액이 아니며, 30% 대출도 개인별 한도·심사·당시 규제 적용을 확인한 승인이 아닙니다.",
         '④ 버티는 시간 — 통장에서는 이자가 먼저 빠져나간다\n'
-        + f"가상 대출은 연 4.5% 고정, 원금 상환 없이 이자만 내고 매도 때 원금을 갚는 단순 모델입니다. 월 이자는 {_amount(model['monthlyInterest'])}, 보유 예산을 합친 월 지출은 {_amount(model['monthlyInterest'] + model['monthlyHoldingBudget'])}, {model['days']:,}일 이자는 365일 기준 {_amount(model['interest'])}입니다. 이자와 보유 예산을 시작 자금에 더한 보유 종료까지의 누적 현금 투입은 {_amount(model['totalCashContributed'])}입니다. 김 씨에게 필요한 것은 호가가 오르는 화면보다 이 지출과 별도 생활비를 계속 감당할 소득이었습니다. 실제 대출의 만기·상환 방식·금리 변경·규제는 이 모델과 다릅니다.",
+        + f"가상 대출은 연 4.5% 고정, 원금 상환 없이 이자만 내고 매도 때 원금을 갚는 단순 모델입니다. 월 이자는 {_amount(model['monthlyInterest'])}, 보유 예산을 합친 월 지출은 {_amount(model['monthlyInterest'] + model['monthlyHoldingBudget'])}, {model['days']:,}일 이자는 365일 기준 {_amount(model['interest'])}입니다. 이자와 보유 예산을 시작 자금에 더한 보유 종료까지의 누적 현금 투입은 {_amount(model['totalCashContributed'])}입니다. {person}에게 필요한 것은 호가가 오르는 화면보다 이 지출과 별도 생활비를 계속 감당할 소득이었습니다. 실제 대출의 만기·상환 방식·금리 변경·규제는 이 모델과 다릅니다.",
         '⑤ 오른 뒤의 선택 — 평가액과 손에 쥔 돈을 나누다\n'
         + f"마지막 표본 가격 {_amount(model['sale'])}에 팔 수 있었다고 가정하면, 대출 원금을 갚은 직후 금액은 {_amount(model['saleEquityBeforeTax'])}입니다. 매각 예산까지 빼면 {_amount(model['saleEquityAfterSaleReserveBeforeTax'])}이며 이것이 전부 번 돈은 아닙니다. 여기서 위 누적 현금 투입을 차감한 세금 미정산 예시 차익은 {_amount(model['illustrativeGainBeforeTax'])}입니다. 이는 매도가에서 매수가·매수/매각/보유 예산·대출 이자를 빼는 것과 같습니다. 취득세 예산과 실제 세액의 차이, 보유세·양도세 및 실제 중개·수리·이사 비용 등을 확정 계산하지 않았으므로 세후 순이익이나 확정 수익률로 제시하지 않습니다.",
         '⑥ 성공 스토리의 이면 — 팔리지 않는 달을 견딜 수 있었을까\n'

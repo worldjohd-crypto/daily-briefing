@@ -151,6 +151,17 @@ class StoryDeliveryTests(unittest.TestCase):
         self.assertEqual(identity['lastContract'], {'date': '2019-08-01', 'priceManwon': 142000, 'floor': 17})
         self.assertEqual(len(delivery.fingerprint_identity(identity)), 64)
 
+    def test_second_official_case_has_new_identity_without_reidentifying_first(self):
+        cases = story.load_story_evidence(REPO / 'housing-story-evidence.json')['cases']
+        original = next(case for case in cases if case['id'] == 'mapo1-848919-201708-credit')
+        addition = next(case for case in cases if case['id'] == 'seoseoul-samsung-4892-201708-credit')
+        old_fingerprint = delivery.fingerprint_identity(delivery.semantic_identity(original))
+        new_fingerprint = delivery.fingerprint_identity(delivery.semantic_identity(addition))
+        self.assertEqual(old_fingerprint, 'e3b390119bc97a3ae50ea2161be6739e8298803d2fa586e4888eb18a26bd4be0')
+        self.assertNotEqual(new_fingerprint, old_fingerprint)
+        changed = dict(addition, fictionalBackground='다른 표현의 가상 인물 이야기', reviewedAt='later')
+        self.assertEqual(new_fingerprint, delivery.fingerprint_identity(delivery.semantic_identity(changed)))
+
     def test_evidence_tamper_fails_even_with_previously_passed_health(self):
         self.csv.write_bytes(self.csv.read_bytes().replace(b'142000', b'143000'))
         with self.assertRaisesRegex(delivery.DeliveryError, '^STORY_VERIFICATION_FAILED$'):
