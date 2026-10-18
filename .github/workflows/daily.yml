@@ -90,12 +90,18 @@ jobs:
         if: ${{ always() }}
         run: python scripts/history_health.py finalize
 
+      - name: Prepare verified story delivery manifest
+        run: >-
+          python scripts/story_delivery.py
+          --html briefing.html --health history-health.json
+          --output housing-story-delivery.json
+
       - name: Commit and push if changed
         id: publish
         run: |
           git config user.name "briefing-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add briefing.html index.html history-health.json
+          git add briefing.html index.html history-health.json housing-story-delivery.json
           [ ! -f article-links.json ] || git add article-links.json
           [ ! -f external-shortlinks.json ] || git add external-shortlinks.json
           [ ! -f news-source-audit.json ] || git add news-source-audit.json
@@ -114,5 +120,6 @@ jobs:
           path: |
             reports/
             history-health.json
+            housing-story-delivery.json
           if-no-files-found: warn
           retention-days: 14
