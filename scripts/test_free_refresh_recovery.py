@@ -116,6 +116,35 @@ class RecoveryTests(unittest.TestCase):
                          {'ref': 'main', 'inputs': {'refresh_comments': False,
                           'recovery_slot': '2026-10-19T21:30:00+09:00'}}))
 
+    def test_source_fix_replacement_requires_exact_failed_native_and_passed_gates(self):
+        client = object.__new__(r.GitHub)
+        row = dict(run(), conclusion='failure', head_sha='b'*40)
+        names = ['Check AI cache before free generation', 'Validate historical matching and monthly prices',
+                 'Check actual browser clipboard and both matching modes',
+                 'Validate official transactions and reconstructed story',
+                 'Require all checks before publication', 'Prepare verified story delivery manifest']
+        steps = [{'name': name, 'conclusion': 'success'} for name in names]
+        steps.append({'name':'Commit and push if changed', 'conclusion':'failure'})
+        with patch.object(client, 'request', side_effect=[{'status':'ahead'}, {'jobs':[{'steps':steps}]}]):
+            self.assertTrue(client.can_replace_failed_source(row, 'a'*40))
+        steps[0]['conclusion'] = 'failure'
+        with patch.object(client, 'request', side_effect=[{'status':'ahead'}, {'jobs':[{'steps':steps}]}]):
+            self.assertFalse(client.can_replace_failed_source(row, 'a'*40))
+        for changed in (dict(row, event='workflow_dispatch'), dict(row, head_sha='a'*40),
+                        dict(row, conclusion='success'), dict(row, status='in_progress')):
+            self.assertFalse(client.can_replace_failed_source(changed, 'a'*40))
+
+    def test_operator_source_recovery_still_claims_once_and_default_does_not_retry(self):
+        client = Client([dict(run(), conclusion='failure', head_sha='b'*40)])
+        client.can_replace_failed_source = lambda row, head: True
+        state, now = {}, at('2026-10-19T23:00:00+09:00')
+        self.assertEqual(r.recover(client, state, now, lambda:None, True)['status'], 'run_already_exists')
+        result = r.recover(client, state, now, lambda:None, True, superseded_run=123)
+        self.assertEqual(result['status'], 'accepted')
+        self.assertEqual(next(iter(state['claims'].values()))['supersededNativeRunId'], '123')
+        r.recover(client, state, now, lambda:None, True, superseded_run=123)
+        self.assertEqual(len(client.posts), 1)
+
     def test_server_rejects_paid_invalid_future_or_stale_recovery(self):
         now = at('2026-10-19T23:00:00+09:00')
         slot = '2026-10-19T21:30:00+09:00'

@@ -103,3 +103,5 @@ GitHub native schedule의 실행 생성 누락에 대비해 기존 15분 감시�
 복구 claim은 POST 전에 원자적으로 저장합니다. 응답이 없거나 불확실하면 같은 슬롯 및 다음 슬롯도 재요청하지 않고 `Free recovery [슬롯]` 실행명을 서버에서 대조합니다. 불확실한 claim과 남은 lock을 삭제하거나 초기화해서 재시도하지 않습니다. 실행 실패는 기존 monitor가 알리며 같은 슬롯을 자동 재시도하지 않습니다. 승인된 본문만 기존 story bridge가 전용 채널로 보내며 발송 영수증·의미 지문·기존 사례 ID 중복 방지는 변경하지 않습니다.
 
 복구 상태의 `pendingAlerts` 중 미통지 문제만 알린 뒤 같은 helper의 `--ack-alert fingerprint`로 확인합니다. 정상·대기·중복 억제는 조용히 기록합니다. 복구는 로컬 PC와 기존 감시가 실행될 때 작동하며 GitHub native schedule의 정시 실행 자체를 보장하지 않습니다.
+
+운영자가 소스 수정 직후의 오래된 native 실행을 복구할 때만 `--superseded-run RUN_ID`를 명시할 수 있습니다. 이는 최신 실패 실행이 native schedule이고, 현재 main이 그 source의 후손이며, 모든 검증이 통과한 뒤 게시 단계에서만 실패했음을 API로 확인해야 합니다. 같은 source·검증 실패·수동 실행에는 적용하지 않습니다. 이 옵션은 자동 감시에 넣지 않으며 슬롯 claim의 재요청 금지도 그대로 유지합니다.

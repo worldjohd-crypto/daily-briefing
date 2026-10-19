@@ -129,8 +129,29 @@ class GitHub:
                             {'ref': BRANCH, 'inputs': {'refresh_comments': False,
                                                       'recovery_slot': slot.isoformat()}})
 
+    def can_replace_failed_source(self, run, head):
+        # Operator-only recovery of a native run whose validated publish lost a
+        # race with a source fix. Never retry a validation failure or same head.
+        if (run.get('event') != 'schedule' or run.get('conclusion') != 'failure'
+                or run.get('status') != 'completed' or run.get('head_sha') == head):
+            return False
+        compared = self.request('compare/' + run['head_sha'] + '...' + head)
+        if compared.get('status') != 'ahead':
+            return False
+        jobs = self.request('actions/runs/' + str(run['id']) + '/jobs?per_page=100')['jobs']
+        required = {'Check AI cache before free generation', 'Validate historical matching and monthly prices',
+                    'Check actual browser clipboard and both matching modes',
+                    'Validate official transactions and reconstructed story',
+                    'Require all checks before publication', 'Prepare verified story delivery manifest'}
+        for job in jobs:
+            steps = {s['name']: s.get('conclusion') for s in job.get('steps', [])}
+            if (steps.get('Commit and push if changed') == 'failure'
+                    and all(steps.get(name) == 'success' for name in required)):
+                return True
+        return False
 
-def recover(client, state, now, persist, apply=False):
+
+def recover(client, state, now, persist, apply=False, superseded_run=None):
     slot = latest_slot(now)
     key = slot.isoformat()
     runs = client.runs(now)
@@ -158,16 +179,26 @@ def recover(client, state, now, persist, apply=False):
     if active:
         return {'status': 'workflow_active', 'runId': str(active[0]['id']), 'dispatchAttempted': False}
     fresh = [r for r in runs if instant(r['created_at']) >= slot.astimezone(UTC)]
+    head = None
     if fresh:
         latest = max(fresh, key=lambda r: (r['created_at'], r['id']))
-        return {'status': 'run_already_exists', 'runId': str(latest['id']), 'dispatchAttempted': False}
+        if superseded_run is not None and str(latest['id']) == str(superseded_run):
+            head = client.check_contract()
+            if not client.can_replace_failed_source(latest, head):
+                raise ValueError('SUPERSEDED_RUN_NOT_SAFE_TO_REPLACE')
+        else:
+            return {'status': 'run_already_exists', 'runId': str(latest['id']), 'dispatchAttempted': False}
+    elif superseded_run is not None:
+        raise ValueError('SUPERSEDED_RUN_NOT_LATEST')
     if now < slot + dt.timedelta(minutes=GRACE_MINUTES):
         return {'status': 'schedule_grace', 'slotKst': key, 'dispatchAttempted': False}
-    head = client.check_contract()
+    head = head or client.check_contract()
     if not apply:
         return {'status': 'would_dispatch', 'slotKst': key, 'headSha': head, 'dispatchAttempted': False}
     claim = {'slotKst': key, 'marker': marker(slot), 'status': 'dispatching',
              'requestedAtUtc': now.isoformat(), 'requestedHeadSha': head, 'refreshComments': False}
+    if superseded_run is not None:
+        claim['supersededNativeRunId'] = str(superseded_run)
     claims[key] = claim
     persist()
     try:
@@ -202,6 +233,7 @@ def main():
     parser.add_argument('--state', type=Path, default=Path('state/free-refresh-recovery.json'))
     parser.add_argument('--monitor-state', type=Path, default=Path('state/history-monitor.json'))
     parser.add_argument('--apply', action='store_true')
+    parser.add_argument('--superseded-run', help='Operator only: validated native publish failed after a source fix')
     parser.add_argument('--ack-alert', action='append', default=[])
     parser.add_argument('--validate-request', action='store_true')
     args = parser.parse_args()
@@ -249,7 +281,7 @@ def main():
         else:
             try:
                 result = recover(GitHub(config['repositoryDirectory']), state, now,
-                                 lambda: save(args.state, state), args.apply)
+                                 lambda: save(args.state, state), args.apply, args.superseded_run)
             except (OSError, ValueError, KeyError, subprocess.SubprocessError, urllib.error.URLError) as error:
                 code = 'RECOVERY_CHECK_' + type(error).__name__
                 if isinstance(error, ValueError) and str(error).isupper():
