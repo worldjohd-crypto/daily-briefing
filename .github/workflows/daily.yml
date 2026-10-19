@@ -1,15 +1,22 @@
 name: Daily Briefing
+run-name: ${{ inputs.recovery_slot != '' && format('Free recovery [{0}]', inputs.recovery_slot) || 'Daily Briefing' }}
 
 on:
   schedule:
     # 매일 06:30 ~ 21:30 KST, 1시간 간격 (총 16회/일) = 매일 00:30~12:30, 21:30~23:30 UTC
-    - cron: "30 0-12,21-23 * * *"
+    # Equivalent expressions re-register the native schedule without changing its hours.
+    - cron: "30 21-23 * * *"
+    - cron: "30 0-12 * * *"
   workflow_dispatch:
     inputs:
       refresh_comments:
         description: "AI 논평 6개 새로 생성 (체크 안 하면 캐시된 이전 논평 재사용, 무료)"
         type: boolean
         default: false
+      recovery_slot:
+        description: "무료 예약 누락 복구 전용 KST 슬롯 (자동 복구 helper가 설정)"
+        type: string
+        default: ""
 
 permissions:
   contents: write
@@ -34,12 +41,19 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt -r requirements-checks.txt
 
+      - name: Check free recovery request
+        env:
+          RECOVERY_SLOT: ${{ inputs.recovery_slot }}
+          RECOVERY_REFRESH_REQUESTED: ${{ inputs.refresh_comments }}
+          RECOVERY_EVENT: ${{ github.event_name }}
+        run: python scripts/free_refresh_recovery.py --validate-request
+
       - name: Check AI cache before free generation
         id: preflight
         run: >-
           python scripts/history_health.py preflight
           --snapshot "$RUNNER_TEMP/history-ai-before.json"
-          --refresh-comments "${{ github.event_name == 'workflow_dispatch' && inputs.refresh_comments }}"
+          --refresh-comments "${{ github.event_name == 'workflow_dispatch' && inputs.recovery_slot == '' && inputs.refresh_comments }}"
 
       - name: Install browser for clipboard checks
         run: python -m playwright install --with-deps chromium
@@ -50,8 +64,8 @@ jobs:
           OPINET_KEY: ${{ secrets.OPINET_KEY }}
           RONE_KEY: ${{ secrets.RONE_KEY }}
           ALADIN_TTB_KEY: ${{ secrets.ALADIN_TTB_KEY }}
-          ANTHROPIC_API_KEY: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_comments && secrets.ANTHROPIC_API_KEY || '' }}
-          REFRESH_COMMENTS: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_comments }}
+          ANTHROPIC_API_KEY: ${{ github.event_name == 'workflow_dispatch' && inputs.recovery_slot == '' && inputs.refresh_comments && secrets.ANTHROPIC_API_KEY || '' }}
+          REFRESH_COMMENTS: ${{ github.event_name == 'workflow_dispatch' && inputs.recovery_slot == '' && inputs.refresh_comments }}
         run: python scripts/generate_briefing.py
 
       - name: Validate historical matching and monthly prices
@@ -59,7 +73,7 @@ jobs:
         if: ${{ always() && steps.generate.outcome == 'success' }}
         continue-on-error: true
         env:
-          HISTORY_REFRESH_REQUESTED: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_comments }}
+          HISTORY_REFRESH_REQUESTED: ${{ github.event_name == 'workflow_dispatch' && inputs.recovery_slot == '' && inputs.refresh_comments }}
         run: |
           args=(--html briefing.html --report reports/content.json --event "$GITHUB_EVENT_NAME" --started-at "${{ steps.preflight.outputs.started_at }}")
           if [ "$HISTORY_REFRESH_REQUESTED" != "true" ]; then
