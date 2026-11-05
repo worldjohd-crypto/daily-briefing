@@ -6,15 +6,15 @@
   },
   "cards": {
     "historycompare": {
-      "copyTextSha256": "b093a9ca28fc3541e57702d2cde4a63512e4daf7a3829a25b46ff3ee47db5ea7",
+      "copyTextSha256": "88654ff0e49dc3606f784a5bb1d812cc5f36bee2f73455a5f25d407e1503b1fa",
       "sourceTextSha256": "c92570fd929402e298846e2e3dfb3445fe6bc7456993000e579ca5dd6fb33ec4"
     },
     "housingstory": {
-      "copyTextSha256": "f3b980067cdc7760cd3f093738261180e928bf203349c207fc17ee015eccb45f",
+      "copyTextSha256": "b0c91764a5b4f79f93340da0704c0200aa2f319cac6899620f4b186042a63989",
       "sourceTextSha256": "458d5921165e14b4f1f02576df32665a45934273d6c0a008cd095f56bcc68ae9"
     },
     "realestate": {
-      "copyTextSha256": "965d4029d8f555ae650e426c4ab8a666c1f133d2c937fd74e95a4817cb181a02",
+      "copyTextSha256": "df273f40ef8cd0e2554d6fbe7d32b1422af43d67f69285fed92e4570aacb3e72",
       "sourceTextSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     }
   },
@@ -25,11 +25,11 @@
     "prices": true,
     "story": true
   },
-  "generatedAtUtc": "2026-11-04T15:45:55.742577+00:00",
-  "headSha": "2fa357b503c947d748818901cc741759442dc291",
-  "reportArtifact": "history-validation-41859881325",
-  "reportSha256": "5047723709efd4e9604b4a9d558e2e2f45f1f0a63443925b586f90490b012def",
-  "runId": "41859881325",
+  "generatedAtUtc": "2026-11-05T01:40:01.743193+00:00",
+  "headSha": "29b1f52919330135b7812f26c397bfd152bdb226",
+  "reportArtifact": "history-validation-41949217622",
+  "reportSha256": "8c2454a5c31a01ea1cc6d6e66d9226b3adbdf619b9c51c670db65308113c77dc",
+  "runId": "41949217622",
   "schemaVersion": 1,
   "status": "passed"
 }
